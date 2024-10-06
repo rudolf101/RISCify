@@ -13,7 +13,6 @@ import {
   Typography,
 } from '@mui/material';
 
-// Определим интерфейс для инструкции
 interface Instruction {
   address: string;
   hex: string;
