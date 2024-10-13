@@ -18,10 +18,9 @@ jobs:
         with:
           node-version: 'lts/*'
 
-      - name: Install dependencies
+      - name: Frontend
+        run: |
+          npm install
+          npm start deploy
         working-directory: ./frontend
-        run: npm install
 
-      - name: Run Deploy
-        working-directory: ./frontend
-        run: npm start deploy
