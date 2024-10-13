@@ -21,5 +21,5 @@ jobs:
       - name: Deploy 
         run: | 
           npm install
-          npm start deploy
+          npm run deploy
         working-directory: ./frontend
