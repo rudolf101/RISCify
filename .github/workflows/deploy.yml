@@ -23,4 +23,5 @@ jobs:
         run: npm install
 
       - name: Run Deploy
+        working-directory: ./frontend
         run: npm start deploy
