@@ -25,7 +25,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "deploy": "GH_TOKEN=${GH_TOKEN} gh-pages -d build"
   },
   "homepage": "https://ndreuu.github.io/RISCify",
   "eslintConfig": {
