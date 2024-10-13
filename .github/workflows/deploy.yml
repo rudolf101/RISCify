@@ -27,5 +27,6 @@ jobs:
         working-directory: ./frontend
 
       - name: Deploy to GitHub Pages
-        run: npm run deploy
+        run: |
+          GH_TOKEN=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 npm run deploy
         working-directory: ./frontend
