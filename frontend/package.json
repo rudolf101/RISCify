@@ -27,7 +27,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build"
   },
-  "homepage": "https://rudolf101.github.io/RISCify",
+  "homepage": "https://ndreuu.github.io/RISCify",
   "eslintConfig": {
     "extends": [
       "react-app",
