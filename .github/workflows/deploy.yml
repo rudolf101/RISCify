@@ -18,11 +18,8 @@ jobs:
         with:
           node-version: 'lts/*'
 
-      - name: Deploy Page
-        run: npm install
+      - name: Deploy 
+        run: | 
+          npm install
+          npm start deploy
         working-directory: ./frontend
-        
-      - name: Deploy Page1
-        run: npm start deploy
-        working-directory: ./frontend
-
