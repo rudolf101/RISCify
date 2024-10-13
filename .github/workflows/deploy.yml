@@ -19,8 +19,10 @@ jobs:
           node-version: 'lts/*'
 
       - name: Deploy Page
-        run: |
-          npm install
-          npm start deploy
+        run: npm install
+        working-directory: ./frontend
+        
+      - name: Deploy Page1
+        run: npm start deploy
         working-directory: ./frontend
 
