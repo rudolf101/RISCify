@@ -13,6 +13,7 @@ jobs:
       - name: Install and Build 🔧
         working-directory: ./frontend
         run: |
+          npm i
           npm ci
           npm run build
 
