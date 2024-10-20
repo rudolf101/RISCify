@@ -5,7 +5,7 @@ class BytesSplitter {
 
         for (let i = 0; i < byteArrays.length; i += instructionSize) {
             const instruction = byteArrays.slice(i, i + instructionSize);
-            instructions.push(instruction);
+            instructions.push(instruction.reverse()); // Little-Endian
         }
 
         return instructions;
