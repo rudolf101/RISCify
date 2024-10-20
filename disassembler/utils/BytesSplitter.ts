@@ -1,7 +1,8 @@
 class BytesSplitter {
 
-    public static splitBytes(byteArrays: Uint8Array[], instructionSize: number): Uint8Array[][] {
+    public static splitBytes(byteArrays: Uint8Array[]): Uint8Array[][] {
         const instructions: Uint8Array[][] = [];
+        const instructionSize = 4; // Only RV32i is supported for now
 
         for (let i = 0; i < byteArrays.length; i += instructionSize) {
             const instruction = byteArrays.slice(i, i + instructionSize);
