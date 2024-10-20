@@ -10,9 +10,7 @@ class Disassembler {
     static disassemble(byteBuffer: Uint8Array[]): Instruction[] {
         let instructionsBytes: Uint8Array[][] = BytesSplitter.splitBytes(byteBuffer, 4);
 
-        return instructionsBytes.map((instructionBytes: Uint8Array[]): Instruction => {
-            return this.findInstruction(instructionBytes);
-        });
+        return instructionsBytes.map(this.findInstruction)
     }
 }
 
