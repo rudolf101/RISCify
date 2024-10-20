@@ -1,14 +1,17 @@
 import {Instruction} from "./model/Instruction";
-import {Arg} from "./model/Arg";
+import {BytesSplitter} from "./utils/BytesSplitter";
 
 class Disassembler {
 
+    private static findInstruction(byteBuffer: Uint8Array[]): Instruction {
+        return null;
+    }
+
     static disassemble(byteBuffer: Uint8Array[]): Instruction[] {
-        return byteBuffer.map((byte: Uint8Array): Instruction => {
-            // Replace this with actual logic to convert byte to instruction
-            const instructionName: string = "instruction-test"; // Example placeholder
-            const args: Arg[] = [new Arg("arg-test")]; // Example placeholder
-            return new Instruction(instructionName, args);
+        let instructionBytes: Uint8Array[][] = BytesSplitter.splitBytes(byteBuffer, 4);
+
+        return instructionBytes.map((instructionBytes: Uint8Array[]): Instruction => {
+            return this.findInstruction(instructionBytes);
         });
     }
 }
