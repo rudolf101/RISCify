@@ -7,30 +7,30 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
   Paper,
   Typography,
+  Box,
 } from '@mui/material';
 
-interface Instruction {
-  address: string;
-  hex: string;
-  instruction: string;
-}
+import useDisassembler from './Render';
 
 const App: React.FC = () => {
-  const [hexCode, setHexCode] = useState<string>('');
-  const [instructions, setInstructions] = useState<Instruction[]>([]);
+  const { hexCode, setHexCode, instructions, handleDisassemble } = useDisassembler();
+  const [error, setError] = useState<string | null>(null);
 
-  const handleDisassemble = () => {
-    // Мок данные дизассемблирования
-    const mockInstructions: Instruction[] = [
-      { address: '0x0000', hex: '0x00000013', instruction: 'addi x0, x0, 0' },
-      { address: '0x0004', hex: '0x00008067', instruction: 'ret' },
-      { address: '0x0008', hex: '0x00400093', instruction: 'addi x1, x0, 4' },
-    ];
-    setInstructions(mockInstructions);
+  const handleHexChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+
+    const isValidHex = /^[0-9a-fA-F\s]*$/.test(value);
+
+    if (!isValidHex) {
+      setError('Please enter a valid hex code (0-9, a-f, A-F, and spaces)');
+    } else {
+      setError(null); 
+    }
+
+    setHexCode(value);
   };
 
   return (
@@ -43,37 +43,56 @@ const App: React.FC = () => {
         variant="outlined"
         fullWidth
         value={hexCode}
-        onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setHexCode(e.target.value)}
+        onChange={handleHexChange}
         style={{ marginBottom: '1rem' }}
+        error={!!error} // Подсвечивает поле, если ошибка есть
+        helperText={error} // Показывает сообщение об ошибке
       />
       <Button
         variant="contained"
         color="primary"
         onClick={handleDisassemble}
         style={{ marginBottom: '2rem' }}
+        disabled={!!error} 
       >
         Disassemble
       </Button>
-      <TableContainer component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Address</TableCell>
-              <TableCell>Hex</TableCell>
-              <TableCell>Instruction</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {instructions.map((inst, index) => (
-              <TableRow key={index}>
-                <TableCell>{inst.address}</TableCell>
-                <TableCell>{inst.hex}</TableCell>
-                <TableCell>{inst.instruction}</TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
+      <Box component={Paper} style={{ padding: '1rem', marginTop: '1rem' }}>
+        <Typography variant="h5" gutterBottom>
+          Instructions
+        </Typography>
+        <TableContainer>
+          <Table>
+            <TableBody>
+              {instructions.map((instGroup, index) => (
+                <TableRow key={index}>
+                  <TableCell style={{ textAlign: 'center' }}>
+                    {instGroup.map((inst, instIndex) => (
+                      <Paper
+                        key={instIndex}
+                        elevation={3}
+                        sx={{
+                          display: 'inline-block',
+                          padding: '0.5rem 1rem',
+                          margin: '0.5rem',
+                          textAlign: 'center',
+                          transition: 'background-color 0.3s, transform 0.3s',
+                          '&:hover': {
+                            backgroundColor: 'rgba(0, 0, 0, 0.1)', 
+                            transform: 'scale(1.05)', 
+                          },
+                        }}
+                      >
+                        {inst}
+                      </Paper>
+                    ))}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </Box>
     </Container>
   );
 };
