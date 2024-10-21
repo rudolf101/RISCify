@@ -41,20 +41,16 @@ class Arg {
     }
   }
   
-  // Вынесенная логика в кастомный хук
   const useDisassembler = () => {
     const [hexCode, setHexCode] = useState<string>('');
     const [instructions, setInstructions] = useState<string[]>([]);
   
     const handleDisassemble = () => {
-      // Преобразование строки в Uint8Array[]
       const byteArray = hexCode.match(/.{1,2}/g)?.map(byte => parseInt(byte, 16)) || [];
       const byteBuffer = [new Uint8Array(byteArray)];
   
-      // Вызов функции disassemble
       const disassembledInstructions = Disassembler.disassemble(byteBuffer);
   
-      // Преобразование в формат для отображения
       const formattedInstructions: string[] = disassembledInstructions.map(inst => (
         `${inst.name} ${inst.args.map(arg => arg.data).join(', ')}`
       ));
