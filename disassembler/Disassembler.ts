@@ -3,14 +3,15 @@ import {BytesSplitter} from "./utils/BytesSplitter";
 
 class Disassembler {
 
-    private static findInstruction(byteBuffer: Uint8Array[]): Instruction {
+    private static findInstruction(byteBuffer: Uint8Array[]): Instruction | null {
         return null;
     }
 
-    static disassemble(byteBuffer: Uint8Array[]): Instruction[] {
+    static disassemble(byteBuffer: Uint8Array[]): Instruction[] | null {
         let instructionsBytes: Uint8Array[][] = BytesSplitter.splitBytes(byteBuffer);
 
-        return instructionsBytes.map(this.findInstruction)
+        // return instructionsBytes.map(this.findInstruction)
+        return null
     }
 }
 
