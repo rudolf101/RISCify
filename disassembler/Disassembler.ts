@@ -1,13 +1,13 @@
-import {Instruction} from "./model/Instruction";
-import {BytesSplitter} from "./utils/BytesSplitter";
+import { Instruction } from "./model/Instruction";
+import { BytesSplitter } from "./utils/BytesSplitter";
 
 class Disassembler {
 
-    private static findInstruction(byteBuffer: Uint8Array[]): Instruction | null {
+    private static findInstruction(byteBuffer: Uint8Array[]): Instruction {
         return null;
     }
 
-    static disassemble(byteBuffer: Uint8Array[]): Instruction[] | null {
+    static disassemble(byteBuffer: Uint8Array[]): Instruction[] {
         let instructionsBytes: Uint8Array[][] = BytesSplitter.splitBytes(byteBuffer);
 
         // return instructionsBytes.map(this.findInstruction)
@@ -15,4 +15,4 @@ class Disassembler {
     }
 }
 
-export {Disassembler};
+export { Disassembler };
