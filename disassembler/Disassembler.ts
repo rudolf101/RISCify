@@ -29,77 +29,63 @@ class Disassembler {
         return c;
     }
 
-    private static span(a: Uint8Array, ...pos: number[]): Uint8Array {
-        var i = 0;
-        var c = new Uint8Array();
-        while (i < pos.length) {
-            if (i + 1 < pos.length) {
-                c = this.concat(c, a.subarray(pos[i], pos[i + 1] + 1));
-            }
-            else {
-                c = this.concat(c, a.subarray(pos[i]));
-            }
-        }
-        return c;
-    }
-
     private static buildR(name: String, rd: Uint8Array, rs1: Uint8Array, rs2: Uint8Array): Instruction {
         return new Instruction(name, [
-            new Arg(`x${this.toNumber(rd, false)}`),
-            new Arg(`x${this.toNumber(rs1, false)}`),
-            new Arg(`x${this.toNumber(rs2, false)}`)
+            new Arg(`x${Disassembler.toNumber(rd, false)}`),
+            new Arg(`x${Disassembler.toNumber(rs1, false)}`),
+            new Arg(`x${Disassembler.toNumber(rs2, false)}`)
         ]);
     }
 
     private static buildI(name: String, rd: Uint8Array, rs1: Uint8Array, imm: Uint8Array): Instruction {
         return new Instruction(name, [
-            new Arg(`x${this.toNumber(rd, false)}`),
-            new Arg(`x${this.toNumber(rs1, false)}`),
-            new Arg(`${this.toNumber(imm)}`)
+            new Arg(`x${Disassembler.toNumber(rd, false)}`),
+            new Arg(`x${Disassembler.toNumber(rs1, false)}`),
+            new Arg(`${Disassembler.toNumber(imm)}`)
         ]);
     }
 
     private static buildIShift(name: String, rd: Uint8Array, rs1: Uint8Array, imm: Uint8Array): Instruction {
         return new Instruction(name, [
-            new Arg(`x${this.toNumber(rd, false)}`),
-            new Arg(`x${this.toNumber(rs1, false)}`),
-            new Arg(`${this.toNumber(imm, false)}`)
+            new Arg(`x${Disassembler.toNumber(rd, false)}`),
+            new Arg(`x${Disassembler.toNumber(rs1, false)}`),
+            new Arg(`${Disassembler.toNumber(imm, false)}`)
         ]);
     }
 
     private static buildIMem(name: String, rd: Uint8Array, rs1: Uint8Array, imm: Uint8Array): Instruction {
         return new Instruction(name, [
-            new Arg(`x${this.toNumber(rd, false)}`),
-            new Arg(`${this.toNumber(imm)}(x${this.toNumber(rs1, false)})`)
+            new Arg(`x${Disassembler.toNumber(rd, false)}`),
+            new Arg(`${Disassembler.toNumber(imm)}(x${Disassembler.toNumber(rs1, false)})`)
         ]);
     }
 
     private static buildSMem(name: String, rs1: Uint8Array, rs2: Uint8Array, imm: Uint8Array): Instruction {
         return new Instruction(name, [
-            new Arg(`x${this.toNumber(rs2, false)}`),
-            new Arg(`${this.toNumber(imm)}(x${this.toNumber(rs1, false)})`)
+            new Arg(`x${Disassembler.toNumber(rs2, false)}`),
+            new Arg(`${Disassembler.toNumber(imm)}(x${Disassembler.toNumber(rs1, false)})`)
         ]);
     }
 
     private static buildB(name: String, rs1: Uint8Array, rs2: Uint8Array, imm: Uint8Array): Instruction {
         return new Instruction(name, [
-            new Arg(`x${this.toNumber(rs1, false)}`),
-            new Arg(`x${this.toNumber(rs2, false)}`),
-            new Arg(`${this.toNumber(imm) * 2}`)
+            new Arg(`x${Disassembler.toNumber(rs1, false)}`),
+            new Arg(`x${Disassembler.toNumber(rs2, false)}`),
+            new Arg(`${Disassembler.toNumber(imm) * 2}`)
         ]);
     }
 
     private static buildU(name: String, rd: Uint8Array, imm: Uint8Array): Instruction {
         return new Instruction(name, [
-            new Arg(`x${this.toNumber(rd, false)}`),
-            new Arg(`${this.toNumber(imm)}`)
+            new Arg(`x${Disassembler.toNumber(rd, false)}`),
+            new Arg(`${Disassembler.toNumber(imm)}`)
         ]);
     }
 
     private static buildJ(name: String, rd: Uint8Array, imm: Uint8Array): Instruction {
         return new Instruction(name, [
-            new Arg(`x${this.toNumber(rd, false)}`),
-            new Arg(`${this.toNumber(imm) * 2}`)
+            new Arg(`x${Disassembler.toNumber(rd, false)}`),
+            new Arg(`${Disassembler.toNumber(imm) * 2}`)
         ]);
     }
 
@@ -144,131 +130,152 @@ class Disassembler {
         const funct7Normal = new Uint8Array([0,0,0,0,0,0,0]);
         const funct7Alter  = new Uint8Array([0,0,0,0,0,1,0]);
 
-        const opcode = this.span(bits,  2,  6);
-        const funct3 = this.span(bits, 12, 14);
-        const funct7 = this.span(bits, 25, 31);
-        const rd     = this.span(bits,  7, 11);
-        const rs1    = this.span(bits, 15, 19);
-        const rs2    = this.span(bits, 20, 24);
-        const shamt  = this.span(bits, 20, 24);
-        const immI   = this.span(bits, 20, 31);
-        const immS   = this.span(bits,  7, 11, 25, 31);
-        const immB   = this.span(bits,  8, 11, 25, 30,  7,  7, 31, 31);
-        const immU   = this.span(bits, 12, 31);
-        const immJ   = this.span(bits, 21, 30, 20, 20, 12, 19, 31, 31);
+        const opcode = bits.subarray( 2,  7);
+        const funct3 = bits.subarray(12, 15);
+        const funct7 = bits.subarray(25, 32);
+        const rd     = bits.subarray( 7, 12);
+        const rs1    = bits.subarray(15, 20);
+        const rs2    = bits.subarray(20, 25);
+        const shamt  = bits.subarray(20, 25);
+        const immI   = bits.subarray(20, 32);
+        const immS   = Disassembler.concat(
+            bits.subarray( 7, 12),
+            bits.subarray(25, 32)
+        );
+        const immB   = Disassembler.concat(
+            bits.subarray( 8, 12),
+            Disassembler.concat(
+                bits.subarray(25, 31),
+                Disassembler.concat(
+                    bits.subarray( 7,  8),
+                    bits.subarray(31, 32)
+                )
+            )
+        );
+        const immU   = bits.subarray(12, 32);
+        const immJ   = Disassembler.concat(
+            bits.subarray(21, 31),
+            Disassembler.concat(
+                bits.subarray(20, 21),
+                Disassembler.concat(
+                    bits.subarray(12, 20),
+                    bits.subarray(31, 32)
+                )
+            )
+        );
         
         var retval: Instruction[] = [];
 
-        if (this.equalBits(opcode, opcodeLoad)) {
-            if (this.equalBits(funct3, funct3WW))
-                retval.push(this.buildIMem("lw", rd, rs1, immI));
-            else if (this.equalBits(funct3, funct3WH))
-                retval.push(this.buildIMem("lh", rd, rs1, immI));
-            else if (this.equalBits(funct3, funct3WB))
-                retval.push(this.buildIMem("lb", rd, rs1, immI));
+        if (Disassembler.equalBits(opcode, opcodeLoad)) {
+            if (Disassembler.equalBits(funct3, funct3WW))
+                retval.push(Disassembler.buildIMem("lw", rd, rs1, immI));
+            else if (Disassembler.equalBits(funct3, funct3WH))
+                retval.push(Disassembler.buildIMem("lh", rd, rs1, immI));
+            else if (Disassembler.equalBits(funct3, funct3WB))
+                retval.push(Disassembler.buildIMem("lb", rd, rs1, immI));
         }
-        else if (this.equalBits(opcode, opcodeStore)) {
-            if (this.equalBits(funct3, funct3WW))
-                retval.push(this.buildSMem("sw", rs1, rs2, immI));
-            else if (this.equalBits(funct3, funct3WH))
-                retval.push(this.buildSMem("sh", rs1, rs2, immI));
-            else if (this.equalBits(funct3, funct3WB))
-                retval.push(this.buildSMem("sb", rs1, rs2, immI));
+        else if (Disassembler.equalBits(opcode, opcodeStore)) {
+            if (Disassembler.equalBits(funct3, funct3WW))
+                retval.push(Disassembler.buildSMem("sw", rs1, rs2, immI));
+            else if (Disassembler.equalBits(funct3, funct3WH))
+                retval.push(Disassembler.buildSMem("sh", rs1, rs2, immI));
+            else if (Disassembler.equalBits(funct3, funct3WB))
+                retval.push(Disassembler.buildSMem("sb", rs1, rs2, immI));
         }
-        else if (this.equalBits(opcode, opcodeRegImm)) {
-            if (this.equalBits(funct3, funct3Add)) {
-                retval.push(this.buildI("addi", rd, rs1, immI));
+        else if (Disassembler.equalBits(opcode, opcodeRegImm)) {
+            if (Disassembler.equalBits(funct3, funct3Add)) {
+                retval.push(Disassembler.buildI("addi", rd, rs1, immI));
                 if (
-                    this.toNumber(rd) == 0
-                    && this.toNumber(rs1) == 0
-                    && this.toNumber(immI) == 0)
+                    Disassembler.toNumber(rd) == 0
+                    && Disassembler.toNumber(rs1) == 0
+                    && Disassembler.toNumber(immI) == 0)
                     retval.push(new Instruction("nop", []));
             }
-            else if (this.equalBits(funct3, funct3Slt))
-                retval.push(this.buildI("slti", rd, rs1, immI));
-            else if (this.equalBits(funct3, funct3Sltu))
-                retval.push(this.buildI("sltiu", rd, rs1, immI));
-            else if (this.equalBits(funct3, funct3And))
-                retval.push(this.buildI("andi", rd, rs1, immI));
-            else if (this.equalBits(funct3, funct3Or))
-                retval.push(this.buildI("ori", rd, rs1, immI));
-            else if (this.equalBits(funct3, funct3Xor))
-                retval.push(this.buildI("xori", rd, rs1, immI));
-            else if (this.equalBits(funct3, funct3Sll)) {
-                if (this.equalBits(funct7, funct7Normal))
-                    retval.push(this.buildIShift("slli", rd, rs1, shamt));
+            else if (Disassembler.equalBits(funct3, funct3Slt))
+                retval.push(Disassembler.buildI("slti", rd, rs1, immI));
+            else if (Disassembler.equalBits(funct3, funct3Sltu))
+                retval.push(Disassembler.buildI("sltiu", rd, rs1, immI));
+            else if (Disassembler.equalBits(funct3, funct3And))
+                retval.push(Disassembler.buildI("andi", rd, rs1, immI));
+            else if (Disassembler.equalBits(funct3, funct3Or))
+                retval.push(Disassembler.buildI("ori", rd, rs1, immI));
+            else if (Disassembler.equalBits(funct3, funct3Xor))
+                retval.push(Disassembler.buildI("xori", rd, rs1, immI));
+            else if (Disassembler.equalBits(funct3, funct3Sll)) {
+                if (Disassembler.equalBits(funct7, funct7Normal))
+                    retval.push(Disassembler.buildIShift("slli", rd, rs1, shamt));
             }
-            else if (this.equalBits(funct3, funct3Srl)) {
-                if (this.equalBits(funct7, funct7Normal))
-                    retval.push(this.buildIShift("srli", rd, rs1, shamt));
-                else if (this.equalBits(funct7, funct7Alter))
-                    retval.push(this.buildIShift("srai", rd, rs1, shamt));
-            }
-        }
-        else if (this.equalBits(opcode, opcodeRegReg)) {
-            if (this.equalBits(funct7, funct7Normal)) {
-                if (this.equalBits(funct3, funct3Add))
-                    retval.push(this.buildR("add", rd, rs1, rs2));
-                else if (this.equalBits(funct3, funct3Slt))
-                    retval.push(this.buildR("slt", rd, rs1, rs2));
-                else if (this.equalBits(funct3, funct3Sltu))
-                    retval.push(this.buildR("sltu", rd, rs1, rs2));
-                else if (this.equalBits(funct3, funct3And))
-                    retval.push(this.buildR("and", rd, rs1, rs2));
-                else if (this.equalBits(funct3, funct3Or))
-                    retval.push(this.buildR("or", rd, rs1, rs2));
-                else if (this.equalBits(funct3, funct3Xor))
-                    retval.push(this.buildR("xor", rd, rs1, rs2));
-                else if (this.equalBits(funct3, funct3Sll))
-                    retval.push(this.buildR("sll", rd, rs1, rs2));
-                else if (this.equalBits(funct3, funct3Srl))
-                    retval.push(this.buildR("srl", rd, rs1, rs2));
-            }
-            else if (this.equalBits(funct7, funct7Alter)) {
-                if (this.equalBits(funct3, funct3Add))
-                    retval.push(this.buildR("sub", rd, rs1, rs2));
-                else if (this.equalBits(funct3, funct3Srl))
-                    retval.push(this.buildR("sra", rd, rs1, rs2));
+            else if (Disassembler.equalBits(funct3, funct3Srl)) {
+                if (Disassembler.equalBits(funct7, funct7Normal))
+                    retval.push(Disassembler.buildIShift("srli", rd, rs1, shamt));
+                else if (Disassembler.equalBits(funct7, funct7Alter))
+                    retval.push(Disassembler.buildIShift("srai", rd, rs1, shamt));
             }
         }
-        else if (this.equalBits(opcode, opcodeLui)) {
-            retval.push(this.buildU("lui", rd, immU));
-        }
-        else if (this.equalBits(opcode, opcodeAuipc)) {
-            retval.push(this.buildU("auipc", rd, immU));
-        }
-        else if (this.equalBits(opcode, opcodeBranch)) {
-            if (this.equalBits(funct3, funct3Beq))
-                retval.push(this.buildSMem("beq", rs1, rs2, immB));
-            else if (this.equalBits(funct3, funct3Bne))
-                retval.push(this.buildSMem("bne", rs1, rs2, immB));
-            else if (this.equalBits(funct3, funct3Blt)) {
-                retval.push(this.buildSMem("blt", rs1, rs2, immB));
-                retval.push(this.buildSMem("bgt", rs2, rs1, immB));
+        else if (Disassembler.equalBits(opcode, opcodeRegReg)) {
+            if (Disassembler.equalBits(funct7, funct7Normal)) {
+                if (Disassembler.equalBits(funct3, funct3Add))
+                    retval.push(Disassembler.buildR("add", rd, rs1, rs2));
+                else if (Disassembler.equalBits(funct3, funct3Slt))
+                    retval.push(Disassembler.buildR("slt", rd, rs1, rs2));
+                else if (Disassembler.equalBits(funct3, funct3Sltu))
+                    retval.push(Disassembler.buildR("sltu", rd, rs1, rs2));
+                else if (Disassembler.equalBits(funct3, funct3And))
+                    retval.push(Disassembler.buildR("and", rd, rs1, rs2));
+                else if (Disassembler.equalBits(funct3, funct3Or))
+                    retval.push(Disassembler.buildR("or", rd, rs1, rs2));
+                else if (Disassembler.equalBits(funct3, funct3Xor))
+                    retval.push(Disassembler.buildR("xor", rd, rs1, rs2));
+                else if (Disassembler.equalBits(funct3, funct3Sll))
+                    retval.push(Disassembler.buildR("sll", rd, rs1, rs2));
+                else if (Disassembler.equalBits(funct3, funct3Srl))
+                    retval.push(Disassembler.buildR("srl", rd, rs1, rs2));
             }
-            else if (this.equalBits(funct3, funct3Bltu)) {
-                retval.push(this.buildSMem("bltu", rs1, rs2, immB));
-                retval.push(this.buildSMem("bgtu", rs2, rs1, immB));
-            }
-            else if (this.equalBits(funct3, funct3Bge)) {
-                retval.push(this.buildSMem("bge", rs1, rs2, immB));
-                retval.push(this.buildSMem("ble", rs2, rs1, immB));
-            }
-            else if (this.equalBits(funct3, funct3Bgeu)) {
-                retval.push(this.buildSMem("bgeu", rs1, rs2, immB));
-                retval.push(this.buildSMem("bleu", rs2, rs1, immB));
+            else if (Disassembler.equalBits(funct7, funct7Alter)) {
+                if (Disassembler.equalBits(funct3, funct3Add))
+                    retval.push(Disassembler.buildR("sub", rd, rs1, rs2));
+                else if (Disassembler.equalBits(funct3, funct3Srl))
+                    retval.push(Disassembler.buildR("sra", rd, rs1, rs2));
             }
         }
-        else if (this.equalBits(opcode, opcodeJump)) {
-            retval.push(this.buildJ("jal", rd, immJ));
-            if (this.toNumber(rd) == 0)
+        else if (Disassembler.equalBits(opcode, opcodeLui)) {
+            retval.push(Disassembler.buildU("lui", rd, immU));
+        }
+        else if (Disassembler.equalBits(opcode, opcodeAuipc)) {
+            retval.push(Disassembler.buildU("auipc", rd, immU));
+        }
+        else if (Disassembler.equalBits(opcode, opcodeBranch)) {
+            if (Disassembler.equalBits(funct3, funct3Beq))
+                retval.push(Disassembler.buildSMem("beq", rs1, rs2, immB));
+            else if (Disassembler.equalBits(funct3, funct3Bne))
+                retval.push(Disassembler.buildSMem("bne", rs1, rs2, immB));
+            else if (Disassembler.equalBits(funct3, funct3Blt)) {
+                retval.push(Disassembler.buildSMem("blt", rs1, rs2, immB));
+                retval.push(Disassembler.buildSMem("bgt", rs2, rs1, immB));
+            }
+            else if (Disassembler.equalBits(funct3, funct3Bltu)) {
+                retval.push(Disassembler.buildSMem("bltu", rs1, rs2, immB));
+                retval.push(Disassembler.buildSMem("bgtu", rs2, rs1, immB));
+            }
+            else if (Disassembler.equalBits(funct3, funct3Bge)) {
+                retval.push(Disassembler.buildSMem("bge", rs1, rs2, immB));
+                retval.push(Disassembler.buildSMem("ble", rs2, rs1, immB));
+            }
+            else if (Disassembler.equalBits(funct3, funct3Bgeu)) {
+                retval.push(Disassembler.buildSMem("bgeu", rs1, rs2, immB));
+                retval.push(Disassembler.buildSMem("bleu", rs2, rs1, immB));
+            }
+        }
+        else if (Disassembler.equalBits(opcode, opcodeJump)) {
+            retval.push(Disassembler.buildJ("jal", rd, immJ));
+            if (Disassembler.toNumber(rd) == 0)
                 retval.push(new Instruction("j", [
-                    new Arg(`${this.toNumber(immJ) * 2}`)
+                    new Arg(`${Disassembler.toNumber(immJ) * 2}`)
                 ]));
         }
-        else if (this.equalBits(opcode, opcodeJalr)) {
-            if (this.equalBits(funct3, funct3Jalr))
-                retval.push(this.buildIMem("jalr", rd, rs1, immI));
+        else if (Disassembler.equalBits(opcode, opcodeJalr)) {
+            if (Disassembler.equalBits(funct3, funct3Jalr))
+                retval.push(Disassembler.buildIMem("jalr", rd, rs1, immI));
         }
 
         return retval;
@@ -276,7 +283,7 @@ class Disassembler {
 
     static disassemble(byteBuffer: Uint8Array[]): Instruction[][] {
         let instructionsBytes: Uint8Array[] = BytesSplitter.splitBytes(byteBuffer);
-        return instructionsBytes.map(this.findInstruction)
+        return instructionsBytes.map(Disassembler.findInstruction)
     }
 }
 

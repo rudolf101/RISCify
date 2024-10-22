@@ -14,8 +14,8 @@ class BytesSplitter {
         for (let i = 0; i < byteArrays.length; i += instructionSize) {
             var instruction = new Uint8Array(32);
             for (var j = 0; j < instructionSize; j++)
-                instruction.set(byteArrays.at(i + j) ?? emptyByte, 8 * j);
-            instructions.push(instruction); // Little-Endian
+                instruction.set(byteArrays[i + j] ?? emptyByte, 8 * j);
+            instructions.push(instruction);
         }
 
         return instructions;
