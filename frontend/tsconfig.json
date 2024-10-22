@@ -21,10 +21,10 @@
     "jsx": "react-jsx",
     "baseUrl": "./",          
     "paths": {
-      "disassembler/*": ["../disassembler/*"] 
+      "disassembler/*": ["src/disassembler/*"] 
     }
   },
   "include": [
     "src"
-  ]
+, "src/disassembler"  ]
 }

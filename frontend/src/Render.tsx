@@ -1,48 +1,14 @@
 import { useState } from "react";
+import { Disassembler } from "./disassembler/Disassembler"; 
 
-class Arg {
-    constructor(data: string) {
-        this._data = data;
+function numberToUnit8Array(x: number): Uint8Array {
+    let acc = new Uint8Array(8);
+    
+    for (let i = 0; i < 8; i++) {
+        acc[i] = (x >> i) & 1;
     }
 
-    private readonly _data: string;
-
-    get data(): string {
-        return this._data;
-    }
-}
-
-class Instruction {
-    constructor(name: string, args: Arg[]) {
-        this._name = name;
-        this._args = args;
-    }
-
-    private readonly _name: string;
-
-    get name(): string {
-        return this._name;
-    }
-
-    private readonly _args: Arg[];
-
-    get args(): Arg[] {
-        return this._args;
-    }
-}
-
-class Disassembler {
-    private static findInstruction(byteBuffer: Uint8Array[]): Instruction {
-        return new Instruction("add", [new Arg("x1"), new Arg("x2"), new Arg("x3")]);
-    }
-
-    static disassemble(byteBuffer: Uint8Array[]): Instruction[][] {
-        return [
-            [Disassembler.findInstruction(byteBuffer)],
-            [Disassembler.findInstruction(byteBuffer)],
-            [Disassembler.findInstruction(byteBuffer), Disassembler.findInstruction(byteBuffer)],
-        ];
-    }
+    return acc
 }
 
 const useDisassembler = () => {
@@ -56,7 +22,7 @@ const useDisassembler = () => {
 
         console.error("byteArray:", byteArray);
 
-        const byteBuffer = [new Uint8Array(byteArray)];
+        const byteBuffer = byteArray.map((b) =>  numberToUnit8Array(b));
         console.error("byteBuffer:", byteBuffer);
 
         const disassembledInstructions = Disassembler.disassemble(byteBuffer);
