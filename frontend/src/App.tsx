@@ -45,8 +45,8 @@ const App: React.FC = () => {
         value={hexCode}
         onChange={handleHexChange}
         style={{ marginBottom: '1rem' }}
-        error={!!error} // Подсвечивает поле, если ошибка есть
-        helperText={error} // Показывает сообщение об ошибке
+        error={!!error} 
+        helperText={error} 
       />
       <Button
         variant="contained"
