@@ -98,6 +98,9 @@ class Disassembler {
      * @returns all instructions that match this bit sequence
      */
     public static findInstruction(bits: Uint8Array): Instruction[] {
+        if (!Disassembler.equalBits(bits.subarray(0,2), new Uint8Array([1,1])))
+            return [];
+
         const opcodeLoad   = new Uint8Array([0,0,0,0,0]);
         const opcodeStore  = new Uint8Array([0,0,0,1,0]);
         const opcodeRegImm = new Uint8Array([0,0,1,0,0]);
