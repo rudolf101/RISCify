@@ -4,17 +4,17 @@ import {BytesSplitter} from "./utils/BytesSplitter";
 
 class Disassembler {
     private static equalBits(a: Uint8Array, b: Uint8Array): boolean {
-        if (a == null || b == null) return false;
-        if (a.length != b.length) return false;
-        return a.every((bit, index) => bit == b[index]);
+        if (a === null || b === null) return false;
+        if (a.length !== b.length) return false;
+        return a.every((bit, index) => bit === b[index]);
     }
 
     private static toNumber(x: Uint8Array, signExtend: boolean = true): number {
-        if (x == null) return 0;
-        if (x.length == 0) return 0;
+        if (x === null) return 0;
+        if (x.length === 0) return 0;
         var retval: number = 0;
         for (var i: number = 0; i < x.length; i++) {
-            if ((x[i] ?? 0) != 0)
+            if ((x[i] ?? 0) !== 0)
                 retval |= 1 << i;
         }
         if (signExtend && retval >= (1 << (x.length - 1)))
@@ -129,7 +129,7 @@ class Disassembler {
         const funct3Bltu   = new Uint8Array([0,1,1]);
         const funct3Bge    = new Uint8Array([1,0,1]);
         const funct3Bgeu   = new Uint8Array([1,1,1]);
-        
+
         const funct7Normal = new Uint8Array([0,0,0,0,0,0,0]);
         const funct7Alter  = new Uint8Array([0,0,0,0,0,1,0]);
 
@@ -166,7 +166,7 @@ class Disassembler {
                 )
             )
         );
-        
+
         var retval: Instruction[] = [];
 
         if (Disassembler.equalBits(opcode, opcodeLoad)) {
@@ -179,19 +179,19 @@ class Disassembler {
         }
         else if (Disassembler.equalBits(opcode, opcodeStore)) {
             if (Disassembler.equalBits(funct3, funct3WW))
-                retval.push(Disassembler.buildSMem("sw", rs1, rs2, immI));
+                retval.push(Disassembler.buildSMem("sw", rs1, rs2, immS));
             else if (Disassembler.equalBits(funct3, funct3WH))
-                retval.push(Disassembler.buildSMem("sh", rs1, rs2, immI));
+                retval.push(Disassembler.buildSMem("sh", rs1, rs2, immS));
             else if (Disassembler.equalBits(funct3, funct3WB))
-                retval.push(Disassembler.buildSMem("sb", rs1, rs2, immI));
+                retval.push(Disassembler.buildSMem("sb", rs1, rs2, immS));
         }
         else if (Disassembler.equalBits(opcode, opcodeRegImm)) {
             if (Disassembler.equalBits(funct3, funct3Add)) {
                 retval.push(Disassembler.buildI("addi", rd, rs1, immI));
                 if (
-                    Disassembler.toNumber(rd) == 0
-                    && Disassembler.toNumber(rs1) == 0
-                    && Disassembler.toNumber(immI) == 0)
+                    Disassembler.toNumber(rd) === 0
+                    && Disassembler.toNumber(rs1) === 0
+                    && Disassembler.toNumber(immI) === 0)
                     retval.push(new Instruction("nop", []));
             }
             else if (Disassembler.equalBits(funct3, funct3Slt))
@@ -271,7 +271,7 @@ class Disassembler {
         }
         else if (Disassembler.equalBits(opcode, opcodeJump)) {
             retval.push(Disassembler.buildJ("jal", rd, immJ));
-            if (Disassembler.toNumber(rd) == 0)
+            if (Disassembler.toNumber(rd) === 0)
                 retval.push(new Instruction("j", [
                     new Arg(`${Disassembler.toNumber(immJ) * 2}`)
                 ]));
