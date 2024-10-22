@@ -281,7 +281,7 @@ class Disassembler {
         return retval;
     }
 
-    static disassemble(byteBuffer: Uint8Array[]): Instruction[][] {
+    public static disassemble(byteBuffer: Uint8Array[]): Instruction[][] {
         let instructionsBytes: Uint8Array[] = BytesSplitter.splitBytes(byteBuffer);
         return instructionsBytes.map(Disassembler.findInstruction)
     }
