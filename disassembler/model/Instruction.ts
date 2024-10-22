@@ -1,4 +1,4 @@
-import {Arg} from "./Arg";
+import { Arg } from "./Arg";
 
 class Instruction {
     constructor(name: String, args: Arg[]) {
@@ -19,4 +19,4 @@ class Instruction {
     }
 }
 
-export {Instruction};
+export { Instruction };
