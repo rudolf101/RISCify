@@ -249,24 +249,24 @@ class Disassembler {
         }
         else if (Disassembler.equalBits(opcode, opcodeBranch)) {
             if (Disassembler.equalBits(funct3, funct3Beq))
-                retval.push(Disassembler.buildSMem("beq", rs1, rs2, immB));
+                retval.push(Disassembler.buildB("beq", rs1, rs2, immB));
             else if (Disassembler.equalBits(funct3, funct3Bne))
-                retval.push(Disassembler.buildSMem("bne", rs1, rs2, immB));
+                retval.push(Disassembler.buildB("bne", rs1, rs2, immB));
             else if (Disassembler.equalBits(funct3, funct3Blt)) {
-                retval.push(Disassembler.buildSMem("blt", rs1, rs2, immB));
-                retval.push(Disassembler.buildSMem("bgt", rs2, rs1, immB));
+                retval.push(Disassembler.buildB("blt", rs1, rs2, immB));
+                retval.push(Disassembler.buildB("bgt", rs2, rs1, immB));
             }
             else if (Disassembler.equalBits(funct3, funct3Bltu)) {
-                retval.push(Disassembler.buildSMem("bltu", rs1, rs2, immB));
-                retval.push(Disassembler.buildSMem("bgtu", rs2, rs1, immB));
+                retval.push(Disassembler.buildB("bltu", rs1, rs2, immB));
+                retval.push(Disassembler.buildB("bgtu", rs2, rs1, immB));
             }
             else if (Disassembler.equalBits(funct3, funct3Bge)) {
-                retval.push(Disassembler.buildSMem("bge", rs1, rs2, immB));
-                retval.push(Disassembler.buildSMem("ble", rs2, rs1, immB));
+                retval.push(Disassembler.buildB("bge", rs1, rs2, immB));
+                retval.push(Disassembler.buildB("ble", rs2, rs1, immB));
             }
             else if (Disassembler.equalBits(funct3, funct3Bgeu)) {
-                retval.push(Disassembler.buildSMem("bgeu", rs1, rs2, immB));
-                retval.push(Disassembler.buildSMem("bleu", rs2, rs1, immB));
+                retval.push(Disassembler.buildB("bgeu", rs1, rs2, immB));
+                retval.push(Disassembler.buildB("bleu", rs2, rs1, immB));
             }
         }
         else if (Disassembler.equalBits(opcode, opcodeJump)) {
