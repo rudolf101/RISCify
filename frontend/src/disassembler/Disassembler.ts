@@ -4,7 +4,7 @@ import {BytesSplitter} from "./utils/BytesSplitter";
 
 class Disassembler {
     private static equalBits(a: Uint8Array, b: Uint8Array): boolean {
-        if (a == null || b == null) false;
+        if (a == null || b == null) return false;
         if (a.length != b.length) return false;
         return a.every((bit, index) => bit == b[index]);
     }
