@@ -1,0 +1,30 @@
+<% instructions.forEach(instruction => { %>
+    class <%= instruction.name.charAt(0).toUpperCase() + instruction.name.slice(1) %> {
+        name: string;
+        fields: any[];
+        args: any[];
+    
+        constructor() {
+            this.name = "<%= instruction.name %>";
+            this.fields = [
+                <% instruction.fields.forEach(field => { %>
+                {
+                    mnemonic: "<%= field.mnemonic %>",
+                    span: "<%= field.span %>",
+                    value: "<%= field.value %>",
+                },
+                <% }) %>
+            ];
+            this.args = [
+                <% instruction.args.forEach(arg => { %>
+                {
+                    mnemonic: "<%= arg.mnemonic %>",
+                    span: "<%= arg.span %>",
+                    display: "<%= arg.display %>",
+                },
+                <% }) %>
+            ];
+        }
+    }
+    <% }) %>
+    

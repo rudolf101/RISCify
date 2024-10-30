@@ -1,0 +1,466 @@
+# я описываю инструкции в ямл
+# (1)
+# Args:
+#   rv32i_rd:
+#     mnemonic: "rd"
+#     span: "7:11"
+#     display: "regx"
+#   rv32i_rs1:
+#     mnemonic: "rs1"
+#     span: "15:19"
+#     display: "regx"
+#   rv32i_rs2:
+#     mnemonic: "rs2"
+#     span: "20:24"
+#     display: "regx"
+
+# Fields:
+#   rv32i_opcode_regreg:
+#     mnemonic: "opcode"
+#     span: "2,6"
+#     value: "00110"
+#   rv32i_funct3_add:
+#     mnemonic: "funct3"
+#     span: "12:14"
+#     value: "000"
+#   rv32i_funct7_normal:
+#     mnemonic: "funct7"
+#     span: "25:31"
+#     value: "0000000"
+
+# Sets:
+# - name: "RV32I"
+#   size: "32"
+#   instructions:
+#     - name: "add"
+#       fields: 
+#         - Fields.rv32i_opcode_regreg
+#         - Fields.rv32i_funct3_add
+#         - Fields.rv32i_funct7_normal
+#       args: 
+#         - Args.rv32i_rd
+#         - Args.rv32i_rs1
+#         - Args.rv32i_rs2
+
+# это тоже самое что и 
+# (2)
+# name: "RV32I"
+# size: "32"
+# instructions:
+#   name: "add"
+#   fields:
+#     - mnemonic: "opcode"
+#       span: "2,6"
+#       value: "00110"
+#     - mnemonic: "funct3"
+#       span: "12:14"
+#       value: "000"
+#     - mnemonic: "funct7"
+#       span: "25:31"
+#       value: "0000000"
+#   args: 
+#     - mnemonic: "rd"
+#       span: "7:11"
+#       display: "regx"
+#     - mnemonic: "rs1"
+#       span: "15:19"
+#       display: "regx"
+#     - mnemonic: "rs2"
+#       span: "20:24"
+#       display: "regx"
+
+# мне надо чтобы ты генерировал автоматически с помощью ejs
+# TS классы:
+# Instruction {
+#     name: "add"
+#     fields:
+#         Field{
+#           mnemonic: "opcode",
+#           span: "2,6",
+#           value: "00110",
+#         },
+#         Field{
+#           mnemonic: "funct3",
+#           span: "12:14",
+#           value: "000",
+#         },
+#         Field{
+#           mnemonic: "funct7",
+#           span: "25:31",
+#           value: "0000000",
+#         }
+#       args: 
+#         Arg{
+#           mnemonic: "rd",
+#           span: "7:11",
+#           display: "regx",
+#         },
+#         Arg{
+#           mnemonic: "rs1",
+#           span: "15:19",
+#           display: "regx",
+#         },
+#         Arg{
+#           mnemonic: "rs2",
+#           span: "20:24",
+#           display: "regx",
+#         },          
+# }
+
+
+
+
+
+
+
+Args:
+  rv32i_rd:
+    mnemonic: "rd"
+    span: "7:11"
+    display: "regx"
+  rv32i_rs1:
+    mnemonic: "rs1"
+    span: "15:19"
+    display: "regx"
+  rv32i_rs2:
+    mnemonic: "rs2"
+    span: "20:24"
+    display: "regx"
+  rv32i_shamt:
+    mnemonic: "imm"
+    span: "20:24"
+    display: "unum"
+  rv32i_i_imm:
+    mnemonic: "imm"
+    span: "20:31"
+    display: "num"
+  rv32i_i_imm_mem:
+    mnemonic: "imm"
+    span: "20:31"
+    display: "pnum"
+  rv32i_s_imm:
+    mnemonic: "imm"
+    span: "7:11,25:31"
+    display: "num"
+  rv32i_s_imm_mem:
+    mnemonic: "imm"
+    span: "7:11,25:31"
+    display: "pnum"
+  rv32i_b_imm:
+    mnemonic: "imm"
+    span: "8:11,25:30,7,31"
+    display: "double"
+  rv32i_u_imm:
+    mnemonic: "imm"
+    span: "12:31"
+    display: "num"
+  rv32i_j_imm:
+    mnemonic: "imm"
+    span: "21:30,20,12:19,31"
+    display: "double"
+  rv32i_f_succ:
+    mnemonic: "succ"
+    span: "20:23"
+    display: "fence"
+  rv32i_f_pred:
+    mnemonic: "pred"
+    span: "24:27"
+    display: "fence"
+
+Fields:
+  rv32i_opcode_jump:
+    mnemonic: "opcode"
+    span: "2,6"
+    value: "11011"
+
+  rv32i_opcode_load:
+    mnemonic: "opcode"
+    span: "2,6"
+    value: "00000"
+  rv32i_opcode_store:
+    mnemonic: "opcode"
+    span: "2,6"
+    value: "00010"
+  rv32i_opcode_regimm:
+    mnemonic: "opcode"
+    span: "2,6"
+    value: "00100"
+  rv32i_opcode_regreg:
+    mnemonic: "opcode"
+    span: "2,6"
+    value: "00110"
+  rv32i_opcode_lui:
+    mnemonic: "opcode"
+    span: "2,6"
+    value: "10110"
+  rv32i_opcode_auipc:
+    mnemonic: "opcode"
+    span: "2,6"
+    value: "10100"
+  rv32i_opcode_branch:
+    mnemonic: "opcode"
+    span: "2,6"
+    value: "00011"
+  rv32i_opcode_jalr:
+    mnemonic: "opcode"
+    span: "2,6"
+    value: "10011"
+  rv32i_opcode_fence:
+    mnemonic: "opcode"
+    span: "2,6"
+    value: "11000"
+  rv32i_opcode_system:
+    mnemonic: "opcode"
+    span: "2,6"
+    value: "00111"
+  rv32i_funct3_add:
+    mnemonic: "funct3"
+    span: "12:14"
+    value: "000"
+  rv32i_funct3_slt:
+    mnemonic: "funct3"
+    span: "12:14"
+    value: "010"
+  rv32i_funct3_sltu:
+    mnemonic: "funct3"
+    span: "12:14"
+    value: "110"
+  rv32i_funct3_and:
+    mnemonic: "funct3"
+    span: "12:14"
+    value: "111"
+  rv32i_funct3_or:
+    mnemonic: "funct3"
+    span: "12:14"
+    value: "011"
+  rv32i_funct3_xor:
+    mnemonic: "funct3"
+    span: "12:14"
+    value: "001"
+  rv32i_funct3_sll:
+    mnemonic: "funct3"
+    span: "12:14"
+    value: "100"
+  rv32i_funct3_srl:
+    mnemonic: "funct3"
+    span: "12:14"
+    value: "101"
+  rv32i_funct3_jalr:
+    mnemonic: "funct3"
+    span: "12:14"
+    value: "001"
+  rv32i_funct3_wb:
+    mnemonic: "funct3"
+    span: "12:14"
+    value: "000"
+  rv32i_funct3_wbu:
+    mnemonic: "funct3"
+    span: "12:14"
+    value: "001"
+  rv32i_funct3_wh:
+    mnemonic: "funct3"
+    span: "12:14"
+    value: "100"
+  rv32i_funct3_whu:
+    mnemonic: "funct3"
+    span: "12:14"
+    value: "101"
+  rv32i_funct3_ww:
+    mnemonic: "funct3"
+    span: "12:14"
+    value: "010"
+  rv32i_funct3_beq:
+    mnemonic: "funct3"
+    span: "12:14"
+    value: "000"
+  rv32i_funct3_bne:
+    mnemonic: "funct3"
+    span: "12:14"
+    value: "100"
+  rv32i_funct3_blt:
+    mnemonic: "funct3"
+    span: "12:14"
+    value: "001"
+  rv32i_funct3_bltu:
+    mnemonic: "funct3"
+    span: "12:14"
+    value: "011"
+  rv32i_funct3_bge:
+    mnemonic: "funct3"
+    span: "12:14"
+    value: "101"
+  rv32i_funct3_bgeu:
+    mnemonic: "funct3"
+    span: "12:14"
+    value: "111"
+  rv32i_funct3_fence:
+    mnemonic: "funct3"
+    span: "12:14"
+    value: "000"
+  rv32i_funct3_system:
+    mnemonic: "funct3"
+    span: "12:14"
+    value: "000"
+  rv32i_funct7_normal:
+    mnemonic: "funct7"
+    span: "25:31"
+    value: "0000000"
+  rv32i_funct7_alter:
+    mnemonic: "funct7"
+    span: "25:31"
+    value: "0000010"
+  rv32i_null_rd:
+    mnemonic: "rd"
+    span: "7:11"
+    value: "00000"
+  rv32i_null_rs1:
+    mnemonic: "rs1"
+    span: "15:19"
+    value: "00000"
+  rv32i_null_rs2:
+    mnemonic: "rs2"
+    span: "20:24"
+    value: "00000"
+  rv32i_null_i_imm:
+    mnemonic: "imm"
+    span: "20:31"
+    value: "000000000000"
+  rv32i_one_i_imm:
+    mnemonic: "imm"
+    span: "20:31"
+    value: "100000000000"
+  rv32i_neg_i_imm:
+    mnemonic: "imm"
+    span: "20:31"
+    value: "111111111111"
+
+Sets:
+- name: "RV32I"
+  size: "32"
+  instructions:
+    - name: "add"
+      fields: 
+        - Fields.rv32i_opcode_regreg
+        - Fields.rv32i_funct3_add
+        - Fields.rv32i_funct7_normal
+      args: 
+        - Args.rv32i_rd
+        - Args.rv32i_rs1
+        - Args.rv32i_rs2
+    - name: "sub"
+      fields: 
+        - Fields.rv32i_opcode_regreg
+        - Fields.rv32i_funct3_add
+        - Fields.rv32i_funct7_alter
+      args: 
+        - Args.rv32i_rd
+        - Args.rv32i_rs1
+        - Args.rv32i_rs2
+    - name: "slt"
+      fields: 
+        - Fields.rv32i_opcode_regreg
+        - Fields.rv32i_funct3_slt
+        - Fields.rv32i_funct7_normal
+      args: 
+        - Args.rv32i_rd
+        - Args.rv32i_rs1
+        - Args.rv32i_rs2
+    - name: "sltu"
+      fields: 
+        - Fields.rv32i_opcode_regreg
+        - Fields.rv32i_funct3_sltu
+        - Fields.rv32i_funct7_normal
+      args: 
+        - Args.rv32i_rd
+        - Args.rv32i_rs1
+        - Args.rv32i_rs2
+    - name: "and"
+      fields: 
+        - Fields.rv32i_opcode_regreg
+        - Fields.rv32i_funct3_and
+        - Fields.rv32i_funct7_normal
+      args: 
+        - Args.rv32i_rd
+        - Args.rv32i_rs1
+        - Args.rv32i_rs2
+    - name: "or"
+      fields: 
+        - Fields.rv32i_opcode_regreg
+        - Fields.rv32i_funct3_or
+        - Fields.rv32i_funct7_normal
+      args: 
+        - Args.rv32i_rd
+        - Args.rv32i_rs1
+        - Args.rv32i_rs2
+    - name: "xor"
+      fields: 
+        - Fields.rv32i_opcode_regreg
+        - Fields.rv32i_funct3_xor
+        - Fields.rv32i_funct7_normal
+      args: 
+        - Args.rv32i_rd
+        - Args.rv32i_rs1
+        - Args.rv32i_rs2
+    - name: "sll"
+      fields: 
+        - Fields.rv32i_opcode_regreg
+        - Fields.rv32i_funct3_sll
+        - Fields.rv32i_funct7_normal
+      args: 
+        - Args.rv32i_rd
+        - Args.rv32i_rs1
+        - Args.rv32i_shamt
+    - name: "srl"
+      fields: 
+        - Fields.rv32i_opcode_regreg
+        - Fields.rv32i_funct3_srl
+        - Fields.rv32i_funct7_normal
+      args: 
+        - Args.rv32i_rd
+        - Args.rv32i_rs1
+        - Args.rv32i_shamt
+    # - name: "jal"
+    #   fields: 
+    #     - Fields.rv32i_opcode_jump
+    #     - Fields.rv32i_j_imm
+    #   args: 
+    #     - Args.rv32i_rd
+    # - name: "jalr"
+    #   fields: 
+    #     - Fields.rv32i_opcode_jalr
+    #     - Fields.rv32i_funct3_jalr
+    #     - Fields.rv32i_j_imm
+      # args: 
+      #   - Args.rv32i_rd
+      #   - Args.rv32i_rs1
+        # - Args.rv32i_i_imm
+    # - name: "beq"
+    #   fields: 
+    #     - Fields.rv32i_opcode_branch
+    #     - Fields.rv32i_funct3_beq
+    #     - Fields.rv32i_b_imm
+    #   args: 
+    #     - Args.rv32i_rs1
+    #     - Args.rv32i_rs2
+    #     - Args.rv32i_b_imm
+    # - name: "bne"
+    #   fields: 
+    #     - Fields.rv32i_opcode_branch
+    #     - Fields.rv32i_funct3_bne
+    #     - Fields.rv32i_b_imm
+    #   args: 
+    #     - Args.rv32i_rs1
+    #     - Args.rv32i_rs2
+    #     - Args.rv32i_b_imm
+    # - name: "lui"
+    #   fields: 
+    #     - Fields.rv32i_opcode_lui
+    #     - Fields.rv32i_u_imm
+    #   args: 
+    #     - Args.rv32i_rd
+    # - name: "auipc"
+    #   fields: 
+    #     - Fields.rv32i_opcode_auipc
+    #     - Fields.rv32i_u_imm
+    #   args: 
+    #     - Args.rv32i_rd
