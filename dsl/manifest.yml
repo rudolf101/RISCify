@@ -1,0 +1,9 @@
+ManifestVersion: "0.1"
+
+Files:
+- rv32i.yml
+- rv64i.yml
+
+Display:
+  RV32I: "RV32I/E"
+  RV64I: "RV64I/E"

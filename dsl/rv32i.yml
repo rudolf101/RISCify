@@ -148,7 +148,7 @@ Sets:
   - name: "sra"
     fields: [ Fields.rv32i_opcode_regreg, Fields.rv32i_funct3_srl, Fields.rv32i_funct7_alter ]
     args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_rs2 ]
-  
+
   - name: "nop"
     fields:
     - Fields.rv32i_opcode_regimm
@@ -219,7 +219,7 @@ Sets:
   - name: "sb"
     fields: [ Fields.rv32i_opcode_store, Fields.rv32i_funct3_wb ]
     args: [ Args.rv32i_rs2, Args.rv32i_s_imm_mem, Args.rv32i_rs1 ]
-  
+
   - name: "lui"
     fields: [ Fields.rv32i_opcode_lui ]
     args: [ Args.rv32i_rd, Args.rv32i_u_imm ]
@@ -269,7 +269,7 @@ Sets:
   - name: "jalr"
     fields: [ Fields.rv32i_opcode_jalr, Fields.rv32i_funct3_jalr ]
     args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_j_imm ]
-  
+
   - name: "pause"
     fields:
     - Fields.rv32i_opcode_fence
@@ -325,7 +325,7 @@ Sets:
     - mnemonic: "succ"
       span: "20:23"
       value: "1100"
-  
+
   - name: "ecall"
     fields:
     - Fields.rv32i_opcode_system
@@ -340,5 +340,3 @@ Sets:
     - Fields.rv32i_null_rd
     - Fields.rv32i_null_rs1
     - Fields.rv32i_one_i_imm
-    
-  
