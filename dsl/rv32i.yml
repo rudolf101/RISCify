@@ -184,6 +184,16 @@ Sets:
     fields: [ Fields.rv32i_opcode_regimm, Fields.rv32i_funct3_xor ]
     args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_i_imm ]
 
+  - name: "slli"
+    fields: [ Fields.rv32i_opcode_regimm, Fields.rv32i_funct3_sll, Fields.rv32i_funct7_normal ]
+    args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_shamt ]
+  - name: "srli"
+    fields: [ Fields.rv32i_opcode_regimm, Fields.rv32i_funct3_srl, Fields.rv32i_funct7_normal ]
+    args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_shamt ]
+  - name: "srai"
+    fields: [ Fields.rv32i_opcode_regimm, Fields.rv32i_funct3_srl, Fields.rv32i_funct7_alter ]
+    args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_shamt ]
+
   - name: "lw"
     fields: [ Fields.rv32i_opcode_load, Fields.rv32i_funct3_ww ]
     args: [ Args.rv32i_rd, Args.rv32i_i_imm_mem, Args.rv32i_rs1 ]
