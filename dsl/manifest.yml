@@ -4,8 +4,10 @@ Files:
 - rv32i.yml
 - rv64i.yml
 - zifencei.yml
+- zicsr.yml
 
 Display:
   RV32I: "RV32I/E"
   RV64I: "RV64I/E"
   # Zifencei: "Zifencei"  # optional if the same
+  # Zifencei: "Zicsr"

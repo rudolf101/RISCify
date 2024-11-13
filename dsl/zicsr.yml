@@ -1,0 +1,37 @@
+Args:  
+  zicsr_rd:   { mnemonic: "rd"  , span: "7:11" , display: "regx"   }
+  zicsr_rs1:  { mnemonic: "rs1" , span: "15:19", display: "regx"   }
+  zicsr_uimm: { mnemonic: "uimm", span: "15:19", display: "unum"   }
+  zicsr_csr:  { mnemonic: "csr" , span: "20:31", display: "num"    }
+
+Fields:
+  zicsr_opcode_csr: { mnemonic: "opcode", span: "2,6"  , value: "00111" }
+  zicsr_funct3_w:   { mnemonic: "funct3", span: "12:14", value: "100"   }
+  zicsr_funct3_s:   { mnemonic: "funct3", span: "12:14", value: "010"   }
+  zicsr_funct3_c:   { mnemonic: "funct3", span: "12:14", value: "110"   }
+  zicsr_funct3_wi:  { mnemonic: "funct3", span: "12:14", value: "101"   }
+  zicsr_funct3_si:  { mnemonic: "funct3", span: "12:14", value: "011"   }
+  zicsr_funct3_ci:  { mnemonic: "funct3", span: "12:14", value: "111"   }
+
+Sets:
+- name: "Zicsr"
+  size: "32"  
+  instructions:
+  - name: "csrrw"
+    fields: [ Fields.zicsr_opcode_csr, Fields.zicsr_funct3_w ]
+    args: [ Args.zicsr_rd, Args.zicsr_rs1, Args.zicsr_csr ]
+  - name: "csrrs"
+    fields: [ Fields.zicsr_opcode_csr, Fields.zicsr_funct3_s ]
+    args: [ Args.zicsr_rd, Args.zicsr_rs1, Args.zicsr_csr ]
+  - name: "csrrc"
+    fields: [ Fields.zicsr_opcode_csr, Fields.zicsr_funct3_c ]
+    args: [ Args.zicsr_rd, Args.zicsr_rs1, Args.zicsr_csr ]
+  - name: "csrrwi"
+    fields: [ Fields.zicsr_opcode_csr, Fields.zicsr_funct3_wi ]
+    args: [ Args.zicsr_rd, Args.zicsr_uimm, Args.zicsr_csr ]
+  - name: "csrrsi"
+    fields: [ Fields.zicsr_opcode_csr, Fields.zicsr_funct3_si ]
+    args: [ Args.zicsr_rd, Args.zicsr_uimm, Args.zicsr_csr ]
+  - name: "csrrci"
+    fields: [ Fields.zicsr_opcode_csr, Fields.zicsr_funct3_ci ]
+    args: [ Args.zicsr_rd, Args.zicsr_uimm, Args.zicsr_csr ]
