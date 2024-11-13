@@ -61,7 +61,7 @@ Args:
   rv64i_rs1:       { mnemonic: "rs1" , span: "15:19"            , display: "regx"   }
   rv64i_rs2:       { mnemonic: "rs2" , span: "20:24"            , display: "regx"   }
   rv64i_shamt:     { mnemonic: "imm" , span: "20:25"            , display: "unum"   }
-  rv64i_wshamt:    { mnemonic: "imm" , span: "20:24"            , display: "unum"   }
+  rv64i_shamt_w:   { mnemonic: "imm" , span: "20:24"            , display: "unum"   }
   rv64i_i_imm:     { mnemonic: "imm" , span: "20:31"            , display: "num"    }
   rv64i_i_imm_mem: { mnemonic: "imm" , span: "20:31"            , display: "pnum"   }
   rv64i_s_imm:     { mnemonic: "imm" , span: "7:11,25:31"       , display: "num"    }
@@ -73,49 +73,53 @@ Args:
   rv64i_f_pred:    { mnemonic: "pred", span: "24:27"            , display: "fence"  }
 
 Fields:
-  rv64i_opcode_load:   { mnemonic: "opcode", span: "2,6"  , value: "00000"        }
-  rv64i_opcode_store:  { mnemonic: "opcode", span: "2,6"  , value: "00010"        }
-  rv64i_opcode_regimm: { mnemonic: "opcode", span: "2,6"  , value: "00100"        }
-  rv64i_opcode_regreg: { mnemonic: "opcode", span: "2,6"  , value: "00110"        }
-  rv64i_opcode_lui:    { mnemonic: "opcode", span: "2,6"  , value: "10110"        }
-  rv64i_opcode_auipc:  { mnemonic: "opcode", span: "2,6"  , value: "10100"        }
-  rv64i_opcode_branch: { mnemonic: "opcode", span: "2,6"  , value: "00011"        }
-  rv64i_opcode_jalr:   { mnemonic: "opcode", span: "2,6"  , value: "10011"        }
-  rv64i_opcode_jump:   { mnemonic: "opcode", span: "2,6"  , value: "11011"        }
-  rv64i_opcode_fence:  { mnemonic: "opcode", span: "2,6"  , value: "11000"        }
-  rv64i_opcode_system: { mnemonic: "opcode", span: "2,6"  , value: "00111"        }
-  rv64i_funct3_add:    { mnemonic: "funct3", span: "12:14", value: "000"          }
-  rv64i_funct3_slt:    { mnemonic: "funct3", span: "12:14", value: "010"          }
-  rv64i_funct3_sltu:   { mnemonic: "funct3", span: "12:14", value: "110"          }
-  rv64i_funct3_and:    { mnemonic: "funct3", span: "12:14", value: "111"          }
-  rv64i_funct3_or:     { mnemonic: "funct3", span: "12:14", value: "011"          }
-  rv64i_funct3_xor:    { mnemonic: "funct3", span: "12:14", value: "001"          }
-  rv64i_funct3_sll:    { mnemonic: "funct3", span: "12:14", value: "100"          }
-  rv64i_funct3_srl:    { mnemonic: "funct3", span: "12:14", value: "101"          }
-  rv64i_funct3_jalr:   { mnemonic: "funct3", span: "12:14", value: "001"          }
-  rv64i_funct3_wb:     { mnemonic: "funct3", span: "12:14", value: "000"          }
-  rv64i_funct3_wbu:    { mnemonic: "funct3", span: "12:14", value: "001"          }
-  rv64i_funct3_wh:     { mnemonic: "funct3", span: "12:14", value: "100"          }
-  rv64i_funct3_whu:    { mnemonic: "funct3", span: "12:14", value: "101"          }
-  rv64i_funct3_ww:     { mnemonic: "funct3", span: "12:14", value: "010"          }
-  rv64i_funct3_beq:    { mnemonic: "funct3", span: "12:14", value: "000"          }
-  rv64i_funct3_bne:    { mnemonic: "funct3", span: "12:14", value: "100"          }
-  rv64i_funct3_blt:    { mnemonic: "funct3", span: "12:14", value: "001"          }
-  rv64i_funct3_bltu:   { mnemonic: "funct3", span: "12:14", value: "011"          }
-  rv64i_funct3_bge:    { mnemonic: "funct3", span: "12:14", value: "101"          }
-  rv64i_funct3_bgeu:   { mnemonic: "funct3", span: "12:14", value: "111"          }
-  rv64i_funct3_fence:  { mnemonic: "funct3", span: "12:14", value: "000"          }
-  rv64i_funct3_system: { mnemonic: "funct3", span: "12:14", value: "000"          }
-  rv64i_funct7_normal: { mnemonic: "funct7", span: "25:31", value: "0000000"      }
-  rv64i_funct7_alter:  { mnemonic: "funct7", span: "25:31", value: "0000010"      }
-  rv64i_funct6_normal: { mnemonic: "funct7", span: "26:31", value: "000000"       }
-  rv64i_funct6_alter:  { mnemonic: "funct7", span: "26:31", value: "000010"       }
-  rv64i_null_rd:       { mnemonic: "rd"    , span: "7:11" , value: "00000"        }
-  rv64i_null_rs1:      { mnemonic: "rs1"   , span: "15:19", value: "00000"        }
-  rv64i_null_rs2:      { mnemonic: "rs2"   , span: "20:24", value: "00000"        }
-  rv64i_null_i_imm:    { mnemonic: "imm"   , span: "20:31", value: "000000000000" }
-  rv64i_one_i_imm:     { mnemonic: "imm"   , span: "20:31", value: "100000000000" }
-  rv64i_neg_i_imm:     { mnemonic: "imm"   , span: "20:31", value: "111111111111" }
+  rv64i_opcode_load:     { mnemonic: "opcode", span: "2,6"  , value: "00000"        }
+  rv64i_opcode_store:    { mnemonic: "opcode", span: "2,6"  , value: "00010"        }
+  rv64i_opcode_regimm:   { mnemonic: "opcode", span: "2,6"  , value: "00100"        }
+  rv64i_opcode_regreg:   { mnemonic: "opcode", span: "2,6"  , value: "00110"        }
+  rv64i_opcode_regimm_w: { mnemonic: "opcode", span: "2,6"  , value: "01100"        }
+  rv64i_opcode_regreg_w: { mnemonic: "opcode", span: "2,6"  , value: "01110"        }
+  rv64i_opcode_lui:      { mnemonic: "opcode", span: "2,6"  , value: "10110"        }
+  rv64i_opcode_auipc:    { mnemonic: "opcode", span: "2,6"  , value: "10100"        }
+  rv64i_opcode_branch:   { mnemonic: "opcode", span: "2,6"  , value: "00011"        }
+  rv64i_opcode_jalr:     { mnemonic: "opcode", span: "2,6"  , value: "10011"        }
+  rv64i_opcode_jump:     { mnemonic: "opcode", span: "2,6"  , value: "11011"        }
+  rv64i_opcode_fence:    { mnemonic: "opcode", span: "2,6"  , value: "11000"        }
+  rv64i_opcode_system:   { mnemonic: "opcode", span: "2,6"  , value: "00111"        }
+  rv64i_funct3_add:      { mnemonic: "funct3", span: "12:14", value: "000"          }
+  rv64i_funct3_slt:      { mnemonic: "funct3", span: "12:14", value: "010"          }
+  rv64i_funct3_sltu:     { mnemonic: "funct3", span: "12:14", value: "110"          }
+  rv64i_funct3_and:      { mnemonic: "funct3", span: "12:14", value: "111"          }
+  rv64i_funct3_or:       { mnemonic: "funct3", span: "12:14", value: "011"          }
+  rv64i_funct3_xor:      { mnemonic: "funct3", span: "12:14", value: "001"          }
+  rv64i_funct3_sll:      { mnemonic: "funct3", span: "12:14", value: "100"          }
+  rv64i_funct3_srl:      { mnemonic: "funct3", span: "12:14", value: "101"          }
+  rv64i_funct3_jalr:     { mnemonic: "funct3", span: "12:14", value: "001"          }
+  rv64i_funct3_wb:       { mnemonic: "funct3", span: "12:14", value: "000"          }
+  rv64i_funct3_wbu:      { mnemonic: "funct3", span: "12:14", value: "001"          }
+  rv64i_funct3_wh:       { mnemonic: "funct3", span: "12:14", value: "100"          }
+  rv64i_funct3_whu:      { mnemonic: "funct3", span: "12:14", value: "101"          }
+  rv64i_funct3_ww:       { mnemonic: "funct3", span: "12:14", value: "010"          }
+  rv64i_funct3_wwu:      { mnemonic: "funct3", span: "12:14", value: "011"          }
+  rv64i_funct3_wd:       { mnemonic: "funct3", span: "12:14", value: "110"          }
+  rv64i_funct3_beq:      { mnemonic: "funct3", span: "12:14", value: "000"          }
+  rv64i_funct3_bne:      { mnemonic: "funct3", span: "12:14", value: "100"          }
+  rv64i_funct3_blt:      { mnemonic: "funct3", span: "12:14", value: "001"          }
+  rv64i_funct3_bltu:     { mnemonic: "funct3", span: "12:14", value: "011"          }
+  rv64i_funct3_bge:      { mnemonic: "funct3", span: "12:14", value: "101"          }
+  rv64i_funct3_bgeu:     { mnemonic: "funct3", span: "12:14", value: "111"          }
+  rv64i_funct3_fence:    { mnemonic: "funct3", span: "12:14", value: "000"          }
+  rv64i_funct3_system:   { mnemonic: "funct3", span: "12:14", value: "000"          }
+  rv64i_funct7_normal:   { mnemonic: "funct7", span: "25:31", value: "0000000"      }
+  rv64i_funct7_alter:    { mnemonic: "funct7", span: "25:31", value: "0000010"      }
+  rv64i_funct6_normal:   { mnemonic: "funct7", span: "26:31", value: "000000"       }
+  rv64i_funct6_alter:    { mnemonic: "funct7", span: "26:31", value: "000010"       }
+  rv64i_null_rd:         { mnemonic: "rd"    , span: "7:11" , value: "00000"        }
+  rv64i_null_rs1:        { mnemonic: "rs1"   , span: "15:19", value: "00000"        }
+  rv64i_null_rs2:        { mnemonic: "rs2"   , span: "20:24", value: "00000"        }
+  rv64i_null_i_imm:      { mnemonic: "imm"   , span: "20:31", value: "000000000000" }
+  rv64i_one_i_imm:       { mnemonic: "imm"   , span: "20:31", value: "100000000000" }
+  rv64i_neg_i_imm:       { mnemonic: "imm"   , span: "20:31", value: "111111111111" }
 
 Sets:
 - name: "rv64i"
@@ -150,6 +154,22 @@ Sets:
     args: [ Args.rv64i_rd, Args.rv64i_rs1, Args.rv64i_rs2 ]
   - name: "sra"
     fields: [ Fields.rv64i_opcode_regreg, Fields.rv64i_funct3_srl, Fields.rv64i_funct7_alter ]
+    args: [ Args.rv64i_rd, Args.rv64i_rs1, Args.rv64i_rs2 ]
+
+  - name: "addw"
+    fields: [ Fields.rv64i_opcode_regreg_w, Fields.rv64i_funct3_add, Fields.rv64i_funct7_normal ]
+    args: [ Args.rv64i_rd, Args.rv64i_rs1, Args.rv64i_rs2 ]
+  - name: "subw"
+    fields: [ Fields.rv64i_opcode_regreg_w, Fields.rv64i_funct3_add, Fields.rv64i_funct7_alter ]
+    args: [ Args.rv64i_rd, Args.rv64i_rs1, Args.rv64i_rs2 ]
+  - name: "sllw"
+    fields: [ Fields.rv64i_opcode_regreg_w, Fields.rv64i_funct3_sll, Fields.rv64i_funct7_normal ]
+    args: [ Args.rv64i_rd, Args.rv64i_rs1, Args.rv64i_rs2 ]
+  - name: "srlw"
+    fields: [ Fields.rv64i_opcode_regreg_w, Fields.rv64i_funct3_srl, Fields.rv64i_funct7_normal ]
+    args: [ Args.rv64i_rd, Args.rv64i_rs1, Args.rv64i_rs2 ]
+  - name: "sraw"
+    fields: [ Fields.rv64i_opcode_regreg_w, Fields.rv64i_funct3_srl, Fields.rv64i_funct7_alter ]
     args: [ Args.rv64i_rd, Args.rv64i_rs1, Args.rv64i_rs2 ]
   
   - name: "nop"
@@ -186,6 +206,29 @@ Sets:
   - name: "xori"
     fields: [ Fields.rv64i_opcode_regimm, Fields.rv64i_funct3_xor ]
     args: [ Args.rv64i_rd, Args.rv64i_rs1, Args.rv64i_i_imm ]
+
+  - name: "slli"
+    fields: [ Fields.rv64i_opcode_regimm, Fields.rv64i_funct3_sll, Fields.rv64i_funct6_normal ]
+    args: [ Args.rv64i_rd, Args.rv64i_rs1, Args.rv64i_shamt ]
+  - name: "srli"
+    fields: [ Fields.rv64i_opcode_regimm, Fields.rv64i_funct3_srl, Fields.rv64i_funct6_normal ]
+    args: [ Args.rv64i_rd, Args.rv64i_rs1, Args.rv64i_shamt ]
+  - name: "srai"
+    fields: [ Fields.rv64i_opcode_regimm, Fields.rv64i_funct3_srl, Fields.rv64i_funct6_alter ]
+    args: [ Args.rv64i_rd, Args.rv64i_rs1, Args.rv64i_shamt ]
+
+  - name: "addiw"
+    fields: [ Fields.rv64i_opcode_regimm_w, Fields.rv64i_funct3_add ]
+    args: [ Args.rv64i_rd, Args.rv64i_rs1, Args.rv64i_i_imm ]
+  - name: "slliw"
+    fields: [ Fields.rv64i_opcode_regimm_w, Fields.rv64i_funct3_sll, Fields.rv64i_funct7_normal ]
+    args: [ Args.rv64i_rd, Args.rv64i_rs1, Args.rv64i_shamt_w ]
+  - name: "srliw"
+    fields: [ Fields.rv64i_opcode_regimm_w, Fields.rv64i_funct3_srl, Fields.rv64i_funct7_normal ]
+    args: [ Args.rv64i_rd, Args.rv64i_rs1, Args.rv64i_shamt_w ]
+  - name: "sraiw"
+    fields: [ Fields.rv64i_opcode_regimm_w, Fields.rv64i_funct3_srl, Fields.rv64i_funct7_alter ]
+    args: [ Args.rv64i_rd, Args.rv64i_rs1, Args.rv64i_shamt_w ]
 
   - name: "lw"
     fields: [ Fields.rv64i_opcode_load, Fields.rv64i_funct3_ww ]
