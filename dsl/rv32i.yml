@@ -26,19 +26,20 @@
 # pnum:
 #   number in [-2^(n-1); 2^(n-1)-1] then the next argument in parentheses
 #   eg:
-#     [0,1,1,0,1,0,0,0,0,0,0,0] -> '22(...)', where ... is substututed with the next argument
+#     [0,1,1,0,1,0,0,0,0,0,0,0] -> '22(...)', where ... is substituted with the next argument
 #     [0,1,1,0,1] -> '-10(...)', where ... is substututed with the next argument
 #   comment:
 #     must have for commands lb, lh, lw, sb, sh, sw.
-#     with this command two arguments are output as one
+#     this way two arguments are output as one
 #
 # double:
-#   EVEN number in [-2^n; 2^n-1]
+#   EVEN number in [-2^n; 2^n-1], i.e. num * 2
 #   eg:
 #     [0,1,1,0,1,0,0,0,0,0,0,0] -> '44'
 #     [0,1,1,0,1] -> '-20'
 #
 # fence:
+#     accepts only 4 bits
 #     [0,0,0,0] -> '0'  # invalid, but let it be
 #     [1,0,0,0] -> 'w'
 #     [0,1,0,0] -> 'r'
@@ -72,17 +73,17 @@ Args:
   rv32i_f_pred:    { mnemonic: "pred", span: "24:27"            , display: "fence"  }
 
 Fields:
-  rv32i_opcode_load:   { mnemonic: "opcode", span: "2,6"  , value: "00000"        }
-  rv32i_opcode_store:  { mnemonic: "opcode", span: "2,6"  , value: "00010"        }
-  rv32i_opcode_regimm: { mnemonic: "opcode", span: "2,6"  , value: "00100"        }
-  rv32i_opcode_regreg: { mnemonic: "opcode", span: "2,6"  , value: "00110"        }
-  rv32i_opcode_lui:    { mnemonic: "opcode", span: "2,6"  , value: "10110"        }
-  rv32i_opcode_auipc:  { mnemonic: "opcode", span: "2,6"  , value: "10100"        }
-  rv32i_opcode_branch: { mnemonic: "opcode", span: "2,6"  , value: "00011"        }
-  rv32i_opcode_jalr:   { mnemonic: "opcode", span: "2,6"  , value: "10011"        }
-  rv32i_opcode_jump:   { mnemonic: "opcode", span: "2,6"  , value: "11011"        }
-  rv32i_opcode_fence:  { mnemonic: "opcode", span: "2,6"  , value: "11000"        }
-  rv32i_opcode_system: { mnemonic: "opcode", span: "2,6"  , value: "00111"        }
+  rv32i_opcode_load:   { mnemonic: "opcode", span: "2:6"  , value: "00000"        }
+  rv32i_opcode_store:  { mnemonic: "opcode", span: "2:6"  , value: "00010"        }
+  rv32i_opcode_regimm: { mnemonic: "opcode", span: "2:6"  , value: "00100"        }
+  rv32i_opcode_regreg: { mnemonic: "opcode", span: "2:6"  , value: "00110"        }
+  rv32i_opcode_lui:    { mnemonic: "opcode", span: "2:6"  , value: "10110"        }
+  rv32i_opcode_auipc:  { mnemonic: "opcode", span: "2:6"  , value: "10100"        }
+  rv32i_opcode_branch: { mnemonic: "opcode", span: "2:6"  , value: "00011"        }
+  rv32i_opcode_jalr:   { mnemonic: "opcode", span: "2:6"  , value: "10011"        }
+  rv32i_opcode_jump:   { mnemonic: "opcode", span: "2:6"  , value: "11011"        }
+  rv32i_opcode_fence:  { mnemonic: "opcode", span: "2:6"  , value: "11000"        }
+  rv32i_opcode_system: { mnemonic: "opcode", span: "2:6"  , value: "00111"        }
   rv32i_funct3_add:    { mnemonic: "funct3", span: "12:14", value: "000"          }
   rv32i_funct3_slt:    { mnemonic: "funct3", span: "12:14", value: "010"          }
   rv32i_funct3_sltu:   { mnemonic: "funct3", span: "12:14", value: "110"          }
@@ -119,163 +120,163 @@ Sets:
   size: "32"  
   instructions:
   - name: "add"
-    fields: [ Fields.rv32i_opcode_regreg, Fields.rv32i_funct3_add, Fields.rv32i_funct7_normal ]
-    args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_rs2 ]
+    fields: [ rv32i_opcode_regreg, rv32i_funct3_add, rv32i_funct7_normal ]
+    args: [ rv32i_rd, rv32i_rs1, rv32i_rs2 ]
   - name: "sub"
-    fields: [ Fields.rv32i_opcode_regreg, Fields.rv32i_funct3_add, Fields.rv32i_funct7_alter ]
-    args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_rs2 ]
+    fields: [ rv32i_opcode_regreg, rv32i_funct3_add, rv32i_funct7_alter ]
+    args: [ rv32i_rd, rv32i_rs1, rv32i_rs2 ]
   - name: "slt"
-    fields: [ Fields.rv32i_opcode_regreg, Fields.rv32i_funct3_slt, Fields.rv32i_funct7_normal ]
-    args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_rs2 ]
+    fields: [ rv32i_opcode_regreg, rv32i_funct3_slt, rv32i_funct7_normal ]
+    args: [ rv32i_rd, rv32i_rs1, rv32i_rs2 ]
   - name: "sltu"
-    fields: [ Fields.rv32i_opcode_regreg, Fields.rv32i_funct3_sltu, Fields.rv32i_funct7_normal ]
-    args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_rs2 ]
+    fields: [ rv32i_opcode_regreg, rv32i_funct3_sltu, rv32i_funct7_normal ]
+    args: [ rv32i_rd, rv32i_rs1, rv32i_rs2 ]
   - name: "and"
-    fields: [ Fields.rv32i_opcode_regreg, Fields.rv32i_funct3_and, Fields.rv32i_funct7_normal ]
-    args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_rs2 ]
+    fields: [ rv32i_opcode_regreg, rv32i_funct3_and, rv32i_funct7_normal ]
+    args: [ rv32i_rd, rv32i_rs1, rv32i_rs2 ]
   - name: "or"
-    fields: [ Fields.rv32i_opcode_regreg, Fields.rv32i_funct3_or, Fields.rv32i_funct7_normal ]
-    args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_rs2 ]
+    fields: [ rv32i_opcode_regreg, rv32i_funct3_or, rv32i_funct7_normal ]
+    args: [ rv32i_rd, rv32i_rs1, rv32i_rs2 ]
   - name: "xor"
-    fields: [ Fields.rv32i_opcode_regreg, Fields.rv32i_funct3_xor, Fields.rv32i_funct7_normal ]
-    args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_rs2 ]
+    fields: [ rv32i_opcode_regreg, rv32i_funct3_xor, rv32i_funct7_normal ]
+    args: [ rv32i_rd, rv32i_rs1, rv32i_rs2 ]
   - name: "sll"
-    fields: [ Fields.rv32i_opcode_regreg, Fields.rv32i_funct3_sll, Fields.rv32i_funct7_normal ]
-    args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_rs2 ]
+    fields: [ rv32i_opcode_regreg, rv32i_funct3_sll, rv32i_funct7_normal ]
+    args: [ rv32i_rd, rv32i_rs1, rv32i_rs2 ]
   - name: "srl"
-    fields: [ Fields.rv32i_opcode_regreg, Fields.rv32i_funct3_srl, Fields.rv32i_funct7_normal ]
-    args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_rs2 ]
+    fields: [ rv32i_opcode_regreg, rv32i_funct3_srl, rv32i_funct7_normal ]
+    args: [ rv32i_rd, rv32i_rs1, rv32i_rs2 ]
   - name: "sra"
-    fields: [ Fields.rv32i_opcode_regreg, Fields.rv32i_funct3_srl, Fields.rv32i_funct7_alter ]
-    args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_rs2 ]
+    fields: [ rv32i_opcode_regreg, rv32i_funct3_srl, rv32i_funct7_alter ]
+    args: [ rv32i_rd, rv32i_rs1, rv32i_rs2 ]
 
   - name: "nop"
     fields:
-    - Fields.rv32i_opcode_regimm
-    - Fields.rv32i_funct3_add
-    - Fields.rv32i_null_rd
-    - Fields.rv32i_null_rs1
-    - Fields.rv32i_null_i_imm
+    - rv32i_opcode_regimm
+    - rv32i_funct3_add
+    - rv32i_null_rd
+    - rv32i_null_rs1
+    - rv32i_null_i_imm
   - name: "mv"
-    fields: [ Fields.rv32i_opcode_regimm, Fields.rv32i_funct3_add, Args.rv32i_null_i_imm ]
-    args: [ Args.rv32i_rd, Args.rv32i_rs1 ]
+    fields: [ rv32i_opcode_regimm, rv32i_funct3_add, rv32i_null_i_imm ]
+    args: [ rv32i_rd, rv32i_rs1 ]
   - name: "addi"
-    fields: [ Fields.rv32i_opcode_regimm, Fields.rv32i_funct3_add ]
-    args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_i_imm ]
+    fields: [ rv32i_opcode_regimm, rv32i_funct3_add ]
+    args: [ rv32i_rd, rv32i_rs1, rv32i_i_imm ]
   - name: "slti"
-    fields: [ Fields.rv32i_opcode_regimm, Fields.rv32i_funct3_slt ]
-    args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_i_imm ]
+    fields: [ rv32i_opcode_regimm, rv32i_funct3_slt ]
+    args: [ rv32i_rd, rv32i_rs1, rv32i_i_imm ]
   - name: "seqz"
-    fields: [ Fields.rv32i_opcode_regimm, Fields.rv32i_funct3_sltu, Args.rv32i_one_i_imm ]
-    args: [ Args.rv32i_rd, Args.rv32i_rs1 ]
+    fields: [ rv32i_opcode_regimm, rv32i_funct3_sltu, rv32i_one_i_imm ]
+    args: [ rv32i_rd, rv32i_rs1 ]
   - name: "sltiu"
-    fields: [ Fields.rv32i_opcode_regimm, Fields.rv32i_funct3_sltu ]
-    args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_i_imm ]
+    fields: [ rv32i_opcode_regimm, rv32i_funct3_sltu ]
+    args: [ rv32i_rd, rv32i_rs1, rv32i_i_imm ]
   - name: "andi"
-    fields: [ Fields.rv32i_opcode_regimm, Fields.rv32i_funct3_and ]
-    args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_i_imm ]
+    fields: [ rv32i_opcode_regimm, rv32i_funct3_and ]
+    args: [ rv32i_rd, rv32i_rs1, rv32i_i_imm ]
   - name: "ori"
-    fields: [ Fields.rv32i_opcode_regimm, Fields.rv32i_funct3_or ]
-    args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_i_imm ]
+    fields: [ rv32i_opcode_regimm, rv32i_funct3_or ]
+    args: [ rv32i_rd, rv32i_rs1, rv32i_i_imm ]
   - name: "not"
-    fields: [ Fields.rv32i_opcode_regimm, Fields.rv32i_funct3_xor, Args.rv32i_neg_i_imm ]
-    args: [ Args.rv32i_rd, Args.rv32i_rs1 ]
+    fields: [ rv32i_opcode_regimm, rv32i_funct3_xor, rv32i_neg_i_imm ]
+    args: [ rv32i_rd, rv32i_rs1 ]
   - name: "xori"
-    fields: [ Fields.rv32i_opcode_regimm, Fields.rv32i_funct3_xor ]
-    args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_i_imm ]
+    fields: [ rv32i_opcode_regimm, rv32i_funct3_xor ]
+    args: [ rv32i_rd, rv32i_rs1, rv32i_i_imm ]
 
   - name: "slli"
-    fields: [ Fields.rv32i_opcode_regimm, Fields.rv32i_funct3_sll, Fields.rv32i_funct7_normal ]
-    args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_shamt ]
+    fields: [ rv32i_opcode_regimm, rv32i_funct3_sll, rv32i_funct7_normal ]
+    args: [ rv32i_rd, rv32i_rs1, rv32i_shamt ]
   - name: "srli"
-    fields: [ Fields.rv32i_opcode_regimm, Fields.rv32i_funct3_srl, Fields.rv32i_funct7_normal ]
-    args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_shamt ]
+    fields: [ rv32i_opcode_regimm, rv32i_funct3_srl, rv32i_funct7_normal ]
+    args: [ rv32i_rd, rv32i_rs1, rv32i_shamt ]
   - name: "srai"
-    fields: [ Fields.rv32i_opcode_regimm, Fields.rv32i_funct3_srl, Fields.rv32i_funct7_alter ]
-    args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_shamt ]
+    fields: [ rv32i_opcode_regimm, rv32i_funct3_srl, rv32i_funct7_alter ]
+    args: [ rv32i_rd, rv32i_rs1, rv32i_shamt ]
 
   - name: "lw"
-    fields: [ Fields.rv32i_opcode_load, Fields.rv32i_funct3_ww ]
-    args: [ Args.rv32i_rd, Args.rv32i_i_imm_mem, Args.rv32i_rs1 ]
+    fields: [ rv32i_opcode_load, rv32i_funct3_ww ]
+    args: [ rv32i_rd, rv32i_i_imm_mem, rv32i_rs1 ]
   - name: "lh"
-    fields: [ Fields.rv32i_opcode_load, Fields.rv32i_funct3_wh ]
-    args: [ Args.rv32i_rd, Args.rv32i_i_imm_mem, Args.rv32i_rs1 ]
+    fields: [ rv32i_opcode_load, rv32i_funct3_wh ]
+    args: [ rv32i_rd, rv32i_i_imm_mem, rv32i_rs1 ]
   - name: "lb"
-    fields: [ Fields.rv32i_opcode_load, Fields.rv32i_funct3_wb ]
-    args: [ Args.rv32i_rd, Args.rv32i_i_imm_mem, Args.rv32i_rs1 ]
+    fields: [ rv32i_opcode_load, rv32i_funct3_wb ]
+    args: [ rv32i_rd, rv32i_i_imm_mem, rv32i_rs1 ]
   - name: "lhu"
-    fields: [ Fields.rv32i_opcode_load, Fields.rv32i_funct3_whu ]
-    args: [ Args.rv32i_rd, Args.rv32i_i_imm_mem, Args.rv32i_rs1 ]
+    fields: [ rv32i_opcode_load, rv32i_funct3_whu ]
+    args: [ rv32i_rd, rv32i_i_imm_mem, rv32i_rs1 ]
   - name: "lbu"
-    fields: [ Fields.rv32i_opcode_load, Fields.rv32i_funct3_wbu ]
-    args: [ Args.rv32i_rd, Args.rv32i_i_imm_mem, Args.rv32i_rs1 ]
+    fields: [ rv32i_opcode_load, rv32i_funct3_wbu ]
+    args: [ rv32i_rd, rv32i_i_imm_mem, rv32i_rs1 ]
 
   - name: "sw"
-    fields: [ Fields.rv32i_opcode_store, Fields.rv32i_funct3_ww ]
-    args: [ Args.rv32i_rs2, Args.rv32i_s_imm_mem, Args.rv32i_rs1 ]
+    fields: [ rv32i_opcode_store, rv32i_funct3_ww ]
+    args: [ rv32i_rs2, rv32i_s_imm_mem, rv32i_rs1 ]
   - name: "sh"
-    fields: [ Fields.rv32i_opcode_store, Fields.rv32i_funct3_wh ]
-    args: [ Args.rv32i_rs2, Args.rv32i_s_imm_mem, Args.rv32i_rs1 ]
+    fields: [ rv32i_opcode_store, rv32i_funct3_wh ]
+    args: [ rv32i_rs2, rv32i_s_imm_mem, rv32i_rs1 ]
   - name: "sb"
-    fields: [ Fields.rv32i_opcode_store, Fields.rv32i_funct3_wb ]
-    args: [ Args.rv32i_rs2, Args.rv32i_s_imm_mem, Args.rv32i_rs1 ]
+    fields: [ rv32i_opcode_store, rv32i_funct3_wb ]
+    args: [ rv32i_rs2, rv32i_s_imm_mem, rv32i_rs1 ]
 
   - name: "lui"
-    fields: [ Fields.rv32i_opcode_lui ]
-    args: [ Args.rv32i_rd, Args.rv32i_u_imm ]
+    fields: [ rv32i_opcode_lui ]
+    args: [ rv32i_rd, rv32i_u_imm ]
   - name: "auipc"
-    fields: [ Fields.rv32i_opcode_auipc ]
-    args: [ Args.rv32i_rd, Args.rv32i_u_imm ]
+    fields: [ rv32i_opcode_auipc ]
+    args: [ rv32i_rd, rv32i_u_imm ]
 
   - name: "beq"
-    fields: [ Fields.rv32i_opcode_branch, Fields.rv32i_funct3_beq ]
-    args: [ Args.rv32i_rs1, Args.rv32i_rs2, Args.rv32i_b_imm ]
+    fields: [ rv32i_opcode_branch, rv32i_funct3_beq ]
+    args: [ rv32i_rs1, rv32i_rs2, rv32i_b_imm ]
   - name: "bne"
-    fields: [ Fields.rv32i_opcode_branch, Fields.rv32i_funct3_bne ]
-    args: [ Args.rv32i_rs1, Args.rv32i_rs2, Args.rv32i_b_imm ]
+    fields: [ rv32i_opcode_branch, rv32i_funct3_bne ]
+    args: [ rv32i_rs1, rv32i_rs2, rv32i_b_imm ]
   - name: "blt"
-    fields: [ Fields.rv32i_opcode_branch, Fields.rv32i_funct3_blt ]
-    args: [ Args.rv32i_rs1, Args.rv32i_rs2, Args.rv32i_b_imm ]
+    fields: [ rv32i_opcode_branch, rv32i_funct3_blt ]
+    args: [ rv32i_rs1, rv32i_rs2, rv32i_b_imm ]
   - name: "bltu"
-    fields: [ Fields.rv32i_opcode_branch, Fields.rv32i_funct3_bltu ]
-    args: [ Args.rv32i_rs1, Args.rv32i_rs2, Args.rv32i_b_imm ]
+    fields: [ rv32i_opcode_branch, rv32i_funct3_bltu ]
+    args: [ rv32i_rs1, rv32i_rs2, rv32i_b_imm ]
   - name: "bge"
-    fields: [ Fields.rv32i_opcode_branch, Fields.rv32i_funct3_bge ]
-    args: [ Args.rv32i_rs1, Args.rv32i_rs2, Args.rv32i_b_imm ]
+    fields: [ rv32i_opcode_branch, rv32i_funct3_bge ]
+    args: [ rv32i_rs1, rv32i_rs2, rv32i_b_imm ]
   - name: "bgeu"
-    fields: [ Fields.rv32i_opcode_branch, Fields.rv32i_funct3_bgeu ]
-    args: [ Args.rv32i_rs1, Args.rv32i_rs2, Args.rv32i_b_imm ]
+    fields: [ rv32i_opcode_branch, rv32i_funct3_bgeu ]
+    args: [ rv32i_rs1, rv32i_rs2, rv32i_b_imm ]
 
 # Reverse alternatives for blt, bltu, bge, bgeu
   - name: "bgt"
-    fields: [ Fields.rv32i_opcode_branch, Fields.rv32i_funct3_blt ]
-    args: [ Args.rv32i_rs2, Args.rv32i_rs1, Args.rv32i_b_imm ]
+    fields: [ rv32i_opcode_branch, rv32i_funct3_blt ]
+    args: [ rv32i_rs2, rv32i_rs1, rv32i_b_imm ]
   - name: "bgtu"
-    fields: [ Fields.rv32i_opcode_branch, Fields.rv32i_funct3_bltu ]
-    args: [ Args.rv32i_rs2, Args.rv32i_rs1, Args.rv32i_b_imm ]
+    fields: [ rv32i_opcode_branch, rv32i_funct3_bltu ]
+    args: [ rv32i_rs2, rv32i_rs1, rv32i_b_imm ]
   - name: "ble"
-    fields: [ Fields.rv32i_opcode_branch, Fields.rv32i_funct3_bge ]
-    args: [ Args.rv32i_rs2, Args.rv32i_rs1, Args.rv32i_b_imm ]
+    fields: [ rv32i_opcode_branch, rv32i_funct3_bge ]
+    args: [ rv32i_rs2, rv32i_rs1, rv32i_b_imm ]
   - name: "bleu"
-    fields: [ Fields.rv32i_opcode_branch, Fields.rv32i_funct3_bgeu ]
-    args: [ Args.rv32i_rs2, Args.rv32i_rs1, Args.rv32i_b_imm ]
+    fields: [ rv32i_opcode_branch, rv32i_funct3_bgeu ]
+    args: [ rv32i_rs2, rv32i_rs1, rv32i_b_imm ]
 
   - name: "j"
-    fields: [ Fields.rv32i_opcode_jal, Args.rv32i_null_rd ]
-    args: [ Args.rv32i_j_imm ]
+    fields: [ rv32i_opcode_jal, rv32i_null_rd ]
+    args: [ rv32i_j_imm ]
   - name: "jal"
-    fields: [ Fields.rv32i_opcode_jal ]
-    args: [ Args.rv32i_rd, Args.rv32i_j_imm ]
+    fields: [ rv32i_opcode_jal ]
+    args: [ rv32i_rd, rv32i_j_imm ]
   - name: "jalr"
-    fields: [ Fields.rv32i_opcode_jalr, Fields.rv32i_funct3_jalr ]
-    args: [ Args.rv32i_rd, Args.rv32i_rs1, Args.rv32i_j_imm ]
+    fields: [ rv32i_opcode_jalr, rv32i_funct3_jalr ]
+    args: [ rv32i_rd, rv32i_rs1, rv32i_j_imm ]
 
   - name: "pause"
     fields:
-    - Fields.rv32i_opcode_fence
-    - Fields.rv32i_funct3_fence
-    - Fields.rv32i_null_rd
-    - Fields.rv32i_null_rs1
+    - rv32i_opcode_fence
+    - rv32i_funct3_fence
+    - rv32i_null_rd
+    - rv32i_null_rs1
     - mnemonic: "fm"
       span: "28:31"
       value: "0000"
@@ -287,10 +288,10 @@ Sets:
       value: "0000"
   - name: "fence"
     fields:
-    - Fields.rv32i_opcode_fence
-    - Fields.rv32i_funct3_fence
-    - Fields.rv32i_null_rd
-    - Fields.rv32i_null_rs1
+    - rv32i_opcode_fence
+    - rv32i_funct3_fence
+    - rv32i_null_rd
+    - rv32i_null_rs1
     - mnemonic: "fm"
       span: "28:31"
       value: "0000"
@@ -302,20 +303,20 @@ Sets:
       value: "1111"
   - name: "fence"
     fields:
-    - Fields.rv32i_opcode_fence
-    - Fields.rv32i_funct3_fence
-    - Fields.rv32i_null_rd
-    - Fields.rv32i_null_rs1
+    - rv32i_opcode_fence
+    - rv32i_funct3_fence
+    - rv32i_null_rd
+    - rv32i_null_rs1
     - mnemonic: "fm"
       span: "28:31"
       value: "0000"
-    args: [ Args.rv32i_f_pred, Args.rv32i_f_succ ]
+    args: [ rv32i_f_pred, rv32i_f_succ ]
   - name: "fence.tso"
     fields:
-    - Fields.rv32i_opcode_fence
-    - Fields.rv32i_funct3_fence
-    - Fields.rv32i_null_rd
-    - Fields.rv32i_null_rs1
+    - rv32i_opcode_fence
+    - rv32i_funct3_fence
+    - rv32i_null_rd
+    - rv32i_null_rs1
     - mnemonic: "fm"
       span: "28:31"
       value: "0001"
@@ -328,15 +329,15 @@ Sets:
 
   - name: "ecall"
     fields:
-    - Fields.rv32i_opcode_system
-    - Fields.rv32i_funct3_system
-    - Fields.rv32i_null_rd
-    - Fields.rv32i_null_rs1
-    - Fields.rv32i_null_i_imm
+    - rv32i_opcode_system
+    - rv32i_funct3_system
+    - rv32i_null_rd
+    - rv32i_null_rs1
+    - rv32i_null_i_imm
   - name: "ebreak"
     fields:
-    - Fields.rv32i_opcode_system
-    - Fields.rv32i_funct3_system
-    - Fields.rv32i_null_rd
-    - Fields.rv32i_null_rs1
-    - Fields.rv32i_one_i_imm
+    - rv32i_opcode_system
+    - rv32i_funct3_system
+    - rv32i_null_rd
+    - rv32i_null_rs1
+    - rv32i_one_i_imm
