@@ -1,11 +1,11 @@
 Sets:
 - name: "Zifencei"
-  size: "32"  
+  size: "32"
   instructions:
-  - name: "fence.i"
+  - mnemonic: "fence.i"
     fields:
-    - { mnemonic: "opcode", span: "2:6", value: "11000" }
-    - { mnemonic: "funct3", span: "12:14", value: "100" }
-    - { mnemonic: "rd"  , span: "7:11", value: "00000" }
-    - { mnemonic: "rs1" , span: "15:19", value: "00000" }
-    - { mnemonic: "imm" , span: "20:31", value: "000000000000" }
+    - { name: "opcode", span: "0:6", value: "1111000" }
+    - { name: "funct3", span: "12:14", value: "100" }
+    - { name: "rd"  , span: "7:11", value: "00000" }
+    - { name: "rs1" , span: "15:19", value: "00000" }
+    - { name: "imm" , span: "20:31", value: "000000000000" }
