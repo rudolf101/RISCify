@@ -1,7 +1,7 @@
 Args:  
-  rv32i_rd:  { name: "rd" , span: "7:11" , display: "regx" }
-  rv32i_rs1: { name: "rs1", span: "15:19", display: "regx" }
-  rv32i_rs2: { name: "rs2", span: "20:24", display: "regx" }
+  m_rd:  { name: "rd" , span: "7:11" , display: "regx" }
+  m_rs1: { name: "rs1", span: "15:19", display: "regx" }
+  m_rs2: { name: "rs2", span: "20:24", display: "regx" }
 
 Fields:
   m_opcode:        { name: "opcode", span: "0:6"  , value: "1100110" }
@@ -22,28 +22,28 @@ Sets:
   instructions:
   - mnemonic: "mul"
     fields: [ m_opcode, m_funct3_mul, m_funct7 ]
-    args: [ rv32i_rd, rv32i_rs1, rv32i_rs2 ]
+    args: [ m_rd, m_rs1, m_rs2 ]
   - mnemonic: "mulh"
     fields: [ m_opcode, m_funct3_mulh, m_funct7 ]
-    args: [ rv32i_rd, rv32i_rs1, rv32i_rs2 ]
+    args: [ m_rd, m_rs1, m_rs2 ]
   - mnemonic: "mulhsu"
     fields: [ m_opcode, m_funct3_mulhsu, m_funct7 ]
-    args: [ rv32i_rd, rv32i_rs1, rv32i_rs2 ]
+    args: [ m_rd, m_rs1, m_rs2 ]
   - mnemonic: "mulhu"
     fields: [ m_opcode, m_funct3_mulhu, m_funct7 ]
-    args: [ rv32i_rd, rv32i_rs1, rv32i_rs2 ]
+    args: [ m_rd, m_rs1, m_rs2 ]
   - mnemonic: "div"
     fields: [ m_opcode, m_funct3_div, m_funct7 ]
-    args: [ rv32i_rd, rv32i_rs1, rv32i_rs2 ]
+    args: [ m_rd, m_rs1, m_rs2 ]
   - mnemonic: "divu"
     fields: [ m_opcode, m_funct3_divu, m_funct7 ]
-    args: [ rv32i_rd, rv32i_rs1, rv32i_rs2 ]
+    args: [ m_rd, m_rs1, m_rs2 ]
   - mnemonic: "rem"
     fields: [ m_opcode, m_funct3_rem, m_funct7 ]
-    args: [ rv32i_rd, rv32i_rs1, rv32i_rs2 ]
+    args: [ m_rd, m_rs1, m_rs2 ]
   - mnemonic: "remu"
     fields: [ m_opcode, m_funct3_remu, m_funct7 ]
-    args: [ rv32i_rd, rv32i_rs1, rv32i_rs2 ]
+    args: [ m_rd, m_rs1, m_rs2 ]
 
 - name: "RV64M"
   size: "32"
@@ -51,16 +51,16 @@ Sets:
   instructions:
   - mnemonic: "mulw"
     fields: [ m_opcode_w, m_funct3_mul, m_funct7 ]
-    args: [ rv32i_rd, rv32i_rs1, rv32i_rs2 ]
+    args: [ m_rd, m_rs1, m_rs2 ]
   - mnemonic: "divw"
     fields: [ m_opcode_w, m_funct3_div, m_funct7 ]
-    args: [ rv32i_rd, rv32i_rs1, rv32i_rs2 ]
+    args: [ m_rd, m_rs1, m_rs2 ]
   - mnemonic: "divuw"
     fields: [ m_opcode_w, m_funct3_divu, m_funct7 ]
-    args: [ rv32i_rd, rv32i_rs1, rv32i_rs2 ]
+    args: [ m_rd, m_rs1, m_rs2 ]
   - mnemonic: "remw"
     fields: [ m_opcode_w, m_funct3_rem, m_funct7 ]
-    args: [ rv32i_rd, rv32i_rs1, rv32i_rs2 ]
+    args: [ m_rd, m_rs1, m_rs2 ]
   - mnemonic: "remuw"
     fields: [ m_opcode_w, m_funct3_remu, m_funct7 ]
-    args: [ rv32i_rd, rv32i_rs1, rv32i_rs2 ]
+    args: [ m_rd, m_rs1, m_rs2 ]
