@@ -15,7 +15,7 @@ Fields:
 
 Sets:
 - name: "Zicsr"
-  size: "32"  
+  size: "32"
   instructions:
   - mnemonic: "csrrw"
     fields: [ zicsr_opcode_csr, zicsr_funct3_w ]

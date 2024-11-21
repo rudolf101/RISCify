@@ -117,7 +117,7 @@ Fields:
 
 Sets:
 - name: "RV32I"
-  size: "32"  
+  size: "32"
   instructions:
   - mnemonic: "add"
     fields: [ rv32i_opcode_regreg, rv32i_funct3_add, rv32i_funct7_normal ]
