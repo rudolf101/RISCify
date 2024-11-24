@@ -72,7 +72,6 @@ class Provider implements Provide {
 }
 
 type Arg = {
-  name: string;
   value: string;
 }
 
@@ -86,27 +85,63 @@ interface HandleSpan {
   compareWithValue: (span: string, value: string) => boolean
 }
 
-// TODO: handle comma
 class SpanHandler implements HandleSpan {
-  private data: string
-  
+  private data: string;
+
   constructor(input: string) {
-    this.data = input
+    this.data = input;
   }
 
   public getSubstring(span: string): string {
-    const [start, end] = span.split(":").map(Number);
-  
-    return this.data.slice(start, end + 1);
+    const segments = span.split(",");
+    let result = "";
+
+    for (const segment of segments) {
+      if (segment.includes(":")) {
+        const [start, end] = segment.split(":").map(Number);
+        result += this.data.slice(start, end + 1);
+      } else {
+        const index = Number(segment);
+        result += this.data[index] ?? ""; 
+      }
+    }
+
+    return result;
   }
-   
+
   public compareWithValue(span: string, value: string): boolean {
     return this.getSubstring(span) === value;
   }
 }
 
+class Display {
+  private rules: Map<string, (input: number) => string> = new Map();
+
+  constructor() {
+    this.rules.set("regx", (input: number) => "x" + input);
+    this.rules.set("regf", (input: number) => "f" + input);
+    this.rules.set("num", (input: number) => String(input));
+    this.rules.set("unum", (input: number) => String(input));
+    this.rules.set("unum", (input: number) => String(input));
+    // this.rules.set("pnum", (input: string) => input);
+    this.rules.set("double", (input: number) => String(input));
+    // this.rules.set("fence", (input: string) => input);
+  }
+
+  public display(prefix: string, value: number): string {
+    const rule = this.rules.get(prefix);
+
+    if (rule) {
+      return rule(value);
+    }
+
+    throw new Error(`No rule found for key: '${prefix}'`);
+  }
+}
+
 class InputValue {
   private spanHandler: HandleSpan
+  private display: Display = new Display()
 
   constructor(input: string) {
     this.spanHandler = new SpanHandler(input)
@@ -118,42 +153,15 @@ class InputValue {
 
   public getArgs(params: Param[]): Arg[] {
     return params.map((param) => ({
-      // TODO: Display
-      name: param.display, 
-      value: this.spanHandler.getSubstring(param.span)}))
+      value: this.display.display(param.display, parseInt(this.spanHandler.getSubstring(param.span), 2))
+    }))
   }
 
-}
-
-
-// TODO: probably it can be just a list of values and this should be removed
-class Input implements Iterable<InputValue> {
-  private inputValues: InputValue[];
-
-  constructor(inputs: string[]) {
-    this.inputValues = inputs.map((input) => new InputValue(input));
-  }
-
-  [Symbol.iterator](): Iterator<InputValue> {
-    let index = 0;
-    const inputValues = this.inputValues; 
-
-    return {
-      next(): IteratorResult<InputValue> {
-        if (index < inputValues.length) {
-          return { value: inputValues[index++], done: false };
-        } else {
-          return { value: undefined, done: true };
-        }
-      },
-    };
-  }
 }
 
 
 class Handler implements Handle {
   private provider: Provide
-  // TODO INPUT
   private input: InputValue[]
   
   constructor(provider: Provide, input: string) {
@@ -194,7 +202,8 @@ class Handler implements Handle {
 }
 
 const m = new Handler(new Provider(loadYAML('input.yaml')), "0000000001100010100000111011001100000000011000101000001110110011") 
-console.log(m.go())
+const ms = m.go()
+ms.forEach((vs) => vs.forEach((v) => console.log(v)))
 
 
 
