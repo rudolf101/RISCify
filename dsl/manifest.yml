@@ -6,6 +6,7 @@ Files:
 - zifencei.yml
 - zicsr.yml
 - m.yml
+- a.yml
 
 Display:
   RV32I: "RV32I/E"
@@ -14,3 +15,5 @@ Display:
   # Zifencei: "Zicsr"
   # RV32M: "RV32M"
   # RV64M: "RV64M"
+  # RV32A: "RV32A"
+  # RV64A: "RV64A"
