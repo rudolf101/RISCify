@@ -42,7 +42,7 @@ const loadYAML = (filePath: string): YAMLData => {
 };
 
 interface Handle {
-  go: () => Apply[]
+  go: () => Apply[][]
 }
 
 interface Provide {
@@ -126,7 +126,7 @@ class InputValue {
 }
 
 
-// TODO
+// TODO: probably it can be just a list of values and this should be removed
 class Input implements Iterable<InputValue> {
   private inputValues: InputValue[];
 
@@ -154,26 +154,31 @@ class Input implements Iterable<InputValue> {
 class Handler implements Handle {
   private provider: Provide
   // TODO INPUT
-  private input: InputValue
+  private input: InputValue[]
   
   constructor(provider: Provide, input: string) {
     this.provider = provider 
-    this.input = new InputValue(input.split('').reverse().join(''))
+
+    this.input = [];
+    for (let i = 0; i < input.length; i += 32) {
+      this.input.push(new InputValue(input.slice(i, i + 32).split('').reverse().join('')));
+    }
+
   }
 
-  public go(): Apply[] {
-    return this.provider.getSets().flatMap((set) => this.mkApplies(set.instructions))
+  public go(): Apply[][] {
+    return this.input.map((value) => this.provider.getSets().flatMap((set) => this.mkApplies(set.instructions, value)))
   }
 
-  private mkApplies(instructions: Instruction[]): Apply[] {
+  private mkApplies(instructions: Instruction[], value: InputValue): Apply[] {
     const isFit = (instruction: Instruction): boolean => {
-      return instruction.fields.every((name) => this.input.haveField(this.provider.getField(name)));
+      return instruction.fields.every((name) => value.haveField(this.provider.getField(name)));
     };
 
     const mkApply = (instruction: Instruction): Apply => {
       return { 
         Instruction: instruction, 
-        Args: this.input.getArgs(instruction.args.map(this.provider.getParam)) 
+        Args: value.getArgs(instruction.args.map((x) => this.provider.getParam(x))) 
       }
     }
 
@@ -188,7 +193,7 @@ class Handler implements Handle {
 
 }
 
-const m = new Handler(new Provider(loadYAML('input.yaml')), "00000000011000101000001110110011") 
+const m = new Handler(new Provider(loadYAML('input.yaml')), "0000000001100010100000111011001100000000011000101000001110110011") 
 console.log(m.go())
 
 
