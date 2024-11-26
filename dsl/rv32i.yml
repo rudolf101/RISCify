@@ -21,6 +21,7 @@ Fields:
   rv32i_opcode_lui:    { name: "opcode", span: "0:6"  , value: "1110110"      }
   rv32i_opcode_auipc:  { name: "opcode", span: "0:6"  , value: "1110100"      }
   rv32i_opcode_branch: { name: "opcode", span: "0:6"  , value: "1100011"      }
+  rv32i_opcode_jal:    { name: "opcode", span: "0:6"  , value: "1111011"      }
   rv32i_opcode_jalr:   { name: "opcode", span: "0:6"  , value: "1110011"      }
   rv32i_opcode_jump:   { name: "opcode", span: "0:6"  , value: "1111011"      }
   rv32i_opcode_fence:  { name: "opcode", span: "0:6"  , value: "1111000"      }
