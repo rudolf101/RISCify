@@ -2,19 +2,19 @@ import * as fs from 'fs';
 import * as yaml from 'js-yaml';
 
 type Param = {
-  mnemonic: string;
+  name: string;
   span: string;
   display: string;
 }
 
 type Field = {
-  mnemonic: string;
+  name: string;
   span: string;
   value: string;
 }
 
 type Instruction = {
-  name: string;
+  mnemonic: string;
   fields: string[];
   args: string[];
 }
@@ -201,7 +201,7 @@ class Handler implements Handle {
 
 }
 
-const m = new Handler(new Provider(loadYAML('input.yaml')), "0000000001100010100000111011001100000000011000101000001110110011") 
+const m = new Handler(new Provider(loadYAML('new-input.yaml')), "0100000001100010100000111011001100000000011000101000001110110011") 
 const ms = m.go()
 ms.forEach((vs) => vs.forEach((v) => console.log(v)))
 
