@@ -1,4 +1,4 @@
-Args:  
+Args:
   rv64i_rd:        { name: "rd"  , span: "7:11"             , display: "regx"   }
   rv64i_rs1:       { name: "rs1" , span: "15:19"            , display: "regx"   }
   rv64i_rs2:       { name: "rs2" , span: "20:24"            , display: "regx"   }

@@ -1,4 +1,4 @@
-Args:  
+Args:
   zicsr_rd:   { name: "rd"  , span: "7:11" , display: "regx"   }
   zicsr_rs1:  { name: "rs1" , span: "15:19", display: "regx"   }
   zicsr_uimm: { name: "uimm", span: "15:19", display: "unum"   }

@@ -1,4 +1,4 @@
-Args:  
+Args:
   a_rd:  { name: "rd" , span: "7:11" , display: "regx" }
   a_rs1: { name: "rs1", span: "15:19", display: "par(regx)" }
   a_rs2: { name: "rs2", span: "20:24", display: "regx" }
