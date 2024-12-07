@@ -7,6 +7,8 @@ Args:
   rv64i_i_imm:     { name: "imm" , span: "20:31"            , display: "num"    }
 
 Fields:
+  rv64i_opcode_load:   { name: "opcode", span: "0:6"  , value: "1100000"      }
+  rv64i_opcode_store:  { name: "opcode", span: "0:6"  , value: "1100010"      }
   rv64i_opcode_regimm:   { name: "opcode", span: "0:6"  , value: "1100100"      }
   rv64i_opcode_regreg:   { name: "opcode", span: "0:6"  , value: "1100110"      }
   rv64i_opcode_regimm_w: { name: "opcode", span: "0:6"  , value: "1101100"      }
