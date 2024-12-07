@@ -8,6 +8,9 @@ Files:
 - m.yml
 - a.yml
 - f.yml
+- d.yml
+- q.yml
+- zfh.yml
 
 Display:
   RV32I: "RV32I/E"
@@ -20,3 +23,9 @@ Display:
   # RV64A: "RV64A"
   # RV32F: "RV32F"
   # RV64F: "RV64F"
+  # RV32D: "RV32D"
+  # RV64D: "RV64D"
+  # RV32Q: "RV32Q"
+  # RV64Q: "RV64Q"
+  # RV32Zfh: "RV32Zfh"
+  # RV64Zfh: "RV64Zfh"
