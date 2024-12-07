@@ -188,17 +188,46 @@ class InputValue {
 
 class Handler implements Handle {
   private provider: Provide
-  private input: InputValue[]
+  private input: InputValue[] = []
   
   constructor(provider: Provide, input: string) {
     this.provider = provider 
 
-    this.input = [];
-    for (let i = 0; i < input.length; i += 32) {
-      this.input.push(new InputValue(input.slice(i, i + 32).split('').reverse().join('')));
+    let i = 0;
+    while (i < input.length) {
+      const segmentLength = this.calculateSegmentLength(input.slice(i));
+      this.input.push(new InputValue(input.slice(i, i + segmentLength)));
+      i += segmentLength;
     }
-
   }
+
+  private calculateSegmentLength(bits: string): number {
+    const prefix = bits.slice(0, 2); 
+
+    switch (prefix) {
+      case "11": {
+        const bbb = bits.slice(2, 5); 
+        if (bbb === "111") {
+          const extendedPrefix = bits.slice(0, 7); 
+          switch (extendedPrefix) {
+            case "111110":
+              return 48;
+            case "1111110":
+              return 64;
+            case "1111111": {
+              const multiplierBits = bits.slice(12, 14); 
+              const multiplier = parseInt(multiplierBits, 2); 
+              return 80 + 16 * multiplier;
+            }
+          }
+        }
+        return 32; 
+      }
+      default:
+        return 16; 
+    }
+  }
+
 
   public go(): Apply[][] {
     return this.input.map((value) => this.provider.getSets().flatMap((set) => this.mkApplies(set.instructions, value)))
@@ -231,21 +260,28 @@ class Handler implements Handle {
 const relativePath = '../../../dsl';
 const absolutePath = path.resolve(relativePath);
 
-const m = new Handler(new Provider(absolutePath), "0100000001100010100000111011001100000000011000101000001110110011") 
+// const m = new Handler(new Provider(absolutePath), "0100000001100010100000111011001100000000011000101000001110110011") 
+const m = new Handler(new Provider(absolutePath), "11000111000000000000000000000000") 
 const ms = m.go()
 ms.forEach((vs) => vs.forEach((v) => console.log(v)))
 
 
 
 
+// 0:6     8:11,25:30,7,31      12:14  15:19  20:24   
+// 1100011                      000    regx  regx
 
+// 0     6   7    8 11    12 14   15 19  20 24   25:30    31
+// 1100011   0    0000     000    00000  00000   000000   0
+
+// 11000110000000000000000000000000
 
 
 // add x7, x5, x6
 // funct7  | rs2   |  rs1  | funct3 | rd    | opcode |
 // 0000000 | 00110 | 00101 | 000    | 00111 | 01100  | 11
 
-
+// 
 
 // fields: [ Fields.rv32i_opcode_regreg, Fields.rv32i_funct3_add, Fields.rv32i_funct7_normal ]
 
