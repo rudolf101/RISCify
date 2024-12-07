@@ -1,0 +1,18 @@
+Sets:
+- name: Zawrs
+  size: 32
+  instructions:
+  - mnemonic: wrs.nto
+    fields:
+    - { name: opcode, span: "0:6"  , value: "1100111"      }
+    - { name: rd    , span: "7:11" , value: "00000"        }
+    - { name: funct3, span: "12:14", value: "000"          }
+    - { name: rs1   , span: "15:19", value: "00000"        }
+    - { name: imm   , span: "20:31", value: "101100000000" }
+  - mnemonic: wrs.sto
+    fields:
+    - { name: opcode, span: "0:6"  , value: "1100111"      }
+    - { name: rd    , span: "7:11" , value: "00000"        }
+    - { name: funct3, span: "12:14", value: "000"          }
+    - { name: rs1   , span: "15:19", value: "00000"        }
+    - { name: imm   , span: "20:31", value: "101110000000" }
