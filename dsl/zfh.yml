@@ -23,8 +23,8 @@ Fields:
   h_opcode_nmsub:  { name: "opcode", span: "0:6"  , value: "1101010" }
   h_opcode_nmadd:  { name: "opcode", span: "0:6"  , value: "1111010" }
   h_opcode_op:     { name: "opcode", span: "0:6"  , value: "1100101" }
-  h_funct3_lw:     { name: "funct3", span: "12:14", value: "001" }
-  h_funct3_sw:     { name: "funct3", span: "12:14", value: "001" }
+  h_funct3_lw:     { name: "funct3", span: "12:14", value: "100" }
+  h_funct3_sw:     { name: "funct3", span: "12:14", value: "100" }
   h_funct3_sgnj:   { name: "funct3", span: "12:14", value: "000" }
   h_funct3_sgnjn:  { name: "funct3", span: "12:14", value: "100" }
   h_funct3_sgnjx:  { name: "funct3", span: "12:14", value: "010" }
