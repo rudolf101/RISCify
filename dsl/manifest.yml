@@ -11,6 +11,7 @@ Files:
 - d.yml
 - q.yml
 - zfh.yml
+- zawrs.yml
 
 Display:
   RV32I: "RV32I/E"
@@ -29,3 +30,4 @@ Display:
   # RV64Q: "RV64Q"
   # RV32Zfh: "RV32Zfh"
   # RV64Zfh: "RV64Zfh"
+  # Zawrs: "Zawrs"
