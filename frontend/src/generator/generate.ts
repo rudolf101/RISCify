@@ -1,5 +1,6 @@
 import * as fs from 'fs';
 import * as yaml from 'js-yaml';
+const path = require('path');
 
 type Param = {
   name: string;
@@ -31,16 +32,6 @@ type YAMLData = {
   Sets: InstructionSet[];
 }
 
-const loadYAML = (filePath: string): YAMLData => {
-  try {
-    const fileContents = fs.readFileSync(filePath, 'utf8');
-    const data = yaml.load(fileContents) as YAMLData;
-    return data;
-  } catch (e) {
-    throw Error(`Error reading YAML file: ${e}`);
-  }
-};
-
 interface Handle {
   go: () => Apply[][]
 }
@@ -52,22 +43,57 @@ interface Provide {
 }
 
 class Provider implements Provide {
-  private data: YAMLData
-  
-  constructor(data: YAMLData) {
-    this.data = data 
+  private data: YAMLData[] = [];
+
+  constructor(folderPath: string) {
+    this.loadAllYAMLFiles(folderPath);
+  }
+
+  private loadYAML(filePath: string): YAMLData {
+    try {
+      const fileContents = fs.readFileSync(filePath, 'utf8');
+      return yaml.load(fileContents) as YAMLData;
+    } catch (e) {
+      throw new Error(`Error reading YAML file (${filePath}): ${e}`);
+    }
+  }
+
+  private loadAllYAMLFiles(folderPath: string): void {
+    try {
+      const files = fs.readdirSync(folderPath);
+      files.forEach((file) => {
+        const filePath = path.join(folderPath, file);
+        if (file.endsWith('.yml') || file.endsWith('.yaml')) {
+          console.log(file)
+          const yamlData = this.loadYAML(filePath);
+          this.data.push(yamlData);
+        }
+      });
+    } catch (e) {
+      throw new Error(`Error reading folder (${folderPath}): ${e}`);
+    }
   }
 
   public getSets(): InstructionSet[] {
-    return this.data.Sets
+    return this.data.flatMap((fileData) => fileData.Sets || []);
   }
 
   public getField(name: string): Field {
-    return this.data.Fields[name]
+    for (const fileData of this.data) {
+      if (fileData.Fields && fileData.Fields[name]) {
+        return fileData.Fields[name];
+      }
+    }
+    throw new Error(`Field not found (${name})`);
   }
 
   public getParam(name: string): Param {
-    return this.data.Args[name]
+    for (const fileData of this.data) {
+      if (fileData.Args && fileData.Args[name]) {
+        return fileData.Args[name];
+      }
+    }
+    throw new Error(`Param not found (${name})`);
   }
 }
 
@@ -114,6 +140,7 @@ class SpanHandler implements HandleSpan {
   }
 }
 
+// shuld be rewrited from python
 class Display {
   private rules: Map<string, (input: number) => string> = new Map();
 
@@ -159,7 +186,6 @@ class InputValue {
 
 }
 
-
 class Handler implements Handle {
   private provider: Provide
   private input: InputValue[]
@@ -201,7 +227,11 @@ class Handler implements Handle {
 
 }
 
-const m = new Handler(new Provider(loadYAML('new-input.yaml')), "0100000001100010100000111011001100000000011000101000001110110011") 
+
+const relativePath = '../../../dsl';
+const absolutePath = path.resolve(relativePath);
+
+const m = new Handler(new Provider(absolutePath), "0100000001100010100000111011001100000000011000101000001110110011") 
 const ms = m.go()
 ms.forEach((vs) => vs.forEach((v) => console.log(v)))
 
