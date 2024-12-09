@@ -140,22 +140,40 @@ class SpanHandler implements HandleSpan {
   }
 }
 
-// shuld be rewrited from python
 class Display {
-  private rules: Map<string, (input: number) => string> = new Map();
+  private rules: Map<string, (value: number | string) => string> = new Map();
 
   constructor() {
-    this.rules.set("regx", (input: number) => "x" + input);
-    this.rules.set("regf", (input: number) => "f" + input);
-    this.rules.set("num", (input: number) => String(input));
-    this.rules.set("unum", (input: number) => String(input));
-    this.rules.set("unum", (input: number) => String(input));
-    // this.rules.set("pnum", (input: string) => input);
-    this.rules.set("double", (input: number) => String(input));
-    // this.rules.set("fence", (input: string) => input);
+    this.rules.set("regx", (value: number) => "x" + value);
+    this.rules.set("regf", (value: number) => "f" + value);
+    this.rules.set("num", (value: number) => String(value));
+    this.rules.set("unum", (value: number) => String(value));
+    this.rules.set("pnum", (value: number) => "%" + value + "({0})");
+    this.rules.set("double", (value: number) => String(2 * value));
+    this.rules.set("fence", (value: string) => this.parseFence(value));
+    this.rules.set("rm", (value: string) => this.parseRm(value));
   }
 
-  public display(prefix: string, value: number): string {
+  private parseRm(value: string): string {
+    const rmMap: Record<string, string> = {
+      "000": "rne",
+      "100": "rtz",
+      "010": "rdn",
+      "110": "rup",
+      "001": "rmm",
+      "101": "-",
+      "011": "-",
+      "111": "dyn",
+    };
+    const key = value.slice(0, 3);
+    return rmMap[key] || "unknown";
+  }
+
+  private parseFence(value: string): string {
+    return `fence(${value.slice(0, 4)})`;
+  }
+
+  public display(prefix: string, value: number | string): string {
     const rule = this.rules.get(prefix);
 
     if (rule) {
