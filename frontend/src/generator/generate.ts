@@ -292,11 +292,36 @@ class Handler implements Handle {
 }
 
 
+
+function processHexDump(input: string): string {
+  const lines = input.split('\n');
+  const byteStrings: string[] = [];
+  for (const line of lines) {
+      const match = line.match(/:\s+((?:[0-9a-fA-F]{2}\s+)+)/);
+      if (match) {
+          byteStrings.push(...match[1].trim().split(/\s+/));
+      }
+  }
+
+  const reversedBits: string[] = byteStrings.map(byte => {
+      const binary = parseInt(byte, 16).toString(2).padStart(8, '0'); 
+      return binary.split('').reverse().join(''); 
+  });
+
+  return reversedBits.join('');
+}
+
+const input = `
+0x0000003f91b19ffe:   06 ec 00 10 aa 84 97 60 e4 ff e7 80 60 6b 11 e1
+`;
+const result = processHexDump(input);
+console.log(result);
+
+
 const relativePath = '../../../dsl';
 const absolutePath = path.resolve(relativePath);
 
-// const m = new Handler(new Provider(absolutePath), "0100000001100010100000111011001100000000011000101000001110110011") 
-const m = new Handler(new Provider(absolutePath), "11000111000000000000000000000000") 
+const m = new Handler(new Provider(absolutePath), "11101001000001100010011111111111") 
 const ms = m.go()
 ms.forEach((vs) => vs.forEach((v) => console.log(v)))
 
