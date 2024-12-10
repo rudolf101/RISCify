@@ -144,14 +144,31 @@ class Display {
   private rules: Map<string, (value: number | string) => string> = new Map();
 
   constructor() {
-    this.rules.set("regx", (value: number) => "x" + value);
-    this.rules.set("regf", (value: number) => "f" + value);
-    this.rules.set("num", (value: number) => String(value));
-    this.rules.set("unum", (value: number) => String(value));
-    this.rules.set("pnum", (value: number) => "%" + value + "({0})");
-    this.rules.set("double", (value: number) => String(2 * value));
+    this.rules.set("regx", (value: string) => "x" + this.toNum(value, false));
+    this.rules.set("regf", (value: string) => "f" + this.toNum(value, false));
+    this.rules.set("num", (value: string) => String(this.toNum(value, true)));
+    this.rules.set("unum", (value: string) => String(this.toNum(value, false)));
+    this.rules.set("pnum", (value: string) => "%" + this.toNum(value, false) + "({0})");
+    this.rules.set("double", (value: string) => String(2 * this.toNum(value, true)));
     this.rules.set("fence", (value: string) => this.parseFence(value));
     this.rules.set("rm", (value: string) => this.parseRm(value));
+  }
+
+  private toNum(bits: string, signed: boolean = true): number {
+    let number = 0;
+    let maximum = 1;
+
+    for (let i = bits.length - 1; i >= 0; i--) {
+      if (bits[i] === '1') {
+        number += maximum;
+      }
+      maximum *= 2;
+    }
+
+    if (!signed || number < maximum / 2) {
+      return number;
+    }
+    return number - maximum;
   }
 
   private parseRm(value: string): string {
@@ -173,7 +190,7 @@ class Display {
     return `fence(${value.slice(0, 4)})`;
   }
 
-  public display(prefix: string, value: number | string): string {
+  public display(prefix: string, value: string): string {
     const rule = this.rules.get(prefix);
 
     if (rule) {
