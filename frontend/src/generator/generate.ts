@@ -64,7 +64,6 @@ class Provider implements Provide {
       files.forEach((file) => {
         const filePath = path.join(folderPath, file);
         if (file.endsWith('.yml') || file.endsWith('.yaml')) {
-          console.log(file)
           const yamlData = this.loadYAML(filePath);
           this.data.push(yamlData);
         }
@@ -97,9 +96,9 @@ class Provider implements Provide {
   }
 }
 
-type Arg = {
-  value: string;
-}
+  type Arg = {
+    value: string;
+  }
 
 type Apply = {
   Instruction: Instruction
@@ -174,7 +173,6 @@ class Display {
     let maximum = 1;
 
     for (let i = bits.length - 1; i >= 0; i--) {
-      console.log("tonum:" + i)
       if (bits[i] === '1') {
         number += maximum;
       }
@@ -208,7 +206,7 @@ class Display {
 
   public display(idx: number, prefix: string, value: string): string {
     const rule = this.rules.get(prefix);
-    console.log("value: " + value)
+
     if (rule) {
       return rule(value, idx);
     }
@@ -363,16 +361,71 @@ const input = `
 0x0000003f91b1a1ee:   09 00 ef f0 ff d4 d3 06 05 e2 52 85 26 86 97 a5
 `;
 const result = processHexDump(input);
-console.log(result);
 
 
 const relativePath = '../../../dsl';
 const absolutePath = path.resolve(relativePath);
 
 const m = new Handler(new Provider(absolutePath), result) 
+
 const ms = m.go()
 ms.forEach((vs) => vs.forEach((v) => console.log(v)))
+
+
+class Disassembler {
+  private provider: Provide = new Provider(absolutePath)
+  private executor = new Handler(new Provider(absolutePath), result) 
+  
+  constructor() {
+  }
+
+  dissasm(): Apply[][] {
+    return this.executor.go();
+  }
+}
+
+export { Disassembler };
+
+
+
 // "11000110000000000000000000000000"
+
+// console.log("\n################### beq x0 x0 0\n")
+
+// const m1 = new Handler(new Provider(absolutePath), "11000110000000000000000000000000") 
+// const ms1 = m1.go()
+// ms1.forEach((vs) => vs.forEach((v) => console.log(v)))
+
+
+// console.log("\n################### beq x16 x0 0\n")
+// const m2 = new Handler(new Provider(absolutePath), "11000110000000010000000000000000") 
+// const ms2 = m2.go()
+// ms2.forEach((vs) => vs.forEach((v) => console.log(v)))
+
+
+// console.log("\n################### beq x17 x0 0\n")
+// const m3 = new Handler(new Provider(absolutePath), "11000110000000010001000000000000") 
+// const ms3 = m3.go()
+// ms3.forEach((vs) => vs.forEach((v) => console.log(v)))
+
+
+// console.log("\n################### beq x17 x0 2048\n")
+// const m4 = new Handler(new Provider(absolutePath), "11000110010000010001000000000000") 
+// const ms4 = m4.go()
+// ms4.forEach((vs) => vs.forEach((v) => console.log(v)))
+
+// console.log("\n################### beq x17 x0 -2048\n")
+// const m5 = new Handler(new Provider(absolutePath), "11000110110000010001000000000000") 
+// const ms5 = m5.go()
+// ms5.forEach((vs) => vs.forEach((v) => console.log(v)))
+
+
+// console.log("\n################### beq x17 x0 -2048 beq x17 x0 2048\n")
+// const m6 = new Handler(new Provider(absolutePath), "1100011011000001000100000000000011000110010000010001000000000000") 
+// const ms6 = m6.go()
+// ms6.forEach((vs) => vs.forEach((v) => console.log(v)))
+
+
 
 
 
