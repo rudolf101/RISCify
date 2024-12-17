@@ -2,7 +2,7 @@
 // import * as yaml from 'js-yaml';
 import { YAMLDataGen } from './generatedData';
 import './models';
-import { YAMLData, Instruction, InstructionSet, Field, Param } from './models';
+import { YAMLData, Instruction, InstructionSet, Field, Param, Apply, Arg } from './models';
 // const path = require('path');
 
 interface Handle {
@@ -15,38 +15,8 @@ interface Provide {
   getParam: (name: string) => Param
 }
 
-class Provider implements Provide {
+export class Provider implements Provide {
   private data: YAMLData[] = YAMLDataGen;
-
-  constructor(folderPath: string) {
-    
-    // this.loadAllYAMLFiles(folderPath);
-  }
-
-  // private loadYAML(filePath: string): YAMLData {
-  //   try {
-  //     const fileContents = fs.readFileSync(filePath, 'utf8');
-  //     return yaml.load(fileContents) as YAMLData;
-  //   } catch (e) {
-  //     throw new Error(`Error reading YAML file (${filePath}): ${e}`);
-  //   }
-  // }
-
-  // private loadAllYAMLFiles(folderPath: string): void {
-  //   try {
-  //     const files = fs.readdirSync(folderPath);
-  //     files.forEach((file) => {
-  //       const filePath = path.join(folderPath, file);
-  //       if (file.endsWith('.yml') || file.endsWith('.yaml')) {
-  //         const yamlData = this.loadYAML(filePath);
-  //         this.data.push(yamlData);
-  //       }
-  //     });
-  //   } catch (e) {
-  //     throw new Error(`Error reading folder (${folderPath}): ${e}`);
-  //   }
-  // }
-
   public getSets(): InstructionSet[] {
     return this.data.flatMap((fileData) => fileData.Sets || []);
   }
@@ -68,15 +38,6 @@ class Provider implements Provide {
     }
     throw new Error(`Param not found (${name})`);
   }
-}
-
-type Arg = {
-  value: string;
-}
-
-type Apply = {
-  Instruction: Instruction
-  Args: Arg[]
 }
 
 interface HandleSpan {
@@ -347,7 +308,7 @@ const result = processHexDump(input);
 // ms.forEach((vs) => vs.forEach((v) => console.log(v)))
 
 
-class Disassembler {
+export class Disassembler {
   private hexToBinary(hexString: string): string {
     const hexArray = hexString.split(' ');
   
@@ -363,16 +324,13 @@ class Disassembler {
 
   dissasm(input: string): Apply[][] {
     console.log(input, ":::", this.hexToBinary(input))
-    const executor = new Handler(new Provider("absolutePath"), this.hexToBinary(input)) 
+    const executor = new Handler(new Provider(), this.hexToBinary(input)) 
     const ret = executor.go()
     console.log(ret)
     return ret;
   }
 }
-// const d = new Disassembler();
-// const vs = d.dissasm()
-// vs.forEach((vs) => vs.forEach(v => console.log(v)))
-export { Disassembler };
+export default { Disassembler, Provider};
 
 
 
