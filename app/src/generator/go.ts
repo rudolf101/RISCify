@@ -107,7 +107,7 @@ class Display {
     let number = 0;
     let maximum = 1;
 
-    for (const c of bits) {
+    for (const c of bits.split('')) {
       if (c === '1') {
         number += maximum;
       }
