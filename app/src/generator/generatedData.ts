@@ -1534,22 +1534,22 @@
       "d_opcode_madd": {
         "name": "opcode",
         "span": "0:6",
-        "value": "1100010"
+        "value": "1100001"
       },
       "d_opcode_msub": {
         "name": "opcode",
         "span": "0:6",
-        "value": "1110010"
+        "value": "1110001"
       },
       "d_opcode_nmsub": {
         "name": "opcode",
         "span": "0:6",
-        "value": "1101010"
+        "value": "1101001"
       },
       "d_opcode_nmadd": {
         "name": "opcode",
         "span": "0:6",
-        "value": "1111010"
+        "value": "1111001"
       },
       "d_opcode_op": {
         "name": "opcode",
@@ -1779,9 +1779,9 @@
             ]
           },
           {
-            "mnemonic": "fmdd.d",
+            "mnemonic": "fnmadd.d",
             "fields": [
-              "d_opcode_madd",
+              "d_opcode_nmadd",
               "d_fmt"
             ],
             "args": [
@@ -2243,22 +2243,22 @@
       "f_opcode_madd": {
         "name": "opcode",
         "span": "0:6",
-        "value": "1100010"
+        "value": "1100001"
       },
       "f_opcode_msub": {
         "name": "opcode",
         "span": "0:6",
-        "value": "1110010"
+        "value": "1110001"
       },
       "f_opcode_nmsub": {
         "name": "opcode",
         "span": "0:6",
-        "value": "1101010"
+        "value": "1101001"
       },
       "f_opcode_nmadd": {
         "name": "opcode",
         "span": "0:6",
-        "value": "1111010"
+        "value": "1111001"
       },
       "f_opcode_op": {
         "name": "opcode",
@@ -2483,9 +2483,9 @@
             ]
           },
           {
-            "mnemonic": "fmdd.s",
+            "mnemonic": "fnmadd.s",
             "fields": [
-              "f_opcode_madd",
+              "f_opcode_nmadd",
               "f_fmt"
             ],
             "args": [
@@ -3188,22 +3188,22 @@
       "q_opcode_madd": {
         "name": "opcode",
         "span": "0:6",
-        "value": "1100010"
+        "value": "1100001"
       },
       "q_opcode_msub": {
         "name": "opcode",
         "span": "0:6",
-        "value": "1110010"
+        "value": "1110001"
       },
       "q_opcode_nmsub": {
         "name": "opcode",
         "span": "0:6",
-        "value": "1101010"
+        "value": "1101001"
       },
       "q_opcode_nmadd": {
         "name": "opcode",
         "span": "0:6",
-        "value": "1111010"
+        "value": "1111001"
       },
       "q_opcode_op": {
         "name": "opcode",
@@ -3433,9 +3433,9 @@
             ]
           },
           {
-            "mnemonic": "fmdd.q",
+            "mnemonic": "fnmadd.q",
             "fields": [
-              "q_opcode_madd",
+              "q_opcode_nmadd",
               "q_fmt"
             ],
             "args": [
@@ -5272,22 +5272,22 @@
       "h_opcode_madd": {
         "name": "opcode",
         "span": "0:6",
-        "value": "1100010"
+        "value": "1100001"
       },
       "h_opcode_msub": {
         "name": "opcode",
         "span": "0:6",
-        "value": "1110010"
+        "value": "1110001"
       },
       "h_opcode_nmsub": {
         "name": "opcode",
         "span": "0:6",
-        "value": "1101010"
+        "value": "1101001"
       },
       "h_opcode_nmadd": {
         "name": "opcode",
         "span": "0:6",
-        "value": "1111010"
+        "value": "1111001"
       },
       "h_opcode_op": {
         "name": "opcode",
@@ -5517,9 +5517,9 @@
             ]
           },
           {
-            "mnemonic": "fmdd.h",
+            "mnemonic": "fnmadd.h",
             "fields": [
-              "h_opcode_madd",
+              "h_opcode_nmadd",
               "h_fmt"
             ],
             "args": [
