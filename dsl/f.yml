@@ -69,8 +69,8 @@ Sets:
   - mnemonic: "fnmsub.s"
     fields: [ f_opcode_nmsub, f_fmt ]
     args: [ f_rd, f_rs1, f_rs2, f_rs3, f_rm ]
-  - mnemonic: "fmdd.s"
-    fields: [ f_opcode_madd, f_fmt ]
+  - mnemonic: "fnmadd.s"
+    fields: [ f_opcode_nmadd, f_fmt ]
     args: [ f_rd, f_rs1, f_rs2, f_rs3, f_rm ]
 
   - mnemonic: "fadd.s"

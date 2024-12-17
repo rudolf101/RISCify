@@ -73,8 +73,8 @@ Sets:
   - mnemonic: "fnmsub.h"
     fields: [ h_opcode_nmsub, h_fmt ]
     args: [ h_rd, h_rs1, h_rs2, h_rs3, h_rm ]
-  - mnemonic: "fmdd.h"
-    fields: [ h_opcode_madd, h_fmt ]
+  - mnemonic: "fnmadd.h"
+    fields: [ h_opcode_nmadd, h_fmt ]
     args: [ h_rd, h_rs1, h_rs2, h_rs3, h_rm ]
 
   - mnemonic: "fadd.h"

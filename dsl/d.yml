@@ -71,8 +71,8 @@ Sets:
   - mnemonic: "fnmsub.d"
     fields: [ d_opcode_nmsub, d_fmt ]
     args: [ d_rd, d_rs1, d_rs2, d_rs3, d_rm ]
-  - mnemonic: "fmdd.d"
-    fields: [ d_opcode_madd, d_fmt ]
+  - mnemonic: "fnmadd.d"
+    fields: [ d_opcode_nmadd, d_fmt ]
     args: [ d_rd, d_rs1, d_rs2, d_rs3, d_rm ]
 
   - mnemonic: "fadd.d"

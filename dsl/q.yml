@@ -72,8 +72,8 @@ Sets:
   - mnemonic: "fnmsub.q"
     fields: [ q_opcode_nmsub, q_fmt ]
     args: [ q_rd, q_rs1, q_rs2, q_rs3, q_rm ]
-  - mnemonic: "fmdd.q"
-    fields: [ q_opcode_madd, q_fmt ]
+  - mnemonic: "fnmadd.q"
+    fields: [ q_opcode_nmadd, q_fmt ]
     args: [ q_rd, q_rs1, q_rs2, q_rs3, q_rm ]
 
   - mnemonic: "fadd.q"
