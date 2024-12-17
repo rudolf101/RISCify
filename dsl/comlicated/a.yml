@@ -75,6 +75,7 @@ Sets:
 
 - name: "RV64A"
   size: "32"
+  extends: "RV32A"
   instructions:
   - { mnemonic:      "lr.d"     , fields: [ a_op, a_f3_d, a_f5_lr  , a_rl0, a_aq0, a_rs2_0 ], args: [ a_rd, a_rs1 ] }
   - { mnemonic:      "lr.d.aq"  , fields: [ a_op, a_f3_d, a_f5_lr  , a_rl0, a_aq1, a_rs2_0 ], args: [ a_rd, a_rs1 ] }

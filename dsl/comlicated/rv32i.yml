@@ -56,15 +56,6 @@ Fields:
   rv32i_null_i_imm:    { name: "imm"   , span: "20:31", value: "000000000000" }
   rv32i_one_i_imm:     { name: "imm"   , span: "20:31", value: "100000000000" }
   rv32i_neg_i_imm:     { name: "imm"   , span: "20:31", value: "111111111111" }
-  rv32i_pause_fm:      { name: "fm"    , span: "28:31", value: "0000"         }
-  rv32i_pause_pred:    { name: "pred"  , span: "24:27", value: "1000"         }
-  rv32i_pause_succ:    { name: "succ"  , span: "20:23", value: "0000"         }
-  rv32i_fence_fm:      { name: "fm"    , span: "28:31", value: "0000"         }
-  rv32i_fence_pred:    { name: "pred"  , span: "24:27", value: "1111"         }
-  rv32i_fence_succ:    { name: "succ"  , span: "20:23", value: "1111"         }
-  rv32i_ftso_fm:       { name: "fm"    , span: "28:31", value: "0001"         }
-  rv32i_ftso_pred:     { name: "pred"  , span: "24:27", value: "1100"         }
-  rv32i_ftso_succ:     { name: "succ"  , span: "20:23", value: "1100"         }
 
 Sets:
 - name: "RV32I"
@@ -228,25 +219,39 @@ Sets:
     - rv32i_funct3_fence
     - rv32i_null_rd
     - rv32i_null_rs1
-    - rv32i_pause_fm
-    - rv32i_pause_pred
-    - rv32i_pause_succ
+    - name: "fm"
+      span: "28:31"
+      value: "0000"
+    - name: "pred"
+      span: "24:27"
+      value: "1000"
+    - name: "succ"
+      span: "20:23"
+      value: "0000"
   - mnemonic: "fence"
     fields:
     - rv32i_opcode_fence
     - rv32i_funct3_fence
     - rv32i_null_rd
     - rv32i_null_rs1
-    - rv32i_fence_fm
-    - rv32i_fence_pred
-    - rv32i_fence_succ
+    - name: "fm"
+      span: "28:31"
+      value: "0000"
+    - name: "pred"
+      span: "24:27"
+      value: "1111"
+    - name: "succ"
+      span: "20:23"
+      value: "1111"
   - mnemonic: "fence"
     fields:
     - rv32i_opcode_fence
     - rv32i_funct3_fence
     - rv32i_null_rd
     - rv32i_null_rs1
-    - rv32i_fence_fm
+    - name: "fm"
+      span: "28:31"
+      value: "0000"
     args: [ rv32i_f_pred, rv32i_f_succ ]
   - mnemonic: "fence.tso"
     fields:
@@ -254,9 +259,15 @@ Sets:
     - rv32i_funct3_fence
     - rv32i_null_rd
     - rv32i_null_rs1
-    - rv32i_tso_fm
-    - rv32i_tso_pred
-    - rv32i_tso_succ
+    - name: "fm"
+      span: "28:31"
+      value: "0001"
+    - name: "pred"
+      span: "24:27"
+      value: "1100"
+    - name: "succ"
+      span: "20:23"
+      value: "1100"
 
   - mnemonic: "ecall"
     fields:
