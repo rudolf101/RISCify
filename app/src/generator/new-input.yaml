@@ -99,7 +99,6 @@ Sets:
     - rv32i_null_rd
     - rv32i_null_rs1
     - rv32i_null_i_imm
-    args: []
   - mnemonic: "mv"
     fields: [ rv32i_opcode_regimm, rv32i_funct3_add, rv32i_null_i_imm ]
     args: [ rv32i_rd, rv32i_rs1 ]
