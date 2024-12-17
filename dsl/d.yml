@@ -16,10 +16,10 @@ Fields:
   d_fmt_cvtsd:     { name: "fmt"   , span: "25:26", value: "00" }
   d_opcode_lw:     { name: "opcode", span: "0:6"  , value: "1110000" }
   d_opcode_sw:     { name: "opcode", span: "0:6"  , value: "1110010" }
-  d_opcode_madd:   { name: "opcode", span: "0:6"  , value: "1100010" }
-  d_opcode_msub:   { name: "opcode", span: "0:6"  , value: "1110010" }
-  d_opcode_nmsub:  { name: "opcode", span: "0:6"  , value: "1101010" }
-  d_opcode_nmadd:  { name: "opcode", span: "0:6"  , value: "1111010" }
+  d_opcode_madd:   { name: "opcode", span: "0:6"  , value: "1100001" }
+  d_opcode_msub:   { name: "opcode", span: "0:6"  , value: "1110001" }
+  d_opcode_nmsub:  { name: "opcode", span: "0:6"  , value: "1101001" }
+  d_opcode_nmadd:  { name: "opcode", span: "0:6"  , value: "1111001" }
   d_opcode_op:     { name: "opcode", span: "0:6"  , value: "1100101" }
   d_funct3_lw:     { name: "funct3", span: "12:14", value: "110" }
   d_funct3_sw:     { name: "funct3", span: "12:14", value: "110" }
@@ -71,8 +71,8 @@ Sets:
   - mnemonic: "fnmsub.d"
     fields: [ d_opcode_nmsub, d_fmt ]
     args: [ d_rd, d_rs1, d_rs2, d_rs3, d_rm ]
-  - mnemonic: "fmdd.d"
-    fields: [ d_opcode_madd, d_fmt ]
+  - mnemonic: "fnmadd.d"
+    fields: [ d_opcode_nmadd, d_fmt ]
     args: [ d_rd, d_rs1, d_rs2, d_rs3, d_rm ]
 
   - mnemonic: "fadd.d"

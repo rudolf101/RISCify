@@ -17,10 +17,10 @@ Fields:
   q_fmt_cvtdq:     { name: "fmt"   , span: "25:26", value: "10" }
   q_opcode_lw:     { name: "opcode", span: "0:6"  , value: "1110000" }
   q_opcode_sw:     { name: "opcode", span: "0:6"  , value: "1110010" }
-  q_opcode_madd:   { name: "opcode", span: "0:6"  , value: "1100010" }
-  q_opcode_msub:   { name: "opcode", span: "0:6"  , value: "1110010" }
-  q_opcode_nmsub:  { name: "opcode", span: "0:6"  , value: "1101010" }
-  q_opcode_nmadd:  { name: "opcode", span: "0:6"  , value: "1111010" }
+  q_opcode_madd:   { name: "opcode", span: "0:6"  , value: "1100001" }
+  q_opcode_msub:   { name: "opcode", span: "0:6"  , value: "1110001" }
+  q_opcode_nmsub:  { name: "opcode", span: "0:6"  , value: "1101001" }
+  q_opcode_nmadd:  { name: "opcode", span: "0:6"  , value: "1111001" }
   q_opcode_op:     { name: "opcode", span: "0:6"  , value: "1100101" }
   q_funct3_lw:     { name: "funct3", span: "12:14", value: "001" }
   q_funct3_sw:     { name: "funct3", span: "12:14", value: "001" }
@@ -72,8 +72,8 @@ Sets:
   - mnemonic: "fnmsub.q"
     fields: [ q_opcode_nmsub, q_fmt ]
     args: [ q_rd, q_rs1, q_rs2, q_rs3, q_rm ]
-  - mnemonic: "fmdd.q"
-    fields: [ q_opcode_madd, q_fmt ]
+  - mnemonic: "fnmadd.q"
+    fields: [ q_opcode_nmadd, q_fmt ]
     args: [ q_rd, q_rs1, q_rs2, q_rs3, q_rm ]
 
   - mnemonic: "fadd.q"

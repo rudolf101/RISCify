@@ -15,10 +15,10 @@ Fields:
   f_fmt:           { name: "fmt"   , span: "25:26", value: "00" }
   f_opcode_lw:     { name: "opcode", span: "0:6"  , value: "1110000" }
   f_opcode_sw:     { name: "opcode", span: "0:6"  , value: "1110010" }
-  f_opcode_madd:   { name: "opcode", span: "0:6"  , value: "1100010" }
-  f_opcode_msub:   { name: "opcode", span: "0:6"  , value: "1110010" }
-  f_opcode_nmsub:  { name: "opcode", span: "0:6"  , value: "1101010" }
-  f_opcode_nmadd:  { name: "opcode", span: "0:6"  , value: "1111010" }
+  f_opcode_madd:   { name: "opcode", span: "0:6"  , value: "1100001" }
+  f_opcode_msub:   { name: "opcode", span: "0:6"  , value: "1110001" }
+  f_opcode_nmsub:  { name: "opcode", span: "0:6"  , value: "1101001" }
+  f_opcode_nmadd:  { name: "opcode", span: "0:6"  , value: "1111001" }
   f_opcode_op:     { name: "opcode", span: "0:6"  , value: "1100101" }
   f_funct3_lw:     { name: "funct3", span: "12:14", value: "010" }
   f_funct3_sw:     { name: "funct3", span: "12:14", value: "010" }
@@ -69,8 +69,8 @@ Sets:
   - mnemonic: "fnmsub.s"
     fields: [ f_opcode_nmsub, f_fmt ]
     args: [ f_rd, f_rs1, f_rs2, f_rs3, f_rm ]
-  - mnemonic: "fmdd.s"
-    fields: [ f_opcode_madd, f_fmt ]
+  - mnemonic: "fnmadd.s"
+    fields: [ f_opcode_nmadd, f_fmt ]
     args: [ f_rd, f_rs1, f_rs2, f_rs3, f_rm ]
 
   - mnemonic: "fadd.s"

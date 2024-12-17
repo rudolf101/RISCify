@@ -18,10 +18,10 @@ Fields:
   h_fmt_cvtqh:     { name: "fmt"   , span: "25:26", value: "10" }
   h_opcode_lw:     { name: "opcode", span: "0:6"  , value: "1110000" }
   h_opcode_sw:     { name: "opcode", span: "0:6"  , value: "1110010" }
-  h_opcode_madd:   { name: "opcode", span: "0:6"  , value: "1100010" }
-  h_opcode_msub:   { name: "opcode", span: "0:6"  , value: "1110010" }
-  h_opcode_nmsub:  { name: "opcode", span: "0:6"  , value: "1101010" }
-  h_opcode_nmadd:  { name: "opcode", span: "0:6"  , value: "1111010" }
+  h_opcode_madd:   { name: "opcode", span: "0:6"  , value: "1100001" }
+  h_opcode_msub:   { name: "opcode", span: "0:6"  , value: "1110001" }
+  h_opcode_nmsub:  { name: "opcode", span: "0:6"  , value: "1101001" }
+  h_opcode_nmadd:  { name: "opcode", span: "0:6"  , value: "1111001" }
   h_opcode_op:     { name: "opcode", span: "0:6"  , value: "1100101" }
   h_funct3_lw:     { name: "funct3", span: "12:14", value: "100" }
   h_funct3_sw:     { name: "funct3", span: "12:14", value: "100" }
@@ -73,8 +73,8 @@ Sets:
   - mnemonic: "fnmsub.h"
     fields: [ h_opcode_nmsub, h_fmt ]
     args: [ h_rd, h_rs1, h_rs2, h_rs3, h_rm ]
-  - mnemonic: "fmdd.h"
-    fields: [ h_opcode_madd, h_fmt ]
+  - mnemonic: "fnmadd.h"
+    fields: [ h_opcode_nmadd, h_fmt ]
     args: [ h_rd, h_rs1, h_rs2, h_rs3, h_rm ]
 
   - mnemonic: "fadd.h"
