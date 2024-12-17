@@ -26,7 +26,6 @@ Fields:
 Sets:
 - name: "RV64I"
   size: "32"
-  extends: "RV32I"
   instructions:
   - mnemonic: "addw"
     fields: [ rv64i_opcode_regreg_w, rv64i_funct3_add, rv64i_funct7_normal ]

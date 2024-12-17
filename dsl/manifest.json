@@ -1,0 +1,20 @@
+{
+  "ManifestVersion": "0.1",
+  "Files": [
+    "rv32i.yml",
+    "rv64i.yml",
+    "zifencei.yml",
+    "zicsr.yml",
+    "m.yml",
+    "a.yml",
+    "f.yml",
+    "d.yml",
+    "q.yml",
+    "zfh.yml",
+    "zawrs.yml"
+  ],
+  "Display": {
+    "RV32I": "RV32I/E",
+    "RV64I": "RV64I/E"
+  }
+}
