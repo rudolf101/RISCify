@@ -48,6 +48,30 @@ Sets:
 - name: "RV64M"
   size: "32"
   instructions:
+  - mnemonic: "mul"
+    fields: [ m_opcode, m_funct3_mul, m_funct7 ]
+    args: [ m_rd, m_rs1, m_rs2 ]
+  - mnemonic: "mulh"
+    fields: [ m_opcode, m_funct3_mulh, m_funct7 ]
+    args: [ m_rd, m_rs1, m_rs2 ]
+  - mnemonic: "mulhsu"
+    fields: [ m_opcode, m_funct3_mulhsu, m_funct7 ]
+    args: [ m_rd, m_rs1, m_rs2 ]
+  - mnemonic: "mulhu"
+    fields: [ m_opcode, m_funct3_mulhu, m_funct7 ]
+    args: [ m_rd, m_rs1, m_rs2 ]
+  - mnemonic: "div"
+    fields: [ m_opcode, m_funct3_div, m_funct7 ]
+    args: [ m_rd, m_rs1, m_rs2 ]
+  - mnemonic: "divu"
+    fields: [ m_opcode, m_funct3_divu, m_funct7 ]
+    args: [ m_rd, m_rs1, m_rs2 ]
+  - mnemonic: "rem"
+    fields: [ m_opcode, m_funct3_rem, m_funct7 ]
+    args: [ m_rd, m_rs1, m_rs2 ]
+  - mnemonic: "remu"
+    fields: [ m_opcode, m_funct3_remu, m_funct7 ]
+    args: [ m_rd, m_rs1, m_rs2 ]
   - mnemonic: "mulw"
     fields: [ m_opcode_w, m_funct3_mul, m_funct7 ]
     args: [ m_rd, m_rs1, m_rs2 ]
