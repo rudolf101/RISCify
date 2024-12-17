@@ -1,4 +1,4 @@
-Args: []
+Args: {}
 
 Fields:
   zawrs_nto_opcode: { name: "opcode", span: "0:6"  , value: "1100111"      }
