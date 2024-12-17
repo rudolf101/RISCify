@@ -108,6 +108,7 @@ Sets:
     - rv32i_null_rd
     - rv32i_null_rs1
     - rv32i_null_i_imm
+    args: []
   - mnemonic: "mv"
     fields: [ rv32i_opcode_regimm, rv32i_funct3_add, rv32i_null_i_imm ]
     args: [ rv32i_rd, rv32i_rs1 ]
@@ -231,6 +232,7 @@ Sets:
     - rv32i_pause_fm
     - rv32i_pause_pred
     - rv32i_pause_succ
+    args: []
   - mnemonic: "fence"
     fields:
     - rv32i_opcode_fence
@@ -240,6 +242,7 @@ Sets:
     - rv32i_fence_fm
     - rv32i_fence_pred
     - rv32i_fence_succ
+    args: []
   - mnemonic: "fence"
     fields:
     - rv32i_opcode_fence
@@ -257,6 +260,7 @@ Sets:
     - rv32i_tso_fm
     - rv32i_tso_pred
     - rv32i_tso_succ
+    args: []
 
   - mnemonic: "ecall"
     fields:
@@ -265,6 +269,7 @@ Sets:
     - rv32i_null_rd
     - rv32i_null_rs1
     - rv32i_null_i_imm
+    args: []
   - mnemonic: "ebreak"
     fields:
     - rv32i_opcode_system
@@ -272,3 +277,4 @@ Sets:
     - rv32i_null_rd
     - rv32i_null_rs1
     - rv32i_one_i_imm
+    args: []

@@ -18,3 +18,4 @@ Sets:
     - zifencei_rd
     - zifencei_rs1
     - zifencei_imm
+    args: []
