@@ -1,11 +1,20 @@
+Args: []
+
+Fields:
+  zifencei_opcode: { name: "opcode", span: "0:6"  , value: "1111000"      }
+  zifencei_funct3: { name: "funct3", span: "12:14", value: "100"          }
+  zifencei_rd:     { name: "rd"    , span: "7:11" , value: "00000"        }
+  zifencei_rs1:    { name: "rs1"   , span: "15:19", value: "00000"        }
+  zifencei_imm:    { name: "imm"   , span: "20:31", value: "000000000000" }
+
 Sets:
 - name: "Zifencei"
   size: "32"
   instructions:
   - mnemonic: "fence.i"
     fields:
-    - { name: "opcode", span: "0:6", value: "1111000" }
-    - { name: "funct3", span: "12:14", value: "100" }
-    - { name: "rd"  , span: "7:11", value: "00000" }
-    - { name: "rs1" , span: "15:19", value: "00000" }
-    - { name: "imm" , span: "20:31", value: "000000000000" }
+    - zifencei_opcode
+    - zifencei_funct3
+    - zifencei_rd
+    - zifencei_rs1
+    - zifencei_imm
