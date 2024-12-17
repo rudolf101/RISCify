@@ -38,6 +38,17 @@ export class Provider implements Provide {
     }
     throw new Error(`Param not found (${name})`);
   }
+
+  public getInstruction(mnemonic: string): Instruction {
+    for (const set of this.getSets()) {
+      for (const instr of set.instructions) {
+        if (instr.mnemonic == mnemonic) {
+          return instr
+        }
+      }
+    }
+    throw new Error(`Instruction not found (${mnemonic})`);
+  }
 }
 
 interface HandleSpan {
@@ -75,7 +86,7 @@ class SpanHandler implements HandleSpan {
 }
 
 class Display {
-  private rules: Map<string, (value: string, idx: number) => string> = new Map();
+  private rules: Map<string, (value: string, idx: number) => [string, number]> = new Map();
   private params: Param[];
   private spanHandler: HandleSpan;
 
@@ -91,16 +102,15 @@ class Display {
   constructor(params: Param[], spanHandler: HandleSpan) {
     this.params = params;
     this.spanHandler = spanHandler;
-    this.rules.set("regx", (value: string, idx: number) => "x" + this.toNum(value, false));
-    this.rules.set("regf", (value: string, idx: number) => "f" + this.toNum(value, false));
-    this.rules.set("num", (value: string, idx: number) => String(this.toNum(value, true)));
-    this.rules.set("unum", (value: string, idx: number) => String(this.toNum(value, false)));
 
-    this.rules.set("pnum", (value: string, idx: number) => this.pnum(value, idx));
-
-    this.rules.set("double", (value: string, idx: number) => String(2 * this.toNum(value, true)));
-    this.rules.set("fence", (value: string, idx: number) => this.parseFence(value));
-    this.rules.set("rm", (value: string, idx: number) => this.parseRm(value));
+    this.rules.set("regx", (value: string, idx: number) => ["x" + this.toNum(value, false), idx + 1]);
+    this.rules.set("regf", (value: string, idx: number) => ["f" + this.toNum(value, false), idx + 1]);
+    this.rules.set("num", (value: string, idx: number) => [String(this.toNum(value, true)), idx + 1]);
+    this.rules.set("unum", (value: string, idx: number) => [String(this.toNum(value, false)), idx + 1 ]);
+    this.rules.set("pnum", (value: string, idx: number) => [this.pnum(value, idx), idx + 2]);
+    this.rules.set("double", (value: string, idx: number) => [String(2 * this.toNum(value, true)), idx + 1] );
+    this.rules.set("fence", (value: string, idx: number) => [this.parseFence(value), idx + 1]);
+    this.rules.set("rm", (value: string, idx: number) => [this.parseRm(value), idx + 1]);
   }
 
   private toNum(bits: string, signed: boolean = true): number {
@@ -139,7 +149,7 @@ class Display {
     return `fence(${value.slice(0, 4)})`;
   }
 
-  public display(idx: number, prefix: string, value: string): string {
+  public display(idx: number, prefix: string, value: string): [string, number] {
     const rule = this.rules.get(prefix);
 
     if (rule) {
@@ -157,16 +167,34 @@ class InputValue {
     this.spanHandler = new SpanHandler(input)
   }
   
+
   public haveField(field: Field): boolean {
     return this.spanHandler.compareWithValue(field.span, field.value)
   }
 
   public getArgs(params: Param[]): Arg[] {
     const display: Display = new Display(params, this.spanHandler)
+    const acc: Arg[] = []
+
+    let i = 0
+    while (i < params.length) {
+      const [v, ii] = display.display(i, params[i].display, this.spanHandler.getSubstring(params[i].span))
+      acc.push({value: v})
+      i = ii
+    }
     
-    return params.map((param, idx) => ({
-      value: display.display(idx, param.display, this.spanHandler.getSubstring(param.span))
-    }))
+    return acc
+
+    // for (let i = 0; i < params.length; i++) {
+    //   const [v, ii] = display.display(i, params[i].display, this.spanHandler.getSubstring(params[i].span))
+    //   acc.push({value: v})
+    // }
+
+
+
+    // return params.map((param, idx) => ({
+    //   value: display.display(idx, param.display, this.spanHandler.getSubstring(param.span))
+    // }))
   }
 
 }
@@ -228,7 +256,7 @@ class Handler implements Handle {
     const mkApply = (instruction: Instruction): Apply => {
       return { 
         Instruction: instruction, 
-        Args: value.getArgs(instruction.args.map((x) => this.provider.getParam(x))) 
+        Args: value.getArgs(instruction.args.map((x) => this.provider.getParam(x))),
       }
     }
 
@@ -243,94 +271,68 @@ class Handler implements Handle {
 
 }
 
-function processHexDump(input: string): string {
-  const lines = input.split('\n');
-  console.log("lines", lines)
-  const byteStrings: string[] = [];
-  for (const line of lines) {
-      const match = line.match(/:\s+((?:[0-9a-fA-F]{2}\s+)+)/);
-      if (match) {
-          byteStrings.push(...match[1].trim().split(/\s+/));
-      }
-  }
-
-  const reversedBits: string[] = byteStrings.map(byte => {
-      const binary = parseInt(byte, 16).toString(2).padStart(8, '0'); 
-      return binary.split('').join(''); 
-  });
-
-  return reversedBits.join('');
-}
-
-const input = `
-0x0000003f91b19ffe:   06 ec 00 10 aa 84 97 60 e4 ff e7 80 60 6b 11 e1
-0x0000003f91b1a00e:   05 45 88 e0 e2 60 42 64 a2 64 05 61 82 80 01 11
-0x0000003f91b1a01e:   06 ec 22 e8 26 e4 00 10 aa 84 97 60 e4 ff e7 80
-0x0000003f91b1a02e:   20 69 9c 60 b3 04 f5 40 97 60 e4 ff e7 80 20 6a
-0x0000003f91b1a03e:   53 f5 24 d2 e2 60 42 64 d3 77 25 d2 a2 64 53 75
-0x0000003f91b1a04e:   f5 1a 05 61 82 80 01 11 06 ec 22 e8 26 e4 00 10
-0x0000003f91b1a05e:   aa 84 97 60 e4 ff e7 80 a0 65 9c 60 b3 04 f5 40
-0x0000003f91b1a06e:   97 60 e4 ff e7 80 a0 66 d3 f7 24 d2 d3 76 25 d2
-0x0000003f91b1a07e:   97 b7 0c 00 07 b7 a7 92 e2 60 d3 f7 d7 1a 42 64
-0x0000003f91b1a08e:   a2 64 05 61 d3 f7 e7 12 53 95 27 c2 82 80 01 11
-0x0000003f91b1a09e:   22 e8 26 e4 06 ec 00 10 aa 84 97 60 e4 ff e7 80
-0x0000003f91b1a0ae:   20 61 9c 60 e2 60 42 64 a2 64 1d 8d 05 61 82 80
-0x0000003f91b1a0be:   41 11 22 e4 00 08 85 47 23 0c 05 00 23 34 05 00
-0x0000003f91b1a0ce:   23 00 c5 00 a3 00 f5 00 0c f5 23 38 05 02 01 e6
-0x0000003f91b1a0de:   22 64 41 01 82 80 23 30 05 02 22 64 21 05 41 01
-0x0000003f91b1a0ee:   6f f0 ff de 41 11 22 e4 1b 17 87 00 00 08 55 8f
-0x0000003f91b1a0fe:   23 0c 05 00 23 34 05 00 23 10 e5 00 0c f5 23 38
-0x0000003f91b1a10e:   05 02 81 e6 22 64 41 01 82 80 10 f1 22 64 21 05
-0x0000003f91b1a11e:   41 01 6f f0 df db 41 11 22 e4 00 08 b3 37 c0 00
-0x0000003f91b1a12e:   23 00 f5 00 85 47 23 0c 05 00 23 34 05 00 a3 00
-0x0000003f91b1a13e:   f5 00 0c f5 10 f9 01 e6 22 64 41 01 82 80 23 30
-0x0000003f91b1a14e:   05 02 22 64 21 05 41 01 6f f0 7f d8 83 47 05 00
-0x0000003f91b1a15e:   91 e3 82 80 5d 71 a2 e0 26 fc 4a f8 86 e4 4e f4
-0x0000003f91b1a16e:   52 f0 80 08 13 09 85 00 aa 84 4a 85 ef f0 1f d9
-0x0000003f91b1a17e:   88 70 11 cd 94 64 98 68 9c 6c 93 05 04 fb 23 38
-0x0000003f91b1a18e:   d4 fa 23 3c e4 fa 23 30 f4 fc ef f0 1f d3 83 c7
-0x0000003f91b1a19e:   14 00 8d cb 83 b9 04 03 84 74 63 8d 09 02 4a 85
-0x0000003f91b1a1ae:   ef f0 1f d9 06 64 a6 60 42 79 02 7a a6 85 ce 87
-0x0000003f91b1a1be:   e2 74 a2 79 53 06 05 e2 17 a5 15 00 13 05 a5 a2
-0x0000003f91b1a1ce:   61 61 82 87 a6 60 06 64 e2 74 42 79 a2 79 02 7a
-0x0000003f91b1a1de:   61 61 82 80 97 a9 22 00 83 b9 e9 2a 4a 85 03 ba
-0x0000003f91b1a1ee:   09 00 ef f0 ff d4 d3 06 05 e2 52 85 26 86 97 a5
-`;
-const result = processHexDump(input);
-
-
-// const relativePath = '../../../dsl';
-// const absolutePath = path.resolve(relativePath);
-
-// const m = new Handler(new Provider(absolutePath), result) 
-
-// const ms = m.go()
-// ms.forEach((vs) => vs.forEach((v) => console.log(v)))
-
-
 export class Disassembler {
   private hexToBinary(hexString: string): string {
-    const hexArray = hexString.split(' ');
+    const hexArray = hexString.trim().split(/\s+/); 
   
     const binaryString = hexArray
       .map((hex) => {
         return parseInt(hex, 16).toString(2).padStart(8, '0').split('').reverse().join('');
       })
-      .join(''); 
+      .join('');
   
     return binaryString;
-  }
-  
+  }  
 
   dissasm(input: string): Apply[][] {
-    console.log(input, ":::", this.hexToBinary(input))
     const executor = new Handler(new Provider(), this.hexToBinary(input)) 
     const ret = executor.go()
-    console.log(ret)
     return ret;
   }
 }
 export default { Disassembler, Provider};
+
+
+
+// const input = `
+// 0x0000003f91b19ffe:   06 ec 00 10 aa 84 97 60 e4 ff e7 80 60 6b 11 e1
+// 0x0000003f91b1a00e:   05 45 88 e0 e2 60 42 64 a2 64 05 61 82 80 01 11
+// 0x0000003f91b1a01e:   06 ec 22 e8 26 e4 00 10 aa 84 97 60 e4 ff e7 80
+// 0x0000003f91b1a02e:   20 69 9c 60 b3 04 f5 40 97 60 e4 ff e7 80 20 6a
+// 0x0000003f91b1a03e:   53 f5 24 d2 e2 60 42 64 d3 77 25 d2 a2 64 53 75
+// 0x0000003f91b1a04e:   f5 1a 05 61 82 80 01 11 06 ec 22 e8 26 e4 00 10
+// 0x0000003f91b1a05e:   aa 84 97 60 e4 ff e7 80 a0 65 9c 60 b3 04 f5 40
+// 0x0000003f91b1a06e:   97 60 e4 ff e7 80 a0 66 d3 f7 24 d2 d3 76 25 d2
+// 0x0000003f91b1a07e:   97 b7 0c 00 07 b7 a7 92 e2 60 d3 f7 d7 1a 42 64
+// 0x0000003f91b1a08e:   a2 64 05 61 d3 f7 e7 12 53 95 27 c2 82 80 01 11
+// 0x0000003f91b1a09e:   22 e8 26 e4 06 ec 00 10 aa 84 97 60 e4 ff e7 80
+// 0x0000003f91b1a0ae:   20 61 9c 60 e2 60 42 64 a2 64 1d 8d 05 61 82 80
+// 0x0000003f91b1a0be:   41 11 22 e4 00 08 85 47 23 0c 05 00 23 34 05 00
+// 0x0000003f91b1a0ce:   23 00 c5 00 a3 00 f5 00 0c f5 23 38 05 02 01 e6
+// 0x0000003f91b1a0de:   22 64 41 01 82 80 23 30 05 02 22 64 21 05 41 01
+// 0x0000003f91b1a0ee:   6f f0 ff de 41 11 22 e4 1b 17 87 00 00 08 55 8f
+// 0x0000003f91b1a0fe:   23 0c 05 00 23 34 05 00 23 10 e5 00 0c f5 23 38
+// 0x0000003f91b1a10e:   05 02 81 e6 22 64 41 01 82 80 10 f1 22 64 21 05
+// 0x0000003f91b1a11e:   41 01 6f f0 df db 41 11 22 e4 00 08 b3 37 c0 00
+// 0x0000003f91b1a12e:   23 00 f5 00 85 47 23 0c 05 00 23 34 05 00 a3 00
+// 0x0000003f91b1a13e:   f5 00 0c f5 10 f9 01 e6 22 64 41 01 82 80 23 30
+// 0x0000003f91b1a14e:   05 02 22 64 21 05 41 01 6f f0 7f d8 83 47 05 00
+// 0x0000003f91b1a15e:   91 e3 82 80 5d 71 a2 e0 26 fc 4a f8 86 e4 4e f4
+// 0x0000003f91b1a16e:   52 f0 80 08 13 09 85 00 aa 84 4a 85 ef f0 1f d9
+// 0x0000003f91b1a17e:   88 70 11 cd 94 64 98 68 9c 6c 93 05 04 fb 23 38
+// 0x0000003f91b1a18e:   d4 fa 23 3c e4 fa 23 30 f4 fc ef f0 1f d3 83 c7
+// 0x0000003f91b1a19e:   14 00 8d cb 83 b9 04 03 84 74 63 8d 09 02 4a 85
+// 0x0000003f91b1a1ae:   ef f0 1f d9 06 64 a6 60 42 79 02 7a a6 85 ce 87
+// 0x0000003f91b1a1be:   e2 74 a2 79 53 06 05 e2 17 a5 15 00 13 05 a5 a2
+// 0x0000003f91b1a1ce:   61 61 82 87 a6 60 06 64 e2 74 42 79 a2 79 02 7a
+// 0x0000003f91b1a1de:   61 61 82 80 97 a9 22 00 83 b9 e9 2a 4a 85 03 ba
+// 0x0000003f91b1a1ee:   09 00 ef f0 ff d4 d3 06 05 e2 52 85 26 86 97 a5
+// `;
+// const result = processHexDump(input);
+
+
+
+
 
 
 
