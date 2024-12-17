@@ -173,9 +173,8 @@ class Display {
     let number = 0;
     let maximum = 1;
 
-    for (let i = bits.length - 1; i >= 0; i--) {
-      console.log("tonum:" + i)
-      if (bits[i] === '1') {
+    for (const c of bits) {
+      if (c === '1') {
         number += maximum;
       }
       maximum *= 2;
