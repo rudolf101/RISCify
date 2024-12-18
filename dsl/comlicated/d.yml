@@ -1,0 +1,159 @@
+Args:
+  d_rd_x:  { name: "rd" , span: "7:11"      , display: "regx" }
+  d_rs1_x: { name: "rs1", span: "15:19"     , display: "regx" }
+  d_rs2_x: { name: "rs2", span: "20:24"     , display: "regx" }
+  d_rs3_x: { name: "rs3", span: "27:31"     , display: "regx" }
+  d_rd:    { name: "rd" , span: "7:11"      , display: "regf" }
+  d_rs1:   { name: "rs1", span: "15:19"     , display: "regf" }
+  d_rs2:   { name: "rs2", span: "20:24"     , display: "regf" }
+  d_rs3:   { name: "rs3", span: "27:31"     , display: "regf" }
+  d_rm:    { name: "rm" , span: "12:14"     , display: "rm"   }
+  d_i_imm: { name: "imm", span: "20:31"     , display: "num"  }
+  d_s_imm: { name: "imm", span: "7:11,25:31", display: "num"  }
+
+Fields:
+  d_fmt:           { name: "fmt"   , span: "25:26", value: "10" }
+  d_fmt_cvtsd:     { name: "fmt"   , span: "25:26", value: "00" }
+  d_opcode_lw:     { name: "opcode", span: "0:6"  , value: "1110000" }
+  d_opcode_sw:     { name: "opcode", span: "0:6"  , value: "1110010" }
+  d_opcode_madd:   { name: "opcode", span: "0:6"  , value: "1100010" }
+  d_opcode_msub:   { name: "opcode", span: "0:6"  , value: "1110010" }
+  d_opcode_nmsub:  { name: "opcode", span: "0:6"  , value: "1101010" }
+  d_opcode_nmadd:  { name: "opcode", span: "0:6"  , value: "1111010" }
+  d_opcode_op:     { name: "opcode", span: "0:6"  , value: "1100101" }
+  d_funct3_lw:     { name: "funct3", span: "12:14", value: "110" }
+  d_funct3_sw:     { name: "funct3", span: "12:14", value: "110" }
+  d_funct3_sgnj:   { name: "funct3", span: "12:14", value: "000" }
+  d_funct3_sgnjn:  { name: "funct3", span: "12:14", value: "100" }
+  d_funct3_sgnjx:  { name: "funct3", span: "12:14", value: "010" }
+  d_funct3_min:    { name: "funct3", span: "12:14", value: "000" }
+  d_funct3_max:    { name: "funct3", span: "12:14", value: "100" }
+  d_funct3_mv:     { name: "funct3", span: "12:14", value: "000" }
+  d_funct3_eq:     { name: "funct3", span: "12:14", value: "010" }
+  d_funct3_lt:     { name: "funct3", span: "12:14", value: "100" }
+  d_funct3_le:     { name: "funct3", span: "12:14", value: "000" }
+  d_funct3_class:  { name: "funct3", span: "12:14", value: "100" }
+  d_funct5_add:    { name: "funct5", span: "27:14", value: "00000" }
+  d_funct5_sub:    { name: "funct5", span: "27:14", value: "10000" }
+  d_funct5_mul:    { name: "funct5", span: "27:14", value: "01000" }
+  d_funct5_div:    { name: "funct5", span: "27:14", value: "11000" }
+  d_funct5_sqrt:   { name: "funct5", span: "27:14", value: "11010" }
+  d_funct5_sgnj:   { name: "funct5", span: "27:14", value: "00100" }
+  d_funct5_minmax: { name: "funct5", span: "27:14", value: "10100" }
+  d_funct5_cvtff:  { name: "funct5", span: "27:14", value: "00010" }
+  d_funct5_cmp:    { name: "funct5", span: "27:14", value: "00101" }
+  d_funct5_class:  { name: "funct5", span: "27:14", value: "00111" }
+  d_funct5_cvtif:  { name: "funct5", span: "27:14", value: "00011" }
+  d_funct5_cvtfi:  { name: "funct5", span: "27:14", value: "01011" }
+  d_funct5_mvfi:   { name: "funct5", span: "27:14", value: "00111" }
+  d_funct5_mvif:   { name: "funct5", span: "27:14", value: "01111" }
+  d_rs2_0:         { name: "rs2",    span: "20:24", value: "00000" }
+  d_rs2_1:         { name: "rs2",    span: "20:24", value: "10000" }
+  d_rs2_2:         { name: "rs2",    span: "20:24", value: "01000" }
+  d_rs2_3:         { name: "rs2",    span: "20:24", value: "11000" }
+
+Sets:
+- name: "RV32D"
+  size: "32"
+  instructions:
+  - mnemonic: "flw"
+    fields: [ d_opcode_lw, d_funct3_lw ]
+    args: [ d_rd, d_i_imm, d_rs1_x ]
+  - mnemonic: "fsw"
+    fields: [ d_opcode_sw, d_funct3_sw ]
+    args: [ d_rs2, d_i_imm, d_rs1_x ]
+  - mnemonic: "fmadd.d"
+    fields: [ d_opcode_madd, d_fmt ]
+    args: [ d_rd, d_rs1, d_rs2, d_rs3, d_rm ]
+  - mnemonic: "fmsub.d"
+    fields: [ d_opcode_msub, d_fmt ]
+    args: [ d_rd, d_rs1, d_rs2, d_rs3, d_rm ]
+  - mnemonic: "fnmsub.d"
+    fields: [ d_opcode_nmsub, d_fmt ]
+    args: [ d_rd, d_rs1, d_rs2, d_rs3, d_rm ]
+  - mnemonic: "fmdd.d"
+    fields: [ d_opcode_madd, d_fmt ]
+    args: [ d_rd, d_rs1, d_rs2, d_rs3, d_rm ]
+
+  - mnemonic: "fadd.d"
+    fields: [ d_opcode_op, d_fmt, d_funct5_add ]
+    args: [ d_rd, d_rs1, d_rs2, d_rm ]
+  - mnemonic: "fsub.d"
+    fields: [ d_opcode_op, d_fmt, d_funct5_sub ]
+    args: [ d_rd, d_rs1, d_rs2, d_rm ]
+  - mnemonic: "fmul.d"
+    fields: [ d_opcode_op, d_fmt, d_funct5_mul ]
+    args: [ d_rd, d_rs1, d_rs2, d_rm ]
+  - mnemonic: "fdiv.d"
+    fields: [ d_opcode_op, d_fmt, d_funct5_div ]
+    args: [ d_rd, d_rs1, d_rs2, d_rm ]
+  - mnemonic: "fsqrt.d"
+    fields: [ d_opcode_op, d_fmt, d_funct5_sqrt, d_rs2_0 ]
+    args: [ d_rd, d_rs1, d_rm ]
+  - mnemonic: "fsgnj.d"
+    fields: [ d_opcode_op, d_fmt, d_funct5_sgnj, d_funct3_sgnj ]
+    args: [ d_rd, d_rs1, d_rs2 ]
+  - mnemonic: "fsgnjn.d"
+    fields: [ d_opcode_op, d_fmt, d_funct5_sgnj, d_funct3_sgnjn ]
+    args: [ d_rd, d_rs1, d_rs2 ]
+  - mnemonic: "fsgnjx.d"
+    fields: [ d_opcode_op, d_fmt, d_funct5_sgnj, d_funct3_sgnjx ]
+    args: [ d_rd, d_rs1, d_rs2 ]
+  - mnemonic: "fmin.d"
+    fields: [ d_opcode_op, d_fmt, d_funct5_minmax, d_funct3_min ]
+    args: [ d_rd, d_rs1, d_rs2 ]
+  - mnemonic: "fmax.d"
+    fields: [ d_opcode_op, d_fmt, d_funct5_minmax, d_funct3_max ]
+    args: [ d_rd, d_rs1, d_rs2 ]
+  - mnemonic: "fcvt.s.d"
+    fields: [ d_opcode_op, d_fmt_cvtsd, d_funct5_cvtff, d_rs2_1 ]
+    args: [ d_rd, d_rs1, d_rm ]
+  - mnemonic: "fcvt.d.s"
+    fields: [ d_opcode_op, d_fmt, d_funct5_cvtff, d_rs2_0 ]
+    args: [ d_rd, d_rs1, d_rm ]
+  - mnemonic: "feq.d"
+    fields: [ d_opcode_op, d_fmt, d_funct5_cmp, d_funct3_eq ]
+    args: [ d_rd_x, d_rs1, d_rs2 ]
+  - mnemonic: "flt.d"
+    fields: [ d_opcode_op, d_fmt, d_funct5_cmp, d_funct3_lt ]
+    args: [ d_rd_x, d_rs1, d_rs2 ]
+  - mnemonic: "fle.d"
+    fields: [ d_opcode_op, d_fmt, d_funct5_cmp, d_funct3_le ]
+    args: [ d_rd_x, d_rs1, d_rs2 ]
+  - mnemonic: "class.d"
+    fields: [ d_opcode_op, d_fmt, d_funct5_class, d_funct3_class, d_rs2_0 ]
+    args: [ d_rd_x, d_rs1 ]
+  - mnemonic: "fcvt.w.d"
+    fields: [ d_opcode_op, d_fmt, d_funct5_cvtif, d_rs2_0 ]
+    args: [ d_rd, d_rs1_x, d_rm ]
+  - mnemonic: "fcvt.wu.d"
+    fields: [ d_opcode_op, d_fmt, d_funct5_cvtif, d_rs2_1 ]
+    args: [ d_rd, d_rs1_x, d_rm ]
+  - mnemonic: "fcvt.d.w"
+    fields: [ d_opcode_op, d_fmt, d_funct5_cvtfi, d_rs2_0 ]
+    args: [ d_rd_x, d_rs1, d_rm ]
+  - mnemonic: "fcvt.d.wu"
+    fields: [ d_opcode_op, d_fmt, d_funct5_cvtfi, d_rs2_1 ]
+    args: [ d_rd_x, d_rs1, d_rm ]
+
+- name: "RV64D"
+  size: "32"
+  instructions:
+  - mnemonic: "fcvt.l.d"
+    fields: [ d_opcode_op, d_fmt, d_funct5_cvtif, d_rs2_2 ]
+    args: [ d_rd, d_rs1_x, d_rm ]
+  - mnemonic: "fcvt.lu.d"
+    fields: [ d_opcode_op, d_fmt, d_funct5_cvtif, d_rs2_3 ]
+    args: [ d_rd, d_rs1_x, d_rm ]
+  - mnemonic: "fmv.x.d"
+    fields: [ d_opcode_op, d_fmt, d_funct3_mv, d_funct5_mvfi, d_rs2_0 ]
+    args: [ d_rd_x, d_rs1 ]
+  - mnemonic: "fcvt.d.l"
+    fields: [ d_opcode_op, d_fmt, d_funct5_cvtfi, d_rs2_2 ]
+    args: [ d_rd_x, d_rs1, d_rm ]
+  - mnemonic: "fcvt.d.lu"
+    fields: [ d_opcode_op, d_fmt, d_funct5_cvtfi, d_rs2_3 ]
+    args: [ d_rd_x, d_rs1, d_rm ]
+  - mnemonic: "fmv.d.x"
+    fields: [ d_opcode_op, d_fmt, d_funct3_mv, d_funct5_mvif, d_rs2_0 ]
+    args: [ d_rd, d_rs1_x ]

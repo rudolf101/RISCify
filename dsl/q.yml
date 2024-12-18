@@ -1,0 +1,160 @@
+Args:
+  q_rd_x:  { name: "rd" , span: "7:11"      , display: "regx" }
+  q_rs1_x: { name: "rs1", span: "15:19"     , display: "regx" }
+  q_rs2_x: { name: "rs2", span: "20:24"     , display: "regx" }
+  q_rs3_x: { name: "rs3", span: "27:31"     , display: "regx" }
+  q_rd:    { name: "rd" , span: "7:11"      , display: "regf" }
+  q_rs1:   { name: "rs1", span: "15:19"     , display: "regf" }
+  q_rs2:   { name: "rs2", span: "20:24"     , display: "regf" }
+  q_rs3:   { name: "rs3", span: "27:31"     , display: "regf" }
+  q_rm:    { name: "rm" , span: "12:14"     , display: "rm"   }
+  q_i_imm: { name: "imm", span: "20:31"     , display: "num"  }
+  q_s_imm: { name: "imm", span: "7:11,25:31", display: "num"  }
+
+Fields:
+  q_fmt:           { name: "fmt"   , span: "25:26", value: "11" }
+  q_fmt_cvtsq:     { name: "fmt"   , span: "25:26", value: "00" }
+  q_fmt_cvtdq:     { name: "fmt"   , span: "25:26", value: "10" }
+  q_opcode_lw:     { name: "opcode", span: "0:6"  , value: "1110000" }
+  q_opcode_sw:     { name: "opcode", span: "0:6"  , value: "1110010" }
+  q_opcode_madd:   { name: "opcode", span: "0:6"  , value: "1100001" }
+  q_opcode_msub:   { name: "opcode", span: "0:6"  , value: "1110001" }
+  q_opcode_nmsub:  { name: "opcode", span: "0:6"  , value: "1101001" }
+  q_opcode_nmadd:  { name: "opcode", span: "0:6"  , value: "1111001" }
+  q_opcode_op:     { name: "opcode", span: "0:6"  , value: "1100101" }
+  q_funct3_lw:     { name: "funct3", span: "12:14", value: "001" }
+  q_funct3_sw:     { name: "funct3", span: "12:14", value: "001" }
+  q_funct3_sgnj:   { name: "funct3", span: "12:14", value: "000" }
+  q_funct3_sgnjn:  { name: "funct3", span: "12:14", value: "100" }
+  q_funct3_sgnjx:  { name: "funct3", span: "12:14", value: "010" }
+  q_funct3_min:    { name: "funct3", span: "12:14", value: "000" }
+  q_funct3_max:    { name: "funct3", span: "12:14", value: "100" }
+  q_funct3_mv:     { name: "funct3", span: "12:14", value: "000" }
+  q_funct3_eq:     { name: "funct3", span: "12:14", value: "010" }
+  q_funct3_lt:     { name: "funct3", span: "12:14", value: "100" }
+  q_funct3_le:     { name: "funct3", span: "12:14", value: "000" }
+  q_funct3_class:  { name: "funct3", span: "12:14", value: "100" }
+  q_funct5_add:    { name: "funct5", span: "27:14", value: "00000" }
+  q_funct5_sub:    { name: "funct5", span: "27:14", value: "10000" }
+  q_funct5_mul:    { name: "funct5", span: "27:14", value: "01000" }
+  q_funct5_div:    { name: "funct5", span: "27:14", value: "11000" }
+  q_funct5_sqrt:   { name: "funct5", span: "27:14", value: "11010" }
+  q_funct5_sgnj:   { name: "funct5", span: "27:14", value: "00100" }
+  q_funct5_minmax: { name: "funct5", span: "27:14", value: "10100" }
+  q_funct5_cvtff:  { name: "funct5", span: "27:14", value: "00010" }
+  q_funct5_cmp:    { name: "funct5", span: "27:14", value: "00101" }
+  q_funct5_class:  { name: "funct5", span: "27:14", value: "00111" }
+  q_funct5_cvtif:  { name: "funct5", span: "27:14", value: "00011" }
+  q_funct5_cvtfi:  { name: "funct5", span: "27:14", value: "01011" }
+  q_funct5_mvfi:   { name: "funct5", span: "27:14", value: "00111" }
+  q_funct5_mvif:   { name: "funct5", span: "27:14", value: "01111" }
+  q_rs2_0:         { name: "rs2",    span: "20:24", value: "00000" }
+  q_rs2_1:         { name: "rs2",    span: "20:24", value: "10000" }
+  q_rs2_2:         { name: "rs2",    span: "20:24", value: "01000" }
+  q_rs2_3:         { name: "rs2",    span: "20:24", value: "11000" }
+
+Sets:
+- name: "RV32Q"
+  size: "32"
+  instructions:
+  - mnemonic: "flw"
+    fields: [ q_opcode_lw, q_funct3_lw ]
+    args: [ q_rd, q_i_imm, q_rs1_x ]
+  - mnemonic: "fsw"
+    fields: [ q_opcode_sw, q_funct3_sw ]
+    args: [ q_rs2, q_i_imm, q_rs1_x ]
+  - mnemonic: "fmadd.q"
+    fields: [ q_opcode_madd, q_fmt ]
+    args: [ q_rd, q_rs1, q_rs2, q_rs3, q_rm ]
+  - mnemonic: "fmsub.q"
+    fields: [ q_opcode_msub, q_fmt ]
+    args: [ q_rd, q_rs1, q_rs2, q_rs3, q_rm ]
+  - mnemonic: "fnmsub.q"
+    fields: [ q_opcode_nmsub, q_fmt ]
+    args: [ q_rd, q_rs1, q_rs2, q_rs3, q_rm ]
+  - mnemonic: "fnmadd.q"
+    fields: [ q_opcode_nmadd, q_fmt ]
+    args: [ q_rd, q_rs1, q_rs2, q_rs3, q_rm ]
+
+  - mnemonic: "fadd.q"
+    fields: [ q_opcode_op, q_fmt, q_funct5_add ]
+    args: [ q_rd, q_rs1, q_rs2, q_rm ]
+  - mnemonic: "fsub.q"
+    fields: [ q_opcode_op, q_fmt, q_funct5_sub ]
+    args: [ q_rd, q_rs1, q_rs2, q_rm ]
+  - mnemonic: "fmul.q"
+    fields: [ q_opcode_op, q_fmt, q_funct5_mul ]
+    args: [ q_rd, q_rs1, q_rs2, q_rm ]
+  - mnemonic: "fdiv.q"
+    fields: [ q_opcode_op, q_fmt, q_funct5_div ]
+    args: [ q_rd, q_rs1, q_rs2, q_rm ]
+  - mnemonic: "fsqrt.q"
+    fields: [ q_opcode_op, q_fmt, q_funct5_sqrt, q_rs2_0 ]
+    args: [ q_rd, q_rs1, q_rm ]
+  - mnemonic: "fsgnj.q"
+    fields: [ q_opcode_op, q_fmt, q_funct5_sgnj, q_funct3_sgnj ]
+    args: [ q_rd, q_rs1, q_rs2 ]
+  - mnemonic: "fsgnjn.q"
+    fields: [ q_opcode_op, q_fmt, q_funct5_sgnj, q_funct3_sgnjn ]
+    args: [ q_rd, q_rs1, q_rs2 ]
+  - mnemonic: "fsgnjx.q"
+    fields: [ q_opcode_op, q_fmt, q_funct5_sgnj, q_funct3_sgnjx ]
+    args: [ q_rd, q_rs1, q_rs2 ]
+  - mnemonic: "fmin.q"
+    fields: [ q_opcode_op, q_fmt, q_funct5_minmax, q_funct3_min ]
+    args: [ q_rd, q_rs1, q_rs2 ]
+  - mnemonic: "fmax.q"
+    fields: [ q_opcode_op, q_fmt, q_funct5_minmax, q_funct3_max ]
+    args: [ q_rd, q_rs1, q_rs2 ]
+  - mnemonic: "fcvt.s.q"
+    fields: [ q_opcode_op, q_fmt_cvtsq, q_funct5_cvtff, q_rs2_3 ]
+    args: [ q_rd, q_rs1, q_rm ]
+  - mnemonic: "fcvt.q.s"
+    fields: [ q_opcode_op, q_fmt, q_funct5_cvtff, q_rs2_0 ]
+    args: [ q_rd, q_rs1, q_rm ]
+  - mnemonic: "fcvt.d.q"
+    fields: [ q_opcode_op, q_fmt_cvtdq, q_funct5_cvtff, q_rs2_3 ]
+    args: [ q_rd, q_rs1, q_rm ]
+  - mnemonic: "fcvt.q.d"
+    fields: [ q_opcode_op, q_fmt, q_funct5_cvtff, q_rs2_1 ]
+    args: [ q_rd, q_rs1, q_rm ]
+  - mnemonic: "feq.q"
+    fields: [ q_opcode_op, q_fmt, q_funct5_cmp, q_funct3_eq ]
+    args: [ q_rd_x, q_rs1, q_rs2 ]
+  - mnemonic: "flt.q"
+    fields: [ q_opcode_op, q_fmt, q_funct5_cmp, q_funct3_lt ]
+    args: [ q_rd_x, q_rs1, q_rs2 ]
+  - mnemonic: "fle.q"
+    fields: [ q_opcode_op, q_fmt, q_funct5_cmp, q_funct3_le ]
+    args: [ q_rd_x, q_rs1, q_rs2 ]
+  - mnemonic: "class.q"
+    fields: [ q_opcode_op, q_fmt, q_funct5_class, q_funct3_class, q_rs2_0 ]
+    args: [ q_rd_x, q_rs1 ]
+  - mnemonic: "fcvt.w.q"
+    fields: [ q_opcode_op, q_fmt, q_funct5_cvtif, q_rs2_0 ]
+    args: [ q_rd, q_rs1_x, q_rm ]
+  - mnemonic: "fcvt.wu.q"
+    fields: [ q_opcode_op, q_fmt, q_funct5_cvtif, q_rs2_1 ]
+    args: [ q_rd, q_rs1_x, q_rm ]
+  - mnemonic: "fcvt.q.w"
+    fields: [ q_opcode_op, q_fmt, q_funct5_cvtfi, q_rs2_0 ]
+    args: [ q_rd_x, q_rs1, q_rm ]
+  - mnemonic: "fcvt.q.wu"
+    fields: [ q_opcode_op, q_fmt, q_funct5_cvtfi, q_rs2_1 ]
+    args: [ q_rd_x, q_rs1, q_rm ]
+
+- name: "RV64Q"
+  size: "32"
+  instructions:
+  - mnemonic: "fcvt.l.q"
+    fields: [ q_opcode_op, q_fmt, q_funct5_cvtif, q_rs2_2 ]
+    args: [ q_rd, q_rs1_x, q_rm ]
+  - mnemonic: "fcvt.lu.q"
+    fields: [ q_opcode_op, q_fmt, q_funct5_cvtif, q_rs2_3 ]
+    args: [ q_rd, q_rs1_x, q_rm ]
+  - mnemonic: "fcvt.q.l"
+    fields: [ q_opcode_op, q_fmt, q_funct5_cvtfi, q_rs2_2 ]
+    args: [ q_rd_x, q_rs1, q_rm ]
+  - mnemonic: "fcvt.q.lu"
+    fields: [ q_opcode_op, q_fmt, q_funct5_cvtfi, q_rs2_3 ]
+    args: [ q_rd_x, q_rs1, q_rm ]

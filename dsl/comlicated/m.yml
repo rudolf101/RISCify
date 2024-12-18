@@ -47,6 +47,7 @@ Sets:
 
 - name: "RV64M"
   size: "32"
+  extends: "RV32M"
   instructions:
   - mnemonic: "mulw"
     fields: [ m_opcode_w, m_funct3_mul, m_funct7 ]
