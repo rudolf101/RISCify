@@ -126,7 +126,7 @@ const InstructionCard: React.FC<InstructionCardProps> = ({ apply }) => {
                         {field.name}:
                       </Typography>
                       <Typography variant="body2" sx={{ color: '#555', marginBottom: '0.5rem' }}>
-                        {field.value}
+                        {field.value.split('').reverse().join('')}
                       </Typography>
                     </Box>
                   </Tooltip>
@@ -196,7 +196,7 @@ const InstructionCard: React.FC<InstructionCardProps> = ({ apply }) => {
                         {param.name}:
                       </Typography>
                       <Typography variant="body2" sx={{ color: '#555', marginBottom: '0.5rem' }}>
-                        {apply.Args[argIndex].value}
+                        {apply.Args[argIndex].value.split('').reverse().join('')}
                       </Typography>
                     </Box>
                   </Tooltip>
@@ -237,6 +237,7 @@ const App: React.FC = () => {
   const handleHexChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
   
+    /* Error not used
     const isValidHex = /^[0-9a-fA-F\s]*$/.test(value);
   
     const isEvenLength = value.replace(/\s+/g, '').length % 2 === 0;
@@ -248,6 +249,7 @@ const App: React.FC = () => {
     } else {
       setError(null);
     }
+    */
   
     setHexCode(value);
   };
