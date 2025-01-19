@@ -273,16 +273,23 @@ class Handler implements Handle {
 
 export class Disassembler {
   private hexToBinary(hexString: string): string {
-    const hexArray = hexString.trim().split(/\s+/); 
+    const hexArray = hexString.trim().split(/\s+/);
   
     const binaryString = hexArray
       .map((hex) => {
-        return parseInt(hex, 16).toString(2).padStart(8, '0').split('').reverse().join('');
+        if (!(hex.charAt(hex.length - 1) == ":")) {
+          if (!/^[0-9a-fA-F\s]*$/.test(hex)) {
+            return undefined
+          }
+          return parseInt(hex, 16).toString(2).padStart(8, '0').split('').reverse().join('');
+        }
+        return undefined
       })
+      .filter((hex) => hex != undefined)
       .join('');
   
     return binaryString;
-  }  
+  }
 
   dissasm(input: string): Apply[][] {
     const executor = new Handler(new Provider(), this.hexToBinary(input)) 

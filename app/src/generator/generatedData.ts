@@ -4816,6 +4816,16 @@
         "name": "imm",
         "span": "20:31",
         "display": "num"
+      },
+      "rv64i_i_imm_mem": {
+        "name": "imm",
+        "span": "20:31",
+        "display": "pnum"
+      },
+      "rv64i_s_imm_mem": {
+        "name": "imm",
+        "span": "7:11,25:31",
+        "display": "pnum"
       }
     },
     "Fields": {
