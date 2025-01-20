@@ -281,7 +281,33 @@ export class Disassembler {
           if (!/^[0-9a-fA-F\s]*$/.test(hex)) {
             return undefined
           }
-          return parseInt(hex, 16).toString(2).padStart(8, '0').split('').reverse().join('');
+          return hex.split('').map((d) => {
+            switch (d) {
+                case '0': return '0000'
+                case '1': return '1000'
+                case '2': return '0100'
+                case '3': return '1100'
+                case '4': return '0010'
+                case '5': return '1010'
+                case '6': return '0110'
+                case '7': return '1110'
+                case '8': return '0001'
+                case '9': return '1001'
+                case 'A':
+                case 'a': return '0101'
+                case 'B':
+                case 'b': return '1101'
+                case 'C':
+                case 'c': return '0011'
+                case 'D':
+                case 'd': return '1011'
+                case 'E':
+                case 'e': return '0111'
+                case 'F':
+                case 'f': return '1111'
+                default: return ''
+            }
+          }).reverse().join('');
         }
         return undefined
       })
