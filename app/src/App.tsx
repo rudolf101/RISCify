@@ -196,7 +196,7 @@ const InstructionCard: React.FC<InstructionCardProps> = ({ apply }) => {
                         {param.name}:
                       </Typography>
                       <Typography variant="body2" sx={{ color: '#555', marginBottom: '0.5rem' }}>
-                        {apply.Args[argIndex].value.split('').reverse().join('')}
+                        {apply.Args[argIndex].value}
                       </Typography>
                     </Box>
                   </Tooltip>
