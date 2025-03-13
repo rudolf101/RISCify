@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { SimilarInstructions } from "../kernel/Disassembler";
-import { InstructionBox } from "./Instruction";
+import { InstructionBox } from "./InstructionBox";
 
 export type InstructionRowProps = {
     instructions: SimilarInstructions,

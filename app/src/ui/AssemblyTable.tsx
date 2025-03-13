@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { SimilarInstructions } from "../kernel/Disassembler";
-import { InstructionRow } from "./SimilarInstructions";
+import { InstructionRow } from "./InstructionRow";
 
 export type AssemblyTableProps = {
     instructions: SimilarInstructions[],
