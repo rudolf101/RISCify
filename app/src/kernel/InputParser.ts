@@ -47,7 +47,7 @@ export function inputParser(input: string, settigns: InputSettings): Input {
         valid: "invalid",
         message: "Not implemented yet"
     }
-    // TODO:
+    // TODO
     /*
     Преобразует пользовательский инпут в соответствии с настройками.
     Заметки:
