@@ -42,7 +42,7 @@ export class Bits {
             if (data[i] === '1') {
                 num |= radix;
             }
-            radix >>= 1;
+            radix <<= 1;
         }
         return num;
     }

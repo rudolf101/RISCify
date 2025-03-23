@@ -1,16 +1,16 @@
 export enum InputOrder {
     /*
     Означает, что в одна последовательность
-    16-ричных цифр записывает байты в BIG_ENDIAN:
+    16-ричных цифр записывает байты в LITTLE_ENDIAN:
     "0a1b2c3d 4e5f" -> [0x3d, 0x2c, 0x1b, 0x0a, 0x5f, 0x4e]
     */
-    BYTE_ORDER_BE = 0,
+    BYTE_ORDER_LE = 0, // default
     /*
     Означает, что в одна последовательность
-    16-ричных цифр записывает байты в LITTLE_ENDIAN:
-    "0a1b2c3d 4e5f" -> [0x0a, 0x1b, 0x2c, 0x3d, 0x4e, 0x5f]
+    16-ричных цифр записывает байты в :BIG_ENDIAN
+    "0a1b2c3d 4e5f" -> [0x0a, 0x1b, 0x2c, 0x3d, 0x4e, 0x5f] -> "01010000110110000..."
     */
-    BYTE_ORDER_LE = 1,
+    BYTE_ORDER_BE = 1,
 }
 
 export type InputSettings = {
