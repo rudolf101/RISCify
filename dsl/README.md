@@ -25,14 +25,6 @@ Displays:
   - eg:
     - `[0,1,1,0,1,0,0,0,0,0,0,0] -> '22'`
     - `[0,1,1,0,1] -> '22'`
-- `pnum`:
-  - number in `[-2^(n-1); 2^(n-1)-1]` then the next argument in parentheses
-  - eg:
-    - `[0,1,1,0,1,0,0,0,0,0,0,0] -> '22(...)'`, where `...` is substituted with the next argument
-    - `[0,1,1,0,1] -> '-10(...)'`, where `...` is substututed with the next argument
-  - comment:
-    - must have for commands lb, lh, lw, sb, sh, sw.
-    - this way two arguments are output as one
 - `par(X)`:
   - do the same as `display: "X"` but then wrap in parentheses
   - eg:
@@ -68,6 +60,9 @@ Displays:
     - `[1,0,1,1] -> 'iow'`
     - `[0,1,1,1] -> 'ior'`
     - `[1,1,1,1] -> 'iorw'`
+
+The `format` field specifies how args are rendered together,
+by default they are listed with commas.
 
 # Examples
 

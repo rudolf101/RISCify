@@ -4,9 +4,7 @@ Args:
   rv32i_rs2:       { name: "rs2" , span: "20:24"            , display: "regx"   }
   rv32i_shamt:     { name: "imm" , span: "20:24"            , display: "unum"   }
   rv32i_i_imm:     { name: "imm" , span: "20:31"            , display: "num"    }
-  rv32i_i_imm_mem: { name: "imm" , span: "20:31"            , display: "pnum"   }
   rv32i_s_imm:     { name: "imm" , span: "7:11,25:31"       , display: "num"    }
-  rv32i_s_imm_mem: { name: "imm" , span: "7:11,25:31"       , display: "pnum"   }
   rv32i_b_imm:     { name: "imm" , span: "8:11,25:30,7,31"  , display: "double" }
   rv32i_u_imm:     { name: "imm" , span: "12:31"            , display: "num"    }
   rv32i_j_imm:     { name: "imm" , span: "21:30,20,12:19,31", display: "double" }
@@ -67,8 +65,24 @@ Fields:
   rv32i_ftso_succ:     { name: "succ"  , span: "20:23", value: "1100"         }
 
 Sets:
-- name: "RV32I"
+- name: "I"
   size: "32"
+  depth: "32"
+  instructions:
+  - mnemonic: "slli"
+    fields: [ rv32i_opcode_regimm, rv32i_funct3_sll, rv32i_funct7_normal ]
+    args: [ rv32i_rd, rv32i_rs1, rv32i_shamt ]
+  - mnemonic: "srli"
+    fields: [ rv32i_opcode_regimm, rv32i_funct3_srl, rv32i_funct7_normal ]
+    args: [ rv32i_rd, rv32i_rs1, rv32i_shamt ]
+  - mnemonic: "srai"
+    fields: [ rv32i_opcode_regimm, rv32i_funct3_srl, rv32i_funct7_alter ]
+    args: [ rv32i_rd, rv32i_rs1, rv32i_shamt ]
+
+Sets:
+- name: "I"
+  size: "32"
+  depth: "32|64"
   instructions:
   - mnemonic: "add"
     fields: [ rv32i_opcode_regreg, rv32i_funct3_add, rv32i_funct7_normal ]
@@ -137,41 +151,39 @@ Sets:
     fields: [ rv32i_opcode_regimm, rv32i_funct3_xor ]
     args: [ rv32i_rd, rv32i_rs1, rv32i_i_imm ]
 
-  - mnemonic: "slli"
-    fields: [ rv32i_opcode_regimm, rv32i_funct3_sll, rv32i_funct7_normal ]
-    args: [ rv32i_rd, rv32i_rs1, rv32i_shamt ]
-  - mnemonic: "srli"
-    fields: [ rv32i_opcode_regimm, rv32i_funct3_srl, rv32i_funct7_normal ]
-    args: [ rv32i_rd, rv32i_rs1, rv32i_shamt ]
-  - mnemonic: "srai"
-    fields: [ rv32i_opcode_regimm, rv32i_funct3_srl, rv32i_funct7_alter ]
-    args: [ rv32i_rd, rv32i_rs1, rv32i_shamt ]
-
   - mnemonic: "lw"
     fields: [ rv32i_opcode_load, rv32i_funct3_ww ]
-    args: [ rv32i_rd, rv32i_i_imm_mem, rv32i_rs1 ]
+    args: [ rv32i_rd, rv32i_i_imm, rv32i_rs1 ]
+    format: "_, _(_)"
   - mnemonic: "lh"
     fields: [ rv32i_opcode_load, rv32i_funct3_wh ]
-    args: [ rv32i_rd, rv32i_i_imm_mem, rv32i_rs1 ]
+    args: [ rv32i_rd, rv32i_i_imm, rv32i_rs1 ]
+    format: "_, _(_)"
   - mnemonic: "lb"
     fields: [ rv32i_opcode_load, rv32i_funct3_wb ]
-    args: [ rv32i_rd, rv32i_i_imm_mem, rv32i_rs1 ]
+    args: [ rv32i_rd, rv32i_i_imm, rv32i_rs1 ]
+    format: "_, _(_)"
   - mnemonic: "lhu"
     fields: [ rv32i_opcode_load, rv32i_funct3_whu ]
-    args: [ rv32i_rd, rv32i_i_imm_mem, rv32i_rs1 ]
+    args: [ rv32i_rd, rv32i_i_imm, rv32i_rs1 ]
+    format: "_, _(_)"
   - mnemonic: "lbu"
     fields: [ rv32i_opcode_load, rv32i_funct3_wbu ]
-    args: [ rv32i_rd, rv32i_i_imm_mem, rv32i_rs1 ]
+    args: [ rv32i_rd, rv32i_i_imm, rv32i_rs1 ]
+    format: "_, _(_)"
 
   - mnemonic: "sw"
     fields: [ rv32i_opcode_store, rv32i_funct3_ww ]
-    args: [ rv32i_rs2, rv32i_s_imm_mem, rv32i_rs1 ]
+    args: [ rv32i_rs2, rv32i_s_imm, rv32i_rs1 ]
+    format: "_, _(_)"
   - mnemonic: "sh"
     fields: [ rv32i_opcode_store, rv32i_funct3_wh ]
-    args: [ rv32i_rs2, rv32i_s_imm_mem, rv32i_rs1 ]
+    args: [ rv32i_rs2, rv32i_s_imm, rv32i_rs1 ]
+    format: "_, _(_)"
   - mnemonic: "sb"
     fields: [ rv32i_opcode_store, rv32i_funct3_wb ]
-    args: [ rv32i_rs2, rv32i_s_imm_mem, rv32i_rs1 ]
+    args: [ rv32i_rs2, rv32i_s_imm, rv32i_rs1 ]
+    format: "_, _(_)"
 
   - mnemonic: "lui"
     fields: [ rv32i_opcode_lui ]

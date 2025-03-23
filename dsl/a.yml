@@ -25,8 +25,9 @@ Fields:
   a_rs2_0:   { name: "rs2",    span: "20:24", value: "00000"   }
 
 Sets:
-- name: "RV32A"
+- name: "A"
   size: "32"
+  depth: "32|64"
   instructions:
   - { mnemonic:      "lr.w"     , fields: [ a_op, a_f3_w, a_f5_lr  , a_rl0, a_aq0, a_rs2_0 ], args: [ a_rd, a_rs1 ] }
   - { mnemonic:      "lr.w.aq"  , fields: [ a_op, a_f3_w, a_f5_lr  , a_rl0, a_aq1, a_rs2_0 ], args: [ a_rd, a_rs1 ] }
@@ -73,8 +74,9 @@ Sets:
   - { mnemonic: "amomaxu.w.rl"  , fields: [ a_op, a_f3_w, a_f5_maxu, a_rl1, a_aq0 ], args: [ a_rd, a_rs2, a_rs1 ] }
   - { mnemonic: "amomaxu.w.aqrl", fields: [ a_op, a_f3_w, a_f5_maxu, a_rl1, a_aq1 ], args: [ a_rd, a_rs2, a_rs1 ] }
 
-- name: "RV64A"
+- name: "A"
   size: "32"
+  depth: "64"
   instructions:
   - { mnemonic:      "lr.d"     , fields: [ a_op, a_f3_d, a_f5_lr  , a_rl0, a_aq0, a_rs2_0 ], args: [ a_rd, a_rs1 ] }
   - { mnemonic:      "lr.d.aq"  , fields: [ a_op, a_f3_d, a_f5_lr  , a_rl0, a_aq1, a_rs2_0 ], args: [ a_rd, a_rs1 ] }
