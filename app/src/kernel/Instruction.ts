@@ -1,105 +1,82 @@
-import { InstructionDescription, BitDepth, Jump } from "./InstructionDescription";
+import { BitDepth, InstructionDescription, Jump } from "./InstructionDescription";
 import { Bits } from "./Bits";
 import { Argument } from "./Argument";
-import { Matcher } from "./Matcher";
-import React from "react";
 
 export class Instruction {
-    private _rvset: string; // идентификатор набора (I, M, C, Zifence, ...)
-    private _wl: BitDepth; // битовые флаги, разрядность набора инструкций (для фильтрации)
-    private _length: number; // длина инструкции в битах
-    private _mnemonic: string; // ассемблерная мнемоника
-    private _fields: Matcher[]; // участки бит, по которым инструкция идентифицируется
-    private _args: Argument[]; // аргументы инструкции
-    private _argFormat: string | undefined; // форматирование аргументов
-    private _jump: Jump; // для control-flow инструкций: какой аргумент определяет переход
+    private _description: InstructionDescription;
+    private _args: Argument[];
 
     constructor(bits: Bits, description: InstructionDescription) {
-        this._rvset = description.rvset;
-        this._wl = description.wl;
-        this._length = description.length;
-        this._mnemonic = description.mnemonic;
-        this._fields = description.fields;
+        this._description = description;
         this._args = description.args.map((pattern) => new Argument(bits, pattern));
-        this._jump = description.jump;
+    }
+
+    public get description(): InstructionDescription {
+        return this._description;
     }
 
     public get rvset(): string {
-        return this._rvset;
+        return this._description.rvset;
     }
 
     public get wl(): BitDepth {
-        return this._wl;
+        return this._description.wl;
     }
 
     public get length(): number {
-        return this._length;
+        return this._description.length;
     }
 
     public get mnemonic(): string {
-        return this._mnemonic;
+        return this._description.mnemonic;
     }
 
-    public get fields(): Matcher[] {
-        return this._fields;
+    public get fields() {
+        return this._description.fields;
+    }
+
+    public get argFormat(): string | undefined {
+        return this._description.argFormat;
     }
 
     public get args(): Argument[] {
         return this._args;
     }
 
-    public get argFormat(): string | undefined {
-        return this._argFormat;
-    }
-
     public get jump(): Jump {
-        return this._jump;
+        return this._description.jump;
     }
 
+    /**
+     * Returns a formatted string representation of the instruction arguments.
+     *
+     * If `argFormat` is `undefined`, the arguments are joined with commas.
+     * Otherwise, each underscore `_` in the format string is replaced by an argument.
+     * Extra arguments are appended. Missing ones are rendered as empty.
+     */
     public formatted(): string {
-        return "";
-        // TODO
-        /*
-        Отформатировать аргументы в соответствии с форматом
+        const args = this._args.map(arg => arg.textual);
 
-        Если this._argFormat == undefined,
-        то просто перечислить через запятую.
+        if (!this.argFormat) {
+            return args.join(', ');
+        }
 
-        Если this._argFormat содержит мало полей,
-        излишние аргументы перечислить через запятую.
+        let result = '';
+        let index = 0;
 
-        Если this._argFormat содержит много полей,
-        недостающие аргументы заменяются на пустые строки.
+        for (let i = 0; i < this.argFormat.length; i++) {
+            const char = this.argFormat[i];
+            if (char === '_') {
+                result += index < args.length ? args[index++] : '';
+            } else {
+                result += char;
+            }
+        }
 
-        Такую же функцию потом нужно
-        будет сделать для реакта.
+        if (index < args.length) {
+            result += ', ' + args.slice(index).join(', ');
+        }
 
-        Пример:
-        this._args[0].textual = "x11"
-        this._args[1].textual = "52"
-        this._args[2].textual = "iorw"
-        this._argFormat = "_(_) :: _"
-        return -> "x11(52) :: iorw"
-
-        Пример:
-        this._args[0].textual = "x11"
-        this._args[1].textual = "52"
-        this._args[2].textual = "iorw"
-        this._argFormat = undefined
-        return -> "x11, 52, iorw"
-
-        Пример:
-        this._args[0].textual = "x11"
-        this._args[1].textual = "52"
-        this._args[2].textual = "iorw"
-        this._argFormat = "_(_)"
-        return -> "x11(52), iorw"
-    
-        Пример:
-        this._args[0].textual = "x11"
-        this._args[1].textual = "52"
-        this._argFormat = "_(_) :: [_]"
-        return -> "x11(52) :: []"
-        */
+        return result;
     }
 }
