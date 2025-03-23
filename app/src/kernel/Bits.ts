@@ -21,11 +21,15 @@ export class Bits {
     }
 
     public get numerical(): number {
-        return 0;
-        // TODO
-        // Представить, что биты идут в little-endian
-        // перевести в число на отрезке [-2^(n-1); 2^(n-1)-1]
-        // Возможно лучше будет использовать геттер unsigned
+        const unsignedValue: number = this.unsigned;
+        const n: number = this._data.length;
+    
+        // Если старший бит равен 1, число отрицательное
+        if (unsignedValue & (1 << (n - 1))) {
+            return unsignedValue - (1 << n);
+        }
+    
+        return unsignedValue;
     }
 
     public get unsigned(): number {
