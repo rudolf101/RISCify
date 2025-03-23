@@ -1,15 +1,23 @@
 export type Span = number[];
 
 /**
- * Parses a span string like "0-3,5,7-9" into an array of numbers.
+ * Parses a span string into an array of indices.
  *
- * Supports:
- * - single numbers: "5" => [5]
- * - ranges: "0-3" => [0,1,2,3]
- * - mixed: "0-2,4,6-7" => [0,1,2,4,6,7]
+ * Grammar:
+ *   Span           ::= SpanElement | SpanElement ',' Span
+ *   SpanElement    ::= NUMBER | NUMBER '-' NUMBER
+ *   NUMBER         ::= [0-9]+
  *
- * @param span The string to parse
- * @returns A list of numbers from the span
+ * Examples:
+ *   "0"                  => [0]
+ *   "5"                  => [5]
+ *   "1,4,0,2"            => [1, 4, 0, 2]
+ *   "0-6"                => [0, 1, 2, 3, 4, 5, 6]
+ *   "0-7,12-14,8-11,15"  => [0, 1, 2, 3, 4, 5, 6, 7, 12, 13, 14, 8, 9, 10, 11, 15]
+ *
+ * @param span A string representing a list of indices or ranges.
+ * @returns A flat array of numbers expanded from the given span.
+ * @throws Error if the span contains invalid syntax or reversed ranges.
  */
 export function parseSpan(span: string): Span {
     const result: number[] = [];
