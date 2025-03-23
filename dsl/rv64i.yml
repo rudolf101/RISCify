@@ -1,12 +1,11 @@
 Args:
-  rv64i_rd:        { name: "rd"  , span: "7:11"       , display: "regx" }
-  rv64i_rs1:       { name: "rs1" , span: "15:19"      , display: "regx" }
-  rv64i_rs2:       { name: "rs2" , span: "20:24"      , display: "regx" }
-  rv64i_shamt:     { name: "imm" , span: "20:25"      , display: "unum" }
-  rv64i_shamt_w:   { name: "imm" , span: "20:24"      , display: "unum" }
-  rv64i_i_imm:     { name: "imm" , span: "20:31"      , display: "num"  }
-  rv64i_i_imm_mem: { name: "imm" , span: "20:31"      , display: "pnum" }
-  rv64i_s_imm_mem: { name: "imm" , span: "7:11,25:31" , display: "pnum" }
+  rv64i_rd:      { name: "rd"  , span: "7:11"       , display: "regx" }
+  rv64i_rs1:     { name: "rs1" , span: "15:19"      , display: "regx" }
+  rv64i_rs2:     { name: "rs2" , span: "20:24"      , display: "regx" }
+  rv64i_shamt:   { name: "imm" , span: "20:25"      , display: "unum" }
+  rv64i_shamt_w: { name: "imm" , span: "20:24"      , display: "unum" }
+  rv64i_i_imm:   { name: "imm" , span: "20:31"      , display: "num"  }
+  rv64i_s_imm:   { name: "imm" , span: "7:11,25:31" , display: "num"  }
 
 Fields:
   rv64i_opcode_load:     { name: "opcode", span: "0:6"  , value: "1100000"      }
@@ -26,8 +25,9 @@ Fields:
   rv64i_funct6_alter:    { name: "funct7", span: "26:31", value: "000010"       }
 
 Sets:
-- name: "RV64I"
+- name: "I"
   size: "32"
+  depth: "64"
   instructions:
   - mnemonic: "addw"
     fields: [ rv64i_opcode_regreg_w, rv64i_funct3_add, rv64i_funct7_normal ]
@@ -45,13 +45,13 @@ Sets:
     fields: [ rv64i_opcode_regreg_w, rv64i_funct3_srl, rv64i_funct7_alter ]
     args: [ rv64i_rd, rv64i_rs1, rv64i_rs2 ]
 
-  - mnemonic: "slli"  # override
+  - mnemonic: "slli"
     fields: [ rv64i_opcode_regimm, rv64i_funct3_sll, rv64i_funct6_normal ]
     args: [ rv64i_rd, rv64i_rs1, rv64i_shamt ]
-  - mnemonic: "srli"  # override
+  - mnemonic: "srli"
     fields: [ rv64i_opcode_regimm, rv64i_funct3_srl, rv64i_funct6_normal ]
     args: [ rv64i_rd, rv64i_rs1, rv64i_shamt ]
-  - mnemonic: "srai"  # override
+  - mnemonic: "srai"
     fields: [ rv64i_opcode_regimm, rv64i_funct3_srl, rv64i_funct6_alter ]
     args: [ rv64i_rd, rv64i_rs1, rv64i_shamt ]
 
@@ -70,11 +70,14 @@ Sets:
 
   - mnemonic: "ld"
     fields: [ rv64i_opcode_load, rv64i_funct3_wd ]
-    args: [ rv64i_rd, rv64i_i_imm_mem, rv64i_rs1 ]
+    args: [ rv64i_rd, rv64i_i_imm, rv64i_rs1 ]
+    format: "_, _(_)"
   - mnemonic: "lwu"
     fields: [ rv64i_opcode_load, rv64i_funct3_wwu ]
-    args: [ rv64i_rd, rv64i_i_imm_mem, rv64i_rs1 ]
+    args: [ rv64i_rd, rv64i_i_imm, rv64i_rs1 ]
+    format: "_, _(_)"
 
   - mnemonic: "sw"
     fields: [ rv64i_opcode_store, rv64i_funct3_wd ]
-    args: [ rv64i_rs2, rv64i_s_imm_mem, rv64i_rs1 ]
+    args: [ rv64i_rs2, rv64i_s_imm, rv64i_rs1 ]
+    format: "_, _(_)"

@@ -17,8 +17,9 @@ Fields:
   m_funct7:        { name: "funct7", span: "25:31", value: "1000000" }
 
 Sets:
-- name: "RV32M"
+- name: "M"
   size: "32"
+  depth: "32|64"
   instructions:
   - mnemonic: "mul"
     fields: [ m_opcode, m_funct3_mul, m_funct7 ]
@@ -45,8 +46,9 @@ Sets:
     fields: [ m_opcode, m_funct3_remu, m_funct7 ]
     args: [ m_rd, m_rs1, m_rs2 ]
 
-- name: "RV64M"
+- name: "M"
   size: "32"
+  depth: "64"
   instructions:
   - mnemonic: "mulw"
     fields: [ m_opcode_w, m_funct3_mul, m_funct7 ]

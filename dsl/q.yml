@@ -54,8 +54,9 @@ Fields:
   q_rs2_3:         { name: "rs2",    span: "20:24", value: "11000" }
 
 Sets:
-- name: "RV32Q"
+- name: "Q"
   size: "32"
+  depth: "32|64"
   instructions:
   - mnemonic: "flw"
     fields: [ q_opcode_lw, q_funct3_lw ]
@@ -143,8 +144,9 @@ Sets:
     fields: [ q_opcode_op, q_fmt, q_funct5_cvtfi, q_rs2_1 ]
     args: [ q_rd_x, q_rs1, q_rm ]
 
-- name: "RV64Q"
+- name: "Q"
   size: "32"
+  depth: "64"
   instructions:
   - mnemonic: "fcvt.l.q"
     fields: [ q_opcode_op, q_fmt, q_funct5_cvtif, q_rs2_2 ]

@@ -167,7 +167,6 @@ class InputValue {
     this.spanHandler = new SpanHandler(input)
   }
   
-
   public haveField(field: Field): boolean {
     return this.spanHandler.compareWithValue(field.span, field.value)
   }

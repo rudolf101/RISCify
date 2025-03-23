@@ -51,8 +51,9 @@ Fields:
   f_rs2_3:         { name: "rs2",    span: "20:24", value: "11000" }
 
 Sets:
-- name: "RV32F"
+- name: "F"
   size: "32"
+  depth: "32|64"
   instructions:
   - mnemonic: "flw"
     fields: [ f_opcode_lw, f_funct3_lw ]
@@ -134,8 +135,9 @@ Sets:
     fields: [ f_opcode_op, f_fmt, f_funct3_mv, f_funct5_mvif, f_rs2_0 ]
     args: [ f_rd, f_rs1_x ]
 
-- name: "RV64F"
+- name: "F"
   size: "32"
+  depth: "64"
   instructions:
   - mnemonic: "fcvt.l.s"
     fields: [ f_opcode_op, f_fmt, f_funct5_cvtif, f_rs2_2 ]

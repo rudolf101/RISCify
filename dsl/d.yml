@@ -53,8 +53,9 @@ Fields:
   d_rs2_3:         { name: "rs2",    span: "20:24", value: "11000" }
 
 Sets:
-- name: "RV32D"
+- name: "D"
   size: "32"
+  depth: "32|64"
   instructions:
   - mnemonic: "flw"
     fields: [ d_opcode_lw, d_funct3_lw ]
@@ -136,8 +137,9 @@ Sets:
     fields: [ d_opcode_op, d_fmt, d_funct5_cvtfi, d_rs2_1 ]
     args: [ d_rd_x, d_rs1, d_rm ]
 
-- name: "RV64D"
+- name: "D"
   size: "32"
+  depth: "64"
   instructions:
   - mnemonic: "fcvt.l.d"
     fields: [ d_opcode_op, d_fmt, d_funct5_cvtif, d_rs2_2 ]
