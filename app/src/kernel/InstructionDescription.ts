@@ -89,7 +89,7 @@ export class InstructionDescription {
     }
 
     public set argFormat(format: string | undefined) {
-        this.argFormat = format;
+        this._argFormat = format;
     }
 
     public set jump(index: Jump) {
