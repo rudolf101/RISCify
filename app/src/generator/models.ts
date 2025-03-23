@@ -16,15 +16,23 @@ export type Instruction = {
     args: string[];
   }
   
-export  type InstructionSet = {
+export type InstructionSet = {
     name: string;
     size: string;
     instructions: Instruction[];
   }
   
-export  type YAMLData = {
+export type YAMLData = {
     Args: { [key: string]: Param };
     Fields: { [key: string]: Field };
     Sets: InstructionSet[];
   }
   
+export type Arg = {
+  value: string;
+}
+  
+export type Apply = {
+  Instruction: Instruction
+  Args: Arg[]
+}

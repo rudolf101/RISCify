@@ -4,7 +4,7 @@ Args:
   rv64i_rs2:       { name: "rs2" , span: "20:24"      , display: "regx" }
   rv64i_shamt:     { name: "imm" , span: "20:25"      , display: "unum" }
   rv64i_shamt_w:   { name: "imm" , span: "20:24"      , display: "unum" }
-  rv64i_i_imm:     { name: "imm" , span: "20:31"      , display: "num " }
+  rv64i_i_imm:     { name: "imm" , span: "20:31"      , display: "num"  }
   rv64i_i_imm_mem: { name: "imm" , span: "20:31"      , display: "pnum" }
   rv64i_s_imm_mem: { name: "imm" , span: "7:11,25:31" , display: "pnum" }
 

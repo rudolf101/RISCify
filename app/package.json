@@ -19,6 +19,7 @@
     "browserify-fs": "^1.0.0",
     "path-browserify": "^1.0.1",
     "react": "18",
+    "react-copy-to-clipboard": "^5.1.0",
     "react-dom": "18",
     "react-scripts": "5.0.1",
     "typescript": "^4.4.2",
@@ -29,7 +30,6 @@
     "build": "react-scripts build",
     "predeploy": "yarn build",
     "deploy": "gh-pages -d build"
-
   },
   "eslintConfig": {
     "extends": [
@@ -51,6 +51,7 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.0",
+    "@types/react-copy-to-clipboard": "^5.0.7",
     "gh-pages": "^6.2.0",
     "ts-node": "^10.9.2"
   }
