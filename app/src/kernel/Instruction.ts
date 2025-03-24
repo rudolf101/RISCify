@@ -8,7 +8,7 @@ export class Instruction {
 
     constructor(bits: Bits, description: InstructionDescription) {
         this._description = description;
-        this._args = description.args.map((pattern) => new Argument(bits, pattern));
+        this._args = description.args.map((pattern) => new Argument(pattern.name, bits, pattern));
     }
 
     public get description(): InstructionDescription {

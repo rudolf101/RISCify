@@ -2,12 +2,18 @@ import { Span, parseSpan } from "./Span";
 import { Bits } from "./Bits";
 
 export class Matcher {
+    private _name: string;
     private _span: Span;
     private _sample: Bits;
 
-    constructor(spanStr: string, sampleStr: string) {
+    constructor(name: string, spanStr: string, sampleStr: string) {
+        this._name = name;
         this._span = parseSpan(spanStr);
         this._sample = new Bits(sampleStr);
+    }
+
+    public get name(): string {
+        return this._name;
     }
 
     public get span(): Span {

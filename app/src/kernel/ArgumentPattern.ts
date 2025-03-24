@@ -3,12 +3,18 @@ import { Span } from "./Span";
 import { ArgumentInterpretation, argumentInterpretationFactory } from "./ArgumentInterpretation";
 
 export class ArgumentPattern {
+    private _name: string;
     private _span: Span;
     private _interpretation: ArgumentInterpretation;
 
-    constructor(span: Span, displayStr: string) {
+    constructor(name: string, span: Span, displayStr: string) {
+        this._name = name;
         this._span = span;
         this._interpretation = argumentInterpretationFactory(displayStr);
+    }
+
+    public get name(): string {
+        return this._name;
     }
 
     public get span(): Span {
