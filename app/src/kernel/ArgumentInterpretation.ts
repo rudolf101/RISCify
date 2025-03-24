@@ -7,7 +7,7 @@ export abstract class ArgumentInterpretation {
 
 class InvalidInterpretation extends ArgumentInterpretation {
     public textual(bits: Bits): string {
-        return "";
+        return "<invalid arg>";
     }
 
     public numerical(bits: Bits): number {
@@ -28,9 +28,94 @@ class UnumInterpretation extends ArgumentInterpretation {
     }
 
     public numerical(bits: Bits): number {
+        return bits.unsigned * this._multiplier;
+    }
+}
+
+class NumInterpretation extends ArgumentInterpretation {
+    private _multiplier: number
+
+    constructor(shift: number) {
+        super();
+        this._multiplier = 1 >> shift;
+    }
+
+    public textual(bits: Bits): string {
+        return this.numerical(bits).toString();
+    }
+
+    public numerical(bits: Bits): number {
         return bits.numerical * this._multiplier;
     }
 }
+
+class RegInterpretation extends ArgumentInterpretation {
+    private _prefix: string
+    private _offset: number
+
+    constructor(prefix: string, offset: number) {
+        super();
+        this._prefix = prefix;
+        this._offset = offset;
+    }
+
+    public textual(bits: Bits): string {
+        return this._prefix + this.numerical(bits).toString();
+    }
+
+    public numerical(bits: Bits): number {
+        return bits.unsigned + this._offset;
+    }
+}
+
+class FenceInterpretation extends ArgumentInterpretation {
+    constructor() {
+        super();
+    }
+
+    public textual(bits: Bits): string {
+        return [  '0',   'w',   'r',   'rw',
+                  'o',  'ow',  'or',  'orw',
+                  'i',  'iw',  'ir',  'irw',
+                 'io', 'iow', 'ior', 'iorw' ][this.numerical(bits)]; 
+    }
+
+    public numerical(bits: Bits): number {
+        return bits.unsigned % 16;
+    }
+}
+
+class RmInterpretation extends ArgumentInterpretation {
+    constructor() {
+        super();
+    }
+
+    public textual(bits: Bits): string {
+        return ['rne', 'rtz', 'rdn', 'rup', 'rmm', '-', '-', 'dyn'][this.numerical(bits)]; 
+    }
+
+    public numerical(bits: Bits): number {
+        return bits.unsigned % 8;
+    }
+}
+
+class ParInterpretation extends ArgumentInterpretation {
+    private _sub: ArgumentInterpretation;
+
+    constructor(sub: ArgumentInterpretation) {
+        super();
+        this._sub = sub;
+    }
+
+    public textual(bits: Bits): string {
+        return "(" + this._sub.textual(bits) + ")";
+    }
+
+    public numerical(bits: Bits): number {
+        return this._sub.numerical(bits);
+    }
+}
+
 
 export function argumentInterpretationFactory(description: string): ArgumentInterpretation {
     /*
@@ -84,7 +169,7 @@ export function argumentInterpretationFactory(description: string): ArgumentInte
           unumx(3) -> [0,1,1,0,1] -> '176'
      
       double:
-        alias of numx(1)
+        legacy alias of numx(1)
      
       fence:
         numeral interpretation works as unum
@@ -121,7 +206,15 @@ export function argumentInterpretationFactory(description: string): ArgumentInte
       more interpretations may be added later
     */
     switch (description) {
-        case "unum": return new UnumInterpretation(0); // беззнаковое целое число от 0 до 2^n-1
+        case "unum": return new UnumInterpretation(0);
+        case "num": return new NumInterpretation(0);
+        case "double": return new NumInterpretation(1);
+        case "regx": return new RegInterpretation("x", 0);
+        case "regf": return new RegInterpretation("f", 0);
+        case "regcx": return new RegInterpretation("x", 8);
+        case "regcf": return new RegInterpretation("f", 8);
+        case "fence": return new FenceInterpretation();
+        case "rm": return new RmInterpretation();
     }
     if (description.startsWith("unumx(") && description.endsWith(")")) {
         var kStr: string = description.substring(6, description.length - 1);
@@ -129,6 +222,17 @@ export function argumentInterpretationFactory(description: string): ArgumentInte
         if (!isNaN(k)) {
             return new UnumInterpretation(k); // беззнаковое целое число от 0 до 2^n-1, умноженное на 2^k
         }
+    }
+    else if (description.startsWith("numx(") && description.endsWith(")")) {
+        var kStr: string = description.substring(5, description.length - 1);
+        var k: number = +kStr;
+        if (!isNaN(k)) {
+            return new NumInterpretation(k); // беззнаковое целое число от 0 до 2^n-1, умноженное на 2^k
+        }
+    }
+    else if (description.startsWith("par(") && description.endsWith(")")) {
+        var subStr: string = description.substring(4, description.length - 1);
+        return new ParInterpretation(argumentInterpretationFactory(subStr));
     }
     return new InvalidInterpretation();
 }
