@@ -17,7 +17,7 @@ describe("inputParser", () => {
         })).toEqual({
             valid: "valid",
             startAddress: 16,
-            bytesConcat: "00000001001000110100010101100111"
+            bytesConcat: "10000000110001001010001011100110"
         });
     });
 
@@ -28,7 +28,7 @@ describe("inputParser", () => {
         })).toEqual({
             valid: "valid",
             startAddress: 16,
-            bytesConcat: "01100111010001010010001100000001"
+            bytesConcat: "11100110101000101100010010000000"
         });
     });
 
@@ -39,7 +39,7 @@ describe("inputParser", () => {
         })).toEqual({
             valid: "valid",
             startAddress: 20,
-            bytesConcat: "00001001101010111100110111101111"
+            bytesConcat: "10010000110101011011001111110111"
         });
     });
 
@@ -50,7 +50,7 @@ describe("inputParser", () => {
         })).toEqual({
             valid: "valid",
             startAddress: 20,
-            bytesConcat: "00001001101010111100110111101111"
+            bytesConcat: "10010000110101011011001111110111"
         });
     });
 
@@ -61,7 +61,7 @@ describe("inputParser", () => {
         })).toEqual({
             valid: "valid",
             startAddress: 16,
-            bytesConcat: "0000000100100011010001010110011100001001101010111100110111101111"
+            bytesConcat: "1000000011000100101000101110011010010000110101011011001111110111"
         });
     });
 
@@ -72,7 +72,7 @@ describe("inputParser", () => {
         })).toEqual({
             valid: "valid",
             startAddress: 16,
-            bytesConcat: "000010100001101100101100001111010100111001011111"
+            bytesConcat: "010100001101100000110100101111000111001011111010"
         });
     });
 
@@ -83,7 +83,7 @@ describe("inputParser", () => {
         })).toEqual({
             valid: "valid",
             startAddress: 16,
-            bytesConcat: "001111010010110000011011000010100101111101001110"
+            bytesConcat: "101111000011010011011000010100001111101001110010"
         });
     });
 
@@ -94,7 +94,7 @@ describe("inputParser", () => {
         })).toEqual({
             valid: "valid",
             startAddress: 16,
-            bytesConcat: "00001001101010111100110111101111"
+            bytesConcat: "10010000110101011011001111110111"
         });
     });
 
@@ -105,13 +105,35 @@ describe("inputParser", () => {
         })).toEqual({
             valid: "valid",
             startAddress: 21,
-            bytesConcat: "1100110111101111"
+            bytesConcat: "1011001111110111"
+        });
+    });
+
+    test("parcel skip with LE", () => {
+        expect(inputParser("0x0014: 09abcdef", {
+            order: InputOrder.BYTE_ORDER_LE,
+            parcelSkip: 1
+        })).toEqual({
+            valid: "valid",
+            startAddress: 21,
+            bytesConcat: "1101010110010000"
         });
     });
 
     test("2 parcel skip", () => {
         expect(inputParser("0x0014: 09abcdef", {
             order: InputOrder.BYTE_ORDER_BE,
+            parcelSkip: 2
+        })).toEqual({
+            valid: "valid",
+            startAddress: 22,
+            bytesConcat: ""
+        });
+    });
+
+    test("2 parcel skip with LE", () => {
+        expect(inputParser("0x0014: 09abcdef", {
+            order: InputOrder.BYTE_ORDER_LE,
             parcelSkip: 2
         })).toEqual({
             valid: "valid",

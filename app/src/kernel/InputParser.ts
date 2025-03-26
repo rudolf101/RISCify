@@ -48,6 +48,18 @@ export function inputParser(input: string, settings: InputSettings): Input {
         return (parseInt(hex, 16).toString(2)).padStart(size, '0');
     }
 
+    function isAddress(s: string) {
+        return s.match(/(0x)?([a-f0-9 ]+):\s*$/);
+    }
+
+    function parseAddress(s: string) {
+        return parseInt(s.trim().match(/^(0x)?([a-f0-9 ]+):/i)!![2], 16);
+    }
+
+    function isHexString(s: string) {
+        return !!s.match(/^[a-f0-9 ]*$/i);
+    }
+
     const result: ValidInput = {
         valid: "valid",
         startAddress: 0,
@@ -59,33 +71,49 @@ export function inputParser(input: string, settings: InputSettings): Input {
     try {
         const resultBuilder: string[] = [];
         const chunks = input.split(/((?:0x)?[0-9a-f]+: *)/gm);
-        for (let curInd = 0; curInd < chunks.length; curInd++) {
-            const curChunk = chunks[curInd];
+        for (let curChunk of chunks) {
             if (curChunk.trim() === "") {
                 continue
             }
-            if (curChunk.match(/:\s*$/)) {
-                const match = curChunk.trim().match(/^(0x)?([a-f0-9 ]+):/i);
-                if (!match) {
-                    throw new Error("Invalid address format: " + curChunk.trim());
+            if (isAddress(curChunk)) {
+                const address = parseAddress(curChunk);
+                if (address === undefined) {
+                    return {
+                        valid: "invalid",
+                        message: "Invalid address format: " + curChunk.trim(),
+                    }
                 }
-                const [, , address] = match;
                 if (result.startAddress === 0) {
-                    result.startAddress = parseInt(address, 16) + settings.parcelSkip;
+                    result.startAddress = address + settings.parcelSkip;
                     if (currentAddress === -1) {
                         currentAddress = result.startAddress
                     } else {
-                        throw new Error("0x0 address already defined")
+                        return {
+                            valid: "invalid",
+                            message: "0x0 address already defined",
+                        }
                     }
                 } else {
-                    if (currentAddress !== parseInt(address, 16)) {
-                        throw new Error(`Position label does not correspond to the amount of data processed. Label: 0x${parseInt(address, 16).toString(16)}, 0x${currentAddress.toString(16)}`)
+                    if (currentAddress !== address) {
+                        return {
+                            valid: "invalid",
+                            message: `Position label does not correspond to the amount of data processed. Label: 0x${address.toString(16)}, 0x${currentAddress.toString(16)}`,
+                        }
                     }
                 }
             } else {
-                curChunk.split(/\s/g).forEach(hex => {
+                for (let hex of curChunk.split(/\s/g)) {
+                    if (!isHexString(hex)){
+                        return {
+                            valid: "invalid",
+                            message: "invalid hex value: " + hex,
+                        }
+                    }
                     if (hex.length % 2) {
-                        throw "invalid fragment: " + hex
+                        return {
+                            valid: "invalid",
+                            message: "invalid hex fragment length: " + hex,
+                        }
                     }
                     switch (settings.order) {
                         case InputOrder.BYTE_ORDER_BE: {
@@ -95,8 +123,8 @@ export function inputParser(input: string, settings: InputSettings): Input {
                                     continue
                                 }
                                 const [a, b] = hex.slice(j, j + 2)
-                                resultBuilder.push(hex2bin(a, 4))
-                                resultBuilder.push(hex2bin(b, 4))
+                                resultBuilder.push(Array.from(hex2bin(b, 4)).toReversed().join(""))
+                                resultBuilder.push(Array.from(hex2bin(a, 4)).toReversed().join(""))
                             }
                             currentAddress += hex.length / 2;
                             break;
@@ -108,17 +136,20 @@ export function inputParser(input: string, settings: InputSettings): Input {
                                     continue
                                 }
                                 const [a, b] = hex.slice(i - 1, i + 1);
-                                resultBuilder.push(hex2bin(a, 4));
-                                resultBuilder.push(hex2bin(b, 4));
+                                resultBuilder.push(Array.from(hex2bin(b, 4)).toReversed().join(""));
+                                resultBuilder.push(Array.from(hex2bin(a, 4)).toReversed().join(""));
                             }
                             currentAddress += hex.length / 2;
                             break;
                         }
                         default: {
-                            throw new Error("invalid bytes order");
+                            return {
+                                valid: "invalid",
+                                message: "invalid bytes order"
+                            }
                         }
                     }
-                })
+                }
             }
         }
         result.bytesConcat = resultBuilder.join("");
@@ -126,7 +157,7 @@ export function inputParser(input: string, settings: InputSettings): Input {
     } catch (error) {
         return {
             valid: "invalid",
-            message: (error as Error).message
+            message: (error as object).toString()
         }
     }
     // TODO
