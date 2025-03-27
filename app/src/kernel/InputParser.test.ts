@@ -17,7 +17,7 @@ describe("inputParser", () => {
         })).toEqual({
             valid: "valid",
             startAddress: 16,
-            bytesConcat: "10000000110001001010001011100110"
+            bytesConcat: ["10000000", "11000100", "10100010", "11100110"].join("")
         });
     });
 
@@ -28,7 +28,7 @@ describe("inputParser", () => {
         })).toEqual({
             valid: "valid",
             startAddress: 16,
-            bytesConcat: "11100110101000101100010010000000"
+            bytesConcat: ["11100110", "10100010", "11000100", "10000000"].join("")
         });
     });
 
@@ -39,7 +39,7 @@ describe("inputParser", () => {
         })).toEqual({
             valid: "valid",
             startAddress: 20,
-            bytesConcat: "10010000110101011011001111110111"
+            bytesConcat: ["10010000", "11010101", "10110011", "11110111"].join("")
         });
     });
 
@@ -50,7 +50,7 @@ describe("inputParser", () => {
         })).toEqual({
             valid: "valid",
             startAddress: 20,
-            bytesConcat: "10010000110101011011001111110111"
+            bytesConcat: ["10010000", "11010101", "10110011", "11110111"].join("")
         });
     });
 
@@ -61,7 +61,10 @@ describe("inputParser", () => {
         })).toEqual({
             valid: "valid",
             startAddress: 16,
-            bytesConcat: "1000000011000100101000101110011010010000110101011011001111110111"
+            bytesConcat: [
+                "10000000", "11000100", "10100010", "11100110",
+                "10010000", "11010101", "10110011", "11110111"
+            ].join("")
         });
     });
 
@@ -72,7 +75,10 @@ describe("inputParser", () => {
         })).toEqual({
             valid: "valid",
             startAddress: 16,
-            bytesConcat: "010100001101100000110100101111000111001011111010"
+            bytesConcat: [
+                "01010000", "11011000", "00110100", "10111100",
+                "01110010", "11111010"
+            ].join("")
         });
     });
 
@@ -83,7 +89,10 @@ describe("inputParser", () => {
         })).toEqual({
             valid: "valid",
             startAddress: 16,
-            bytesConcat: "101111000011010011011000010100001111101001110010"
+            bytesConcat: [
+                "10111100", "00110100", "11011000", "01010000",
+                "11111010", "01110010"
+            ].join("")
         });
     });
 
@@ -94,7 +103,7 @@ describe("inputParser", () => {
         })).toEqual({
             valid: "valid",
             startAddress: 16,
-            bytesConcat: "10010000110101011011001111110111"
+            bytesConcat: ["10010000", "11010101", "10110011", "11110111"].join("")
         });
     });
 
@@ -105,7 +114,7 @@ describe("inputParser", () => {
         })).toEqual({
             valid: "valid",
             startAddress: 21,
-            bytesConcat: "1011001111110111"
+            bytesConcat: ["10110011", "11110111"].join("")
         });
     });
 
@@ -116,7 +125,7 @@ describe("inputParser", () => {
         })).toEqual({
             valid: "valid",
             startAddress: 21,
-            bytesConcat: "1101010110010000"
+            bytesConcat: ["11010101", "10010000"].join("")
         });
     });
 
