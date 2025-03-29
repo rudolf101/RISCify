@@ -17,6 +17,7 @@ import {
 import useDisassembler from './Render';
 import { Provider } from './generator/go';
 import { Apply } from './generator/models';
+import "./App.css";
 
 const provider = new Provider()
 
@@ -27,14 +28,14 @@ type InstructionCardProps = {
 
 const InstructionCard: React.FC<InstructionCardProps> = ({ apply }) => {
   const [expanded, setExpanded] = useState(false);
-  const [copied, setCopied] = useState(false);  
+  const [copied, setCopied] = useState(false);
 
   const copyToClipboard = (text: string, event: React.MouseEvent) => {
-    event.stopPropagation();  
+    event.stopPropagation();
     navigator.clipboard.writeText(text)
       .then(() => {
-        setCopied(true); 
-        setTimeout(() => setCopied(false), 1000); 
+        setCopied(true);
+        setTimeout(() => setCopied(false), 1000);
       })
       .catch((err) => {
         alert('Failed to copy: ' + err);
@@ -55,8 +56,8 @@ const InstructionCard: React.FC<InstructionCardProps> = ({ apply }) => {
         margin: '0.5rem',
         textAlign: 'left',
         transition: 'background-color 0.3s, transform 0.3s',
-        border: '1px solid rgba(0, 0, 0, 0.3)', 
-        borderRadius: '15px', 
+        border: '1px solid rgba(0, 0, 0, 0.3)',
+        borderRadius: '15px',
         '&:hover': {
           backgroundColor: 'rgba(0, 0, 0, 0.05)',
           transform: 'scale(1.02)',
@@ -66,23 +67,23 @@ const InstructionCard: React.FC<InstructionCardProps> = ({ apply }) => {
       onClick={toggleExpanded}
     >
       <Box
-    sx={{
-      display: 'flex',
-      justifyContent: 'center', 
-      alignItems: 'center', 
-      flexGrow: 1, 
-    }}
-  >
-    <Typography
-      sx={{
-        fontWeight: 'bold',
-      }}
-    >
-      {apply.Instruction.mnemonic} {apply.Args.map((arg) => arg.value).join(' ')}
-    </Typography>
-  </Box>
+        sx={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          flexGrow: 1,
+        }}
+      >
+        <Typography
+          sx={{
+            fontWeight: 'bold',
+          }}
+        >
+          {apply.Instruction.mnemonic} {apply.Args.map((arg) => arg.value).join(' ')}
+        </Typography>
+      </Box>
 
-  {expanded && (
+      {expanded && (
         <>
           <Typography variant="body1" sx={{ marginBottom: '0.5rem', fontWeight: 'bold' }}>
             <strong>Fields:</strong>
@@ -114,13 +115,13 @@ const InstructionCard: React.FC<InstructionCardProps> = ({ apply }) => {
                         flexDirection: 'column',
                         justifyContent: 'space-between',
                         '&:hover': {
-                          backgroundColor: '#e0f7fa',  
+                          backgroundColor: '#e0f7fa',
                         },
                         '&:active': {
-                          backgroundColor: '#b2ebf2',  
+                          backgroundColor: '#b2ebf2',
                         },
                       }}
-                      onClick={(event) => copyToClipboard(field.value, event)}  
+                      onClick={(event) => copyToClipboard(field.value, event)}
                     >
                       <Typography variant="body2" sx={{ fontWeight: 'bold' }}>
                         {field.name}:
@@ -184,10 +185,10 @@ const InstructionCard: React.FC<InstructionCardProps> = ({ apply }) => {
                         flexDirection: 'column',
                         justifyContent: 'space-between',
                         '&:hover': {
-                          backgroundColor: '#e0f7fa',  
+                          backgroundColor: '#e0f7fa',
                         },
                         '&:active': {
-                          backgroundColor: '#b2ebf2',  
+                          backgroundColor: '#b2ebf2',
                         },
                       }}
                       onClick={(event) => copyToClipboard(apply.Args[argIndex].value, event)}  // Копируем при клике на текст
@@ -236,7 +237,7 @@ const App: React.FC = () => {
 
   const handleHexChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
-  
+
     /* Error not used
     const isValidHex = /^[0-9a-fA-F\s]*$/.test(value);
   
@@ -250,87 +251,81 @@ const App: React.FC = () => {
       setError(null);
     }
     */
-  
+
     setHexCode(value);
   };
 
   return (
-    <Container maxWidth="md" style={{ marginTop: '2rem' }}>
-      <Typography variant="h4" gutterBottom>
-        RISC-V Disassembler
-      </Typography>
-      <TextField
-        label="Hex Code"
-        variant="outlined"
-        fullWidth
-        value={hexCode}
-        onChange={handleHexChange}
-        style={{ marginBottom: '1rem' }}
-        error={!!error} 
-        helperText={error} 
-      />
-      <Button
-        variant="contained"
-        color="primary"
-        onClick={handleDisassemble}
-        style={{ marginBottom: '2rem' }}
-        disabled={!!error} 
-      >
-        Disassemble
-      </Button>
-      <Box component={Paper} style={{ padding: '1rem', marginTop: '1rem' }}>
-        <Typography variant="h5" gutterBottom>
-          Instructions
-        </Typography>
-        <TableContainer>
-          <Table>
-            <TableBody>
-              {instructions.map((instGroup, index) => (
-                <TableRow key={index}>
-                  <TableCell style={{ textAlign: 'center' }}>
-                    {instGroup.length === 0 ? (
-                      <Paper
-                        elevation={3}
-                        sx={{
-                          display: 'inline-block',
-                          padding: '1rem',
-                          margin: '0.5rem',
-                          textAlign: 'center',
-                          backgroundColor: 'red',
-                          color: 'white',
-                          fontWeight: 'bold',
-                          transition: 'background-color 0.3s, transform 0.3s',
-                          '&:hover': {
-                            backgroundColor: 'darkred',
-                            transform: 'scale(1.05)',
-                          },
-                        }}
-                      >
-                        Failed to disassemble instructions
-                      </Paper>
-                    ) : (
-                    <Box
-                    sx={{
-                      display: 'flex',
-                      flexWrap: 'wrap',
-                      gap: '0.5rem', 
-                      justifyContent: 'center', 
-                      alignItems: 'flex-start',
-                    }}
-                  >
-                    {instGroup.map((apply, instIndex) => (
-                      <InstructionCard key={instIndex} apply={apply} />
-                    ))}
-                  </Box>
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </Box>
-    </Container>
+    <div className='app'>
+      <div className='tools'>Tools panel</div>
+      <div className='code'>
+        <div className='arrows'>
+          {/* TODO: Add arrows for jumps */}
+        </div>
+        <pre className='offsets'>{`0x0000
+0x0004
+0x0008
+0x000c
+0x0010
+0x0014
+0x0018
+0x001c
+0x0020
+0x0024
+0x0028
+0x002c
+0x0030
+0x0034
+0x0038`}</pre>
+        <pre className='encoded'>{`00000293
+00100313
+02b35663
+00331e13
+01c50e33
+ff8e3e83
+000e3f03
+01df5863
+00100293
+01de3023
+ffee3c23
+00130313
+fd9ff06f
+fc0296e3
+00008067`}</pre>
+        <div className='decoded'>
+          <div>li</div>
+          <div>t0, 0</div>
+          <div>li</div>
+          <div>t1, 1</div>
+          <div>bge</div>
+          <div>t1, a1, 2f</div>
+          <div>slli</div>
+          <div>t3, t1, 3</div>
+          <div>add</div>
+          <div>t3, a0, t3</div>
+          <div>ld</div>
+          <div>t4, -8(t3)</div>
+          <div>ld</div>
+          <div>t5, 0(t3)</div>
+          <div>ble</div>
+          <div>t4, t5, 3f</div>
+          <div>li</div>
+          <div>t0, 1</div>
+          <div>sd</div>
+          <div>t4, 0(t3)</div>
+          <div>sd</div>
+          <div>t5, -8(t3)</div>
+          <div>addi</div>
+          <div>t1, t1, 1</div>
+          <div>j</div>
+          <div>2b</div>
+          <div>bnez</div>
+          <div>t0, 1b</div>
+          <div>ret</div>
+          <div></div>
+        </div>
+      </div>
+    </div>
   );
 };
 
