@@ -51,11 +51,15 @@ const App = () => {
           </div>
         </div>
       </div>
-      <div className='code'>
-        <div className='arrows'>
-          {/* TODO: Add arrows for jumps */}
-        </div>
-        <pre className='offsets'>{`0x0000
+      {true ? <>
+        <div className='header'>PASTE CODE</div>
+        <div className='message'>CTRL + V</div>
+      </> :
+        <div className='code'>
+          <div className='arrows'>
+            {/* TODO: Add arrows for jumps */}
+          </div>
+          <pre className='offsets'>{`0x0000
 0x0004
 0x0008
 0x000c
@@ -70,7 +74,7 @@ const App = () => {
 0x0030
 0x0034
 0x0038`}</pre>
-        <pre className='encoded'>{`00000293
+          <pre className='encoded'>{`00000293
 00100313
 02b35663
 00331e13
@@ -85,39 +89,40 @@ ffee3c23
 fd9ff06f
 fc0296e3
 00008067`}</pre>
-        <div className='decoded'>
-          <div>li</div>
-          <div>t0, 0</div>
-          <div>li</div>
-          <div>t1, 1</div>
-          <div>bge</div>
-          <div>t1, a1, 2f</div>
-          <div>slli</div>
-          <div>t3, t1, 3</div>
-          <div>add</div>
-          <div>t3, a0, t3</div>
-          <div>ld</div>
-          <div>t4, -8(t3)</div>
-          <div>ld</div>
-          <div>t5, 0(t3)</div>
-          <div>ble</div>
-          <div>t4, t5, 3f</div>
-          <div>li</div>
-          <div>t0, 1</div>
-          <div>sd</div>
-          <div>t4, 0(t3)</div>
-          <div>sd</div>
-          <div>t5, -8(t3)</div>
-          <div>addi</div>
-          <div>t1, t1, 1</div>
-          <div>j</div>
-          <div>2b</div>
-          <div>bnez</div>
-          <div>t0, 1b</div>
-          <div>ret</div>
-          <div></div>
+          <div className='decoded'>
+            <div>li</div>
+            <div>t0, 0</div>
+            <div>li</div>
+            <div>t1, 1</div>
+            <div>bge</div>
+            <div>t1, a1, 2f</div>
+            <div>slli</div>
+            <div>t3, t1, 3</div>
+            <div>add</div>
+            <div>t3, a0, t3</div>
+            <div>ld</div>
+            <div>t4, -8(t3)</div>
+            <div>ld</div>
+            <div>t5, 0(t3)</div>
+            <div>ble</div>
+            <div>t4, t5, 3f</div>
+            <div>li</div>
+            <div>t0, 1</div>
+            <div>sd</div>
+            <div>t4, 0(t3)</div>
+            <div>sd</div>
+            <div>t5, -8(t3)</div>
+            <div>addi</div>
+            <div>t1, t1, 1</div>
+            <div>j</div>
+            <div>2b</div>
+            <div>bnez</div>
+            <div>t0, 1b</div>
+            <div>ret</div>
+            <div></div>
+          </div>
         </div>
-      </div>
+      }
     </div>
   );
 };
