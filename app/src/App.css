@@ -31,3 +31,41 @@
   grid-template-columns: repeat(2, auto);
   gap: 0 1rem;
 }
+
+.tools {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+}
+
+.tool {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.tool > input {
+  background-color: transparent;
+  border: 1px solid var(--color-panel);
+  color: inherit;
+  outline: none;
+  font: inherit;
+  width: 2em;
+}
+
+.switch {
+  border: 1px solid var(--color-panel);
+}
+
+.switch > * {
+  display: inline-block;
+  margin: 1px;
+  padding: 0 2px;
+  cursor: pointer; 
+}
+
+.switch > .selected {
+  background-color: var(--color-panel);
+  color: var(--color-bg);
+}

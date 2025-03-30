@@ -257,7 +257,33 @@ const App: React.FC = () => {
 
   return (
     <div className='app'>
-      <div className='tools'>Tools panel</div>
+      <div className='tools'>
+        <div className="tool">
+          <div className='switch'>
+            <span className='selected'>RV32</span>
+            <span>RV64</span>
+          </div>
+        </div>
+        <div className="tool">
+          <span>SKIP PARCELS</span>
+            <input value={0} />
+        </div>
+        <div className="tool">
+        <span>BYTE ORDER</span>
+          <div className='switch'>
+            <span className='selected'>BE</span>
+            <span>LE</span>
+          </div>
+        </div>
+        <div className="tool">
+          <span>DISPLAY</span>
+          <div className='switch'>
+            <span className='selected'>0xFF</span>
+            <span>0b01</span>
+            <span>1234</span>
+          </div>
+        </div>
+      </div>
       <div className='code'>
         <div className='arrows'>
           {/* TODO: Add arrows for jumps */}
