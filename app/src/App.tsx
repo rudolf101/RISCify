@@ -1,4 +1,5 @@
 import "./App.css";
+import { Bits } from "./kernel/Bits";
 import { descriptions } from "./kernel/Descriptions";
 import { disassemble, FilterSettings, SimilarInstructions } from "./kernel/Disassembler";
 
@@ -13,6 +14,29 @@ const Message = (props: {
     <div className={'header ' + (props.error ? 'error' : '')}>{props.header}</div>
     <div className={'message ' + (props.error ? 'error' : '')}>{props.text}</div>
   </>
+}
+
+const bits2hex = (bits: Bits) =>
+  bits.bigEndian.replaceAll(/.{4}/, (bit) => parseInt(bit, 2).toString(16))
+
+const Code = (props: { instructions: SimilarInstructions[] }) => {
+  return <div className='code'>
+    <div className='arrows'>
+      {/* TODO: Add arrows for jumps */}
+    </div>
+    <pre className='offsets'>{
+      props.instructions.map(inst => '0x' + inst.chunk.address.toString(16).padStart(4, '0')).join('\n')
+    }</pre>
+    <pre className='encoded'>{
+      props.instructions.map(inst => bits2hex(inst.chunk.bits)).join('\n')
+    }</pre>
+    <div className='decoded'>
+      {props.instructions.flatMap(inst => <>
+        <div>{inst.instructions[0].mnemonic}</div>
+        <div>{inst.instructions[0].args.map(arg => arg.textual).join(', ')}</div>
+      </>)}
+    </div>
+  </div>;
 }
 
 const disassembleChain =
@@ -71,73 +95,9 @@ const App = () => {
         <Message header='PASTE CODE' text='CTRL + V' /> :
         input.valid === 'invalid' ?
           <Message header='FAILED TO DECODE' text={input.message} error /> :
-          <div className='code'>
-            <div className='arrows'>
-              {/* TODO: Add arrows for jumps */}
-            </div>
-            <pre className='offsets'>{`0x0000
-0x0004
-0x0008
-0x000c
-0x0010
-0x0014
-0x0018
-0x001c
-0x0020
-0x0024
-0x0028
-0x002c
-0x0030
-0x0034
-0x0038`}</pre>
-            <pre className='encoded'>{`00000293
-00100313
-02b35663
-00331e13
-01c50e33
-ff8e3e83
-000e3f03
-01df5863
-00100293
-01de3023
-ffee3c23
-00130313
-fd9ff06f
-fc0296e3
-00008067`}</pre>
-            <div className='decoded'>
-              <div>li</div>
-              <div>t0, 0</div>
-              <div>li</div>
-              <div>t1, 1</div>
-              <div>bge</div>
-              <div>t1, a1, 2f</div>
-              <div>slli</div>
-              <div>t3, t1, 3</div>
-              <div>add</div>
-              <div>t3, a0, t3</div>
-              <div>ld</div>
-              <div>t4, -8(t3)</div>
-              <div>ld</div>
-              <div>t5, 0(t3)</div>
-              <div>ble</div>
-              <div>t4, t5, 3f</div>
-              <div>li</div>
-              <div>t0, 1</div>
-              <div>sd</div>
-              <div>t4, 0(t3)</div>
-              <div>sd</div>
-              <div>t5, -8(t3)</div>
-              <div>addi</div>
-              <div>t1, t1, 1</div>
-              <div>j</div>
-              <div>2b</div>
-              <div>bnez</div>
-              <div>t0, 1b</div>
-              <div>ret</div>
-              <div></div>
-            </div>
-          </div>
+          <Code instructions={disassembleChain(input, descriptions, {
+            bitDepth
+          })} />
       }
     </div>
   );
