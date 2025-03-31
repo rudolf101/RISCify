@@ -96,16 +96,19 @@ export class InstructionDescription {
         this._jump = index;
     }
 
-    public addField(field: Matcher) {
+    public addField(field: Matcher): InstructionDescription {
         this.fields.push(field);
+        return this;
     }
 
-    public addRestrict(restrict: Matcher) {
+    public addRestrict(restrict: Matcher): InstructionDescription {
         this.restricts.push(restrict);
+        return this;
     }
 
-    public addArg(arg: ArgumentPattern) {
+    public addArg(arg: ArgumentPattern): InstructionDescription {
         this.args.push(arg);
+        return this;
     }
 
     public matchBits(bits: Bits): boolean {
