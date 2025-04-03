@@ -51,16 +51,16 @@ async function main() {
 
     const content = `// Auto-generated file. Do not edit manually.
 
-import { InstructionDescription } from "../kernel/InstructionDescription";
-import { Matcher } from "../kernel/Matcher";
-import { ArgumentPattern } from "../kernel/ArgumentPattern";
+import { InstructionDescription } from "./InstructionDescription";
+import { Matcher } from "./Matcher";
+import { ArgumentPattern } from "./ArgumentPattern";
 
-export const INSTRUCTIONS: InstructionDescription[] = [
+export const descriptions: InstructionDescription[] = [
 ${body}
 ];
 `;
 
-    fs.writeFileSync(path.resolve(__dirname, "instructions.generated.ts"), content);
+    fs.writeFileSync(path.resolve(__dirname, "../kernel/descriptions.generated.ts"), content);
     console.log("✅ Generated instructions.generated.ts");
 }
 
