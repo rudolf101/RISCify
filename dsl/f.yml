@@ -32,19 +32,19 @@ Fields:
   f_funct3_lt:     { name: "funct3", span: "12:14", value: "100" }
   f_funct3_le:     { name: "funct3", span: "12:14", value: "000" }
   f_funct3_class:  { name: "funct3", span: "12:14", value: "100" }
-  f_funct5_add:    { name: "funct5", span: "27:14", value: "00000" }
-  f_funct5_sub:    { name: "funct5", span: "27:14", value: "10000" }
-  f_funct5_mul:    { name: "funct5", span: "27:14", value: "01000" }
-  f_funct5_div:    { name: "funct5", span: "27:14", value: "11000" }
-  f_funct5_sqrt:   { name: "funct5", span: "27:14", value: "11010" }
-  f_funct5_sgnj:   { name: "funct5", span: "27:14", value: "00100" }
-  f_funct5_minmax: { name: "funct5", span: "27:14", value: "10100" }
-  f_funct5_cvtif:  { name: "funct5", span: "27:14", value: "00011" }
-  f_funct5_mvfi:   { name: "funct5", span: "27:14", value: "00111" }
-  f_funct5_cmp:    { name: "funct5", span: "27:14", value: "00101" }
-  f_funct5_class:  { name: "funct5", span: "27:14", value: "00111" }
-  f_funct5_cvtfi:  { name: "funct5", span: "27:14", value: "01011" }
-  f_funct5_mvif:   { name: "funct5", span: "27:14", value: "01111" }
+  f_funct5_add:    { name: "funct5", span: "27:31", value: "00000" }
+  f_funct5_sub:    { name: "funct5", span: "27:31", value: "10000" }
+  f_funct5_mul:    { name: "funct5", span: "27:31", value: "01000" }
+  f_funct5_div:    { name: "funct5", span: "27:31", value: "11000" }
+  f_funct5_sqrt:   { name: "funct5", span: "27:31", value: "11010" }
+  f_funct5_sgnj:   { name: "funct5", span: "27:31", value: "00100" }
+  f_funct5_minmax: { name: "funct5", span: "27:31", value: "10100" }
+  f_funct5_cvtif:  { name: "funct5", span: "27:31", value: "00011" }
+  f_funct5_mvfi:   { name: "funct5", span: "27:31", value: "00111" }
+  f_funct5_cmp:    { name: "funct5", span: "27:31", value: "00101" }
+  f_funct5_class:  { name: "funct5", span: "27:31", value: "00111" }
+  f_funct5_cvtfi:  { name: "funct5", span: "27:31", value: "01011" }
+  f_funct5_mvif:   { name: "funct5", span: "27:31", value: "01111" }
   f_rs2_0:         { name: "rs2",    span: "20:24", value: "00000" }
   f_rs2_1:         { name: "rs2",    span: "20:24", value: "10000" }
   f_rs2_2:         { name: "rs2",    span: "20:24", value: "01000" }
