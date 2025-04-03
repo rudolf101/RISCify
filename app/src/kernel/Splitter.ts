@@ -32,7 +32,7 @@ export function splitter(input: ValidInput): Chunk[] {
       } else if (firstByte.substring(0, 7) === "1111110") {
         instrBytes = 8
       } else {
-        let nnn = firstByte.substring(13, 16)
+        let nnn = firstByte.substring(12, 15)
         let n = Number(nnn[0]) + Number(nnn[1]) * 2 + Number(nnn[2]) * 4
         instrBytes = (80 + 16 * n)
       }
