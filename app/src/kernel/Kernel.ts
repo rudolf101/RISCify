@@ -1,5 +1,5 @@
 import { adjuster } from "./Adjuster";
-import { descriptions } from "./Descriptions";
+import { descriptions } from "./Description.generated";
 import { disassemble, FilterSettings, SimilarInstructions } from "./Disassembler";
 import { inputParser, InputSettings } from "./InputParser";
 import { splitter } from "./Splitter";

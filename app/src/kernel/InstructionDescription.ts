@@ -1,7 +1,6 @@
 import { Bits } from "./Bits";
 import { Matcher } from "./Matcher";
 import { ArgumentPattern } from "./ArgumentPattern";
-import { Span } from "./Span";
 
 // Для инструкций, которые не управляют потоком управления
 export type JumpNone = {
@@ -108,6 +107,16 @@ export class InstructionDescription {
 
     public addArg(arg: ArgumentPattern): InstructionDescription {
         this.args.push(arg);
+        return this;
+    }
+
+    public setJump(jump: Jump): this {
+        this._jump = jump;
+        return this;
+    }
+
+    public setArgFormat(format: string): this {
+        this._argFormat = format;
         return this;
     }
 

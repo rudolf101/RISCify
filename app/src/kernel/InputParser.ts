@@ -123,8 +123,8 @@ export function inputParser(input: string, settings: InputSettings): Input {
                                     continue
                                 }
                                 const [a, b] = hex.slice(j, j + 2)
-                                resultBuilder.push(Array.from(hex2bin(b, 4)).toReversed().join(""))
-                                resultBuilder.push(Array.from(hex2bin(a, 4)).toReversed().join(""))
+                                resultBuilder.push(Array.from(hex2bin(b, 4)).reverse().join(""))
+                                resultBuilder.push(Array.from(hex2bin(a, 4)).reverse().join(""))
                             }
                             currentAddress += hex.length / 2;
                             break;
@@ -136,8 +136,8 @@ export function inputParser(input: string, settings: InputSettings): Input {
                                     continue
                                 }
                                 const [a, b] = hex.slice(i - 1, i + 1);
-                                resultBuilder.push(Array.from(hex2bin(b, 4)).toReversed().join(""));
-                                resultBuilder.push(Array.from(hex2bin(a, 4)).toReversed().join(""));
+                                resultBuilder.push(Array.from(hex2bin(b, 4)).reverse().join(""));
+                                resultBuilder.push(Array.from(hex2bin(a, 4)).reverse().join(""));
                             }
                             currentAddress += hex.length / 2;
                             break;
