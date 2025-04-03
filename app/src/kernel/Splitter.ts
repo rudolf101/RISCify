@@ -18,7 +18,7 @@ export function splitter(input: ValidInput): Chunk[] {
     while (offset < totalBytes) {
       // Извлекаем текущий первый байт инструкции.
       const byteStartIndex = offset * 8;
-      const firstByte = bytesConcat.substring(byteStartIndex, byteStartIndex + 8);
+      const firstByte = bytesConcat.substring(byteStartIndex, byteStartIndex + 16);
       
       // Определяем количество байт для инструкции
       // (если первые два символа равны "11", то инструкция 4-байтная)
@@ -27,7 +27,7 @@ export function splitter(input: ValidInput): Chunk[] {
         instrBytes = 2
       } else if (firstByte.substring(2, 5) !== "111") {
         instrBytes = 4
-      } else if (firstByte.substring(0, 6) !== "011111") {
+      } else if (firstByte.substring(0, 6) !== "111110") {
         instrBytes = 6
       } else if (firstByte.substring(0, 7) !== "0111111") {
         instrBytes = 8
