@@ -27,9 +27,9 @@ export function splitter(input: ValidInput): Chunk[] {
         instrBytes = 2
       } else if (firstByte.substring(2, 5) !== "111") {
         instrBytes = 4
-      } else if (firstByte.substring(0, 6) !== "011111") {
+      } else if (firstByte.substring(0, 6) === "111110") {
         instrBytes = 6
-      } else if (firstByte.substring(0, 7) !== "0111111") {
+      } else if (firstByte.substring(0, 7) === "1111110") {
         instrBytes = 8
       } else {
         let nnn = firstByte.substring(13, 16)
