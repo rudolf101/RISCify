@@ -27,7 +27,7 @@ export function splitter(input: ValidInput): Chunk[] {
         instrBytes = 2
       } else if (firstByte.substring(2, 5) !== "111") {
         instrBytes = 4
-      } else if (firstByte.substring(0, 6) !== "111110") {
+      } else if (firstByte.substring(0, 6) !== "011111") {
         instrBytes = 6
       } else if (firstByte.substring(0, 7) !== "0111111") {
         instrBytes = 8
