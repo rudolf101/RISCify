@@ -60,7 +60,7 @@ ${body}
 ];
 `;
 
-    fs.writeFileSync(path.resolve(__dirname, "../kernel/descriptions.generated.ts"), content);
+    fs.writeFileSync(path.resolve(__dirname, "../kernel/Description.generated.ts"), content);
     console.log("✅ Generated instructions.generated.ts");
 }
 
