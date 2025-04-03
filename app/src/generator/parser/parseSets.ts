@@ -1,14 +1,13 @@
-
-import { DSLSet, DSLInstruction } from "./types";
-import { ArgumentPattern } from "../../kernel/ArgumentPattern";
+import { DSLArg, DSLSet } from "./types";
 import { Matcher } from "../../kernel/Matcher";
 import { Instruction } from "../../kernel/Instruction";
-import { InstructionDescription, BitDepth, Jump } from "../../kernel/InstructionDescription";
+import { BitDepth, InstructionDescription, Jump } from "../../kernel/InstructionDescription";
 import { Bits } from "../../kernel/Bits";
+import { ArgumentPattern } from "../../kernel/ArgumentPattern";
 
 export function parseSets(
     sets: DSLSet[],
-    args: Map<string, ArgumentPattern>,
+    args: Map<string, DSLArg>,
     fields: Map<string, Matcher>,
     restricts: Map<string, Matcher>
 ): Instruction[] {
@@ -33,9 +32,9 @@ export function parseSets(
             }
 
             for (const aname of instr.args ?? []) {
-                const pattern = args.get(aname);
-                if (!pattern) throw new Error(`Unknown arg: ${aname}`);
-                desc.addArg(pattern);
+                const arg = args.get(aname);
+                if (!arg) throw new Error(`Unknown arg: ${aname}`);
+                desc.addArg(new ArgumentPattern(arg.name, arg.span.replace(/:/g, "-"), arg.display));
             }
 
             if (instr.format !== undefined) {
@@ -43,9 +42,8 @@ export function parseSets(
             }
 
             desc.jump = parseJump(instr.jump);
-
-            const combinedBits = combineBits(desc.fields);
-            result.push(new Instruction(combinedBits, desc));
+            const bits = combineBits(desc.fields);
+            result.push(new Instruction(bits, desc));
         }
     }
 
@@ -63,25 +61,18 @@ function parseJump(jump: string | number | undefined): Jump {
     if (jump === undefined) return { label: "none" };
     if (jump === "out") return { label: "out" };
     if (typeof jump === "number") return { label: "within", argIndex: jump };
-    throw new Error(`Invalid jump value: ${jump}`);
+    throw new Error(`Invalid jump: ${jump}`);
 }
 
 function combineBits(matchers: Matcher[]): Bits {
-    const maxIndex = matchers
-        .flatMap(m => m.span)
-        .reduce((a, b) => Math.max(a, b), 0);
-
-    const bits = Array(maxIndex + 1).fill('0');
-
+    const maxIndex = matchers.flatMap(m => m.span).reduce((a, b) => Math.max(a, b), 0);
+    const bits = Array(maxIndex + 1).fill("0");
     for (const matcher of matchers) {
         const span = matcher.span;
         const sample = matcher.sample.data;
-
         for (let i = 0; i < span.length; i++) {
-            const index = span[i];
-            bits[index] = sample[i]; // Заполняем бит в нужной позиции
+            bits[span[i]] = sample[i];
         }
     }
-
     return new Bits(bits.join(""));
 }

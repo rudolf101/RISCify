@@ -2,69 +2,66 @@ import { generateAll } from "./generate";
 import fs from "fs";
 import path from "path";
 import { Instruction } from "../kernel/Instruction";
-import { ArgumentPattern } from "../kernel/ArgumentPattern";
 
-function quote(str: String | ArgumentPattern) {
+function q(str: string): string {
     return JSON.stringify(str);
 }
 
-function serialize(instr: Instruction): string {
-    const d = instr.description;
-    const parts: string[] = [];
+function spanToStr(span: number[]): string {
+    return span.join(",");
+}
 
-    parts.push(`(() => {`);
-    parts.push(`  const d = new InstructionDescription(${quote(d.rvset)}, ${d.wl}, ${d.length}, ${quote(d.mnemonic)});`);
+function serialize(inst: Instruction): string {
+    const d = inst.description;
+    const lines: string[] = [];
+
+    lines.push(`new InstructionDescription(${q(d.rvset)}, ${d.wl}, ${d.length}, ${q(d.mnemonic)})`);
 
     for (const f of d.fields) {
-        parts.push(`  d.addField(new Matcher(${quote(f.name)}, new Span(${JSON.stringify(f.span)}), new Bits(${quote(f.sample.data)})));`);
+        lines.push(`  .addField(new Matcher(${q(f.name)}, "${f.span.join(",")}", ${q(f.sample.data)}))`);
     }
 
     for (const r of d.restricts) {
-        parts.push(`  d.addRestrict(new Matcher(${quote(r.name)}, new Span(${JSON.stringify(r.span)}), new Bits(${quote(r.sample.data)})));`);
+        lines.push(`  .addRestrict(new Matcher(${q(r.name)}, "${r.span.join(",")}", ${q(r.sample.data)}))`);
     }
 
     for (const a of d.args) {
-        parts.push(`  d.addArg(${quote(a)});`);
+        lines.push(`  .addArg(new ArgumentPattern(${q(a.name)}, ${q(spanToStr(a.span))}, ${q(a.name)}))`);
     }
 
-    if (d.argFormat !== undefined) {
-        parts.push(`  d.argFormat = ${quote(d.argFormat)};`);
+    if (d.argFormat) {
+        lines.push(`  .setArgFormat(${q(d.argFormat)})`);
     }
 
-    parts.push(`  d.jump = ${serializeJump(d.jump)};`);
-    parts.push(`  return d;`);
-    parts.push(`})()`);
-    return parts.join("\n");
+    lines.push(`  .setJump(${serializeJump(d.jump)})`);
+
+    return lines.join("\n");
 }
 
-function serializeJump(jump: any): string {
-    if (jump.label === "none") return `{ label: "none" }`;
-    if (jump.label === "out") return `{ label: "out" }`;
-    if (jump.label === "within") return `{ label: "within", argIndex: ${jump.argIndex} }`;
-    throw new Error(`Unknown jump type: ${jump.label}`);
+function serializeJump(j: any): string {
+    if (j.label === "none") return `{ label: "none" }`;
+    if (j.label === "out") return `{ label: "out" }`;
+    if (j.label === "within") return `{ label: "within", argIndex: ${j.argIndex} }`;
+    throw new Error("Unknown jump: " + JSON.stringify(j));
 }
 
 async function main() {
     const instructions = await generateAll();
-    const lines = instructions.map(serialize);
+    const body = instructions.map(serialize).join(",\n\n");
 
-    const output = `// Auto-generated file. Do not edit manually.
+    const content = `// Auto-generated file. Do not edit manually.
 
-import { InstructionDescription, BitDepth } from "../kernel/InstructionDescription";
+import { InstructionDescription } from "../kernel/InstructionDescription";
 import { Matcher } from "../kernel/Matcher";
-import { Bits } from "../kernel/Bits";
-import { Span } from "../kernel/Span";
 import { ArgumentPattern } from "../kernel/ArgumentPattern";
-import { argumentInterpretationFactory } from "../kernel/ArgumentInterpretation";
 
 export const INSTRUCTIONS: InstructionDescription[] = [
-${lines.join(",\n\n")}
+${body}
 ];
 `;
 
-    const outPath = path.resolve(__dirname, "instructions.generated.ts");
-    fs.writeFileSync(outPath, output);
-    console.log("✅ Generated:", outPath);
+    fs.writeFileSync(path.resolve(__dirname, "instructions.generated.ts"), content);
+    console.log("✅ Generated instructions.generated.ts");
 }
 
 main().catch((err) => {

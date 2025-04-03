@@ -13,21 +13,19 @@ import { Instruction } from "../kernel/Instruction";
 export async function generateAll(): Promise<Instruction[]> {
     const dslDir = path.resolve(__dirname, "../../../dsl");
     const files = fs.readdirSync(dslDir).filter(f => f.endsWith(".yml"));
-
-    const allInstructions: Instruction[] = [];
+    const all: Instruction[] = [];
 
     for (const file of files) {
-        const filePath = path.join(dslDir, file);
-        const content = fs.readFileSync(filePath, "utf8");
-        const parsed = yaml.load(content) as DSLFile;
+        const fullPath = path.join(dslDir, file);
+        const raw = fs.readFileSync(fullPath, "utf8");
+        const parsed = yaml.load(raw) as DSLFile;
 
         const args = parseArgs(parsed.Args ?? {});
         const fields = parseFields(parsed.Fields ?? {});
         const restricts = parseFields(parsed.Restricts ?? {});
         const instructions = parseSets(parsed.Sets, args, fields, restricts);
-
-        allInstructions.push(...instructions);
+        all.push(...instructions);
     }
 
-    return allInstructions;
+    return all;
 }
