@@ -60,9 +60,9 @@ Fields:
   rv32i_fence_fm:      { name: "fm"    , span: "28:31", value: "0000"         }
   rv32i_fence_pred:    { name: "pred"  , span: "24:27", value: "1111"         }
   rv32i_fence_succ:    { name: "succ"  , span: "20:23", value: "1111"         }
-  rv32i_ftso_fm:       { name: "fm"    , span: "28:31", value: "0001"         }
-  rv32i_ftso_pred:     { name: "pred"  , span: "24:27", value: "1100"         }
-  rv32i_ftso_succ:     { name: "succ"  , span: "20:23", value: "1100"         }
+  rv32i_tso_fm:       { name: "fm"    , span: "28:31", value: "0001"         }
+  rv32i_tso_pred:     { name: "pred"  , span: "24:27", value: "1100"         }
+  rv32i_tso_succ:     { name: "succ"  , span: "20:23", value: "1100"         }
 
 Sets:
 - name: "I"
