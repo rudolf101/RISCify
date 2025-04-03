@@ -35,20 +35,20 @@ Fields:
   h_funct3_lt:     { name: "funct3", span: "12:14", value: "100" }
   h_funct3_le:     { name: "funct3", span: "12:14", value: "000" }
   h_funct3_class:  { name: "funct3", span: "12:14", value: "100" }
-  h_funct5_add:    { name: "funct5", span: "27:14", value: "00000" }
-  h_funct5_sub:    { name: "funct5", span: "27:14", value: "10000" }
-  h_funct5_mul:    { name: "funct5", span: "27:14", value: "01000" }
-  h_funct5_div:    { name: "funct5", span: "27:14", value: "11000" }
-  h_funct5_sqrt:   { name: "funct5", span: "27:14", value: "11010" }
-  h_funct5_sgnj:   { name: "funct5", span: "27:14", value: "00100" }
-  h_funct5_minmax: { name: "funct5", span: "27:14", value: "10100" }
-  h_funct5_cvtff:  { name: "funct5", span: "27:14", value: "00010" }
-  h_funct5_cmp:    { name: "funct5", span: "27:14", value: "00101" }
-  h_funct5_class:  { name: "funct5", span: "27:14", value: "00111" }
-  h_funct5_cvtif:  { name: "funct5", span: "27:14", value: "00011" }
-  h_funct5_cvtfi:  { name: "funct5", span: "27:14", value: "01011" }
-  h_funct5_mvfi:   { name: "funct5", span: "27:14", value: "00111" }
-  h_funct5_mvif:   { name: "funct5", span: "27:14", value: "01111" }
+  h_funct5_add:    { name: "funct5", span: "27:31", value: "00000" }
+  h_funct5_sub:    { name: "funct5", span: "27:31", value: "10000" }
+  h_funct5_mul:    { name: "funct5", span: "27:31", value: "01000" }
+  h_funct5_div:    { name: "funct5", span: "27:31", value: "11000" }
+  h_funct5_sqrt:   { name: "funct5", span: "27:31", value: "11010" }
+  h_funct5_sgnj:   { name: "funct5", span: "27:31", value: "00100" }
+  h_funct5_minmax: { name: "funct5", span: "27:31", value: "10100" }
+  h_funct5_cvtff:  { name: "funct5", span: "27:31", value: "00010" }
+  h_funct5_cmp:    { name: "funct5", span: "27:31", value: "00101" }
+  h_funct5_class:  { name: "funct5", span: "27:31", value: "00111" }
+  h_funct5_cvtif:  { name: "funct5", span: "27:31", value: "00011" }
+  h_funct5_cvtfi:  { name: "funct5", span: "27:31", value: "01011" }
+  h_funct5_mvfi:   { name: "funct5", span: "27:31", value: "00111" }
+  h_funct5_mvif:   { name: "funct5", span: "27:31", value: "01111" }
   h_rs2_0:         { name: "rs2",    span: "20:24", value: "00000" }
   h_rs2_1:         { name: "rs2",    span: "20:24", value: "10000" }
   h_rs2_2:         { name: "rs2",    span: "20:24", value: "01000" }
