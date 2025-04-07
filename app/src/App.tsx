@@ -5,7 +5,7 @@ import performDisassemble from "./kernel/Kernel";
 import { InputOrder, inputParser } from "./kernel/InputParser";
 import { BitDepth } from "./kernel/InstructionDescription";
 import { SimilarInstructions } from "./kernel/Disassembler";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const Message = (props: {
   header: string, text: string, error?: boolean
@@ -17,7 +17,7 @@ const Message = (props: {
 }
 
 const bits2hex = (bits: Bits) =>
-  (console.log(bits.bigEndian),
+(console.log(bits.bigEndian),
   bits.bigEndian.replaceAll(/.{4}/g, (bit) => parseInt(bit, 2).toString(16)))
 
 const Code = (props: { instructions: SimilarInstructions[] }) => {
@@ -41,11 +41,30 @@ const Code = (props: { instructions: SimilarInstructions[] }) => {
   </div>;
 }
 
+const Switch = <T,>(props: { cases: { text: string, value: T }[], onChange: (v: T) => void }) => {
+  const [selected, setSelected] = useState(0)
+
+  useEffect(() => {
+    if (selected != 0 && selected >= props.cases.length) {
+      setSelected(0)
+    }
+  }, [props.cases])
+
+  return <div className='switch'>
+    {props.cases.map((_case, i) => <span className={selected == i ? 'selected' : ''}
+      onClick={() => {
+        setSelected(i)
+        props.onChange(_case.value)
+      }}>{_case.text}</span>)}
+  </div>
+}
+
 const App = () => {
   const sourceCode = "0010031302b3566300331e1301c50e33ff8e3e83000e3f0301df58630010029301de3023ffee3c2300130313fd9ff06ffc0296e300008067"
-  const byteOrder = InputOrder.BYTE_ORDER_BE;
+  const [byteOrder, setByteOrder] = useState(InputOrder.BYTE_ORDER_BE);
   const parcelSkip = 0;
-  const bitDepth = BitDepth.BIT_32;
+  const [bitDepth, setBitDepth] = useState(BitDepth.BIT_32);
+  const [display, setDisplay] = useState<'hex' | 'dec' | 'bin'>('hex')
   let disassemblerResult = performDisassemble(sourceCode, {
     order: byteOrder,
     parcelSkip: parcelSkip
@@ -57,10 +76,10 @@ const App = () => {
     <div className='app'>
       <div className='tools'>
         <div className="tool">
-          <div className='switch'>
-            <span className='selected'>RV32</span>
-            <span>RV64</span>
-          </div>
+          <Switch
+            cases={[{ text: "RV32", value: BitDepth.BIT_32 }, { text: "RV64", value: BitDepth.BIT_64 }]}
+            onChange={setBitDepth}
+          />
         </div>
         <div className="tool">
           <span>SKIP PARCELS</span>
@@ -68,18 +87,30 @@ const App = () => {
         </div>
         <div className="tool">
           <span>BYTE ORDER</span>
-          <div className='switch'>
-            <span className='selected'>BE</span>
-            <span>LE</span>
-          </div>
+          <Switch
+            cases={[{ 
+              text: "BE", value: InputOrder.BYTE_ORDER_BE
+            }, { 
+              text: "LE", value: InputOrder.BYTE_ORDER_LE 
+            }]}
+            onChange={setByteOrder}
+          />
         </div>
         <div className="tool">
           <span>DISPLAY</span>
-          <div className='switch'>
-            <span className='selected'>0xFF</span>
-            <span>0b01</span>
-            <span>1234</span>
-          </div>
+          <Switch
+            cases={[{
+              text: "0xFF",
+              value: 'hex' as const
+            }, {
+              text: "0b01",
+              value: "bin" as const
+            }, {
+              text: "1234",
+              value: "dec" as const
+            }]}
+            onChange={setDisplay}
+          />
         </div>
       </div>
       {sourceCode.length === 0 ?
