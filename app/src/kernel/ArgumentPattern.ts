@@ -1,5 +1,5 @@
 import { Bits } from "./Bits";
-import { Span } from "./Span";
+import { parseSpan, Span } from "./Span";
 import { ArgumentInterpretation, argumentInterpretationFactory } from "./ArgumentInterpretation";
 
 export class ArgumentPattern {
@@ -7,9 +7,9 @@ export class ArgumentPattern {
     private _span: Span;
     private _interpretation: ArgumentInterpretation;
 
-    constructor(name: string, span: Span, displayStr: string) {
+    constructor(name: string, spanStr: string, displayStr: string) {
         this._name = name;
-        this._span = span;
+        this._span = parseSpan(spanStr);
         this._interpretation = argumentInterpretationFactory(displayStr);
     }
 

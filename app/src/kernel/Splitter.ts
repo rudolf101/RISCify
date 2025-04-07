@@ -7,21 +7,54 @@ export type Chunk = {
 };
 
 export function splitter(input: ValidInput): Chunk[] {
-    return [];
-    // TODO
-    // Разбивает инпут на чанки в соответствии с
-    // правилами определения длины инструкции
-    /*
+    const { startAddress, bytesConcat } = input;
+    const chunks: Chunk[] = [];
     
-    input:
-    startAddress: 0x0010
-    bytesConcat: 001100110011001111001100110011001100110011001100...
+    // Определяем общее число байт в bytesConcat:
+    const totalBytes = bytesConcat.length / 8;
     
-    return:
-    [
-        {"0011001100110011", 0x0010},
-        {"11001100110011001100110011001100", 0x0012}
-    ]
-
-    */
+    // offset отсчитываем в байтах
+    let offset = 0;
+    while (offset < totalBytes) {
+      // Извлекаем текущий первый байт инструкции.
+      const byteStartIndex = offset * 8;
+      const firstByte = bytesConcat.substring(byteStartIndex, byteStartIndex + 16);
+      
+      // Определяем количество байт для инструкции
+      // (если первые два символа равны "11", то инструкция 4-байтная)
+      var instrBytes = 0 
+      if (firstByte.substring(0, 2) !== "11") {
+        instrBytes = 2
+      } else if (firstByte.substring(2, 5) !== "111") {
+        instrBytes = 4
+      } else if (firstByte.substring(0, 6) === "111110") {
+        instrBytes = 6
+      } else if (firstByte.substring(0, 7) === "1111110") {
+        instrBytes = 8
+      } else {
+        let nnn = firstByte.substring(12, 15)
+        let n = Number(nnn[0]) + Number(nnn[1]) * 2 + Number(nnn[2]) * 4
+        instrBytes = (80 + 16 * n)
+      }
+      
+      // Если недостаточно байт для завершения инструкции, можно завершить цикл,
+      // выбросить ошибку или обработать по-другому.
+      if (offset + instrBytes > totalBytes) {
+        break;
+      }
+      
+      // Извлекаем инструкцию как конкатенацию instrBytes байт (каждый байт – 8 символов)
+      const instructionBits = bytesConcat.substring(offset * 8, (offset + instrBytes) * 8);
+      
+      // Сохраняем чанк с рассчитанным адресом.
+      chunks.push({
+        bits: new Bits(instructionBits),
+        address: startAddress + offset,
+      });
+      
+      // Переходим к следующему байтовому адресу после текущей инструкции.
+      offset += instrBytes;
+    }
+    
+    return chunks;
 }

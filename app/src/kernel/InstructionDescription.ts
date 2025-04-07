@@ -1,7 +1,6 @@
 import { Bits } from "./Bits";
 import { Matcher } from "./Matcher";
 import { ArgumentPattern } from "./ArgumentPattern";
-import { Span } from "./Span";
 
 // Для инструкций, которые не управляют потоком управления
 export type JumpNone = {
@@ -96,16 +95,29 @@ export class InstructionDescription {
         this._jump = index;
     }
 
-    public addField(field: Matcher) {
+    public addField(field: Matcher): InstructionDescription {
         this.fields.push(field);
+        return this;
     }
 
-    public addRestrict(restrict: Matcher) {
+    public addRestrict(restrict: Matcher): InstructionDescription {
         this.restricts.push(restrict);
+        return this;
     }
 
-    public addArg(arg: ArgumentPattern) {
+    public addArg(arg: ArgumentPattern): InstructionDescription {
         this.args.push(arg);
+        return this;
+    }
+
+    public setJump(jump: Jump): this {
+        this._jump = jump;
+        return this;
+    }
+
+    public setArgFormat(format: string): this {
+        this._argFormat = format;
+        return this;
     }
 
     public matchBits(bits: Bits): boolean {
