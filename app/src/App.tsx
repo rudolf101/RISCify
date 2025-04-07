@@ -1,11 +1,11 @@
 import "./App.css";
 import { Bits } from "./kernel/Bits";
-import { descriptions } from "./kernel/Descriptions";
-import { disassemble, FilterSettings, SimilarInstructions } from "./kernel/Disassembler";
+import performDisassemble from "./kernel/Kernel";
 
-import { InputOrder, inputParser, ValidInput } from "./kernel/InputParser";
-import { BitDepth, InstructionDescription } from "./kernel/InstructionDescription";
-import { splitter } from "./kernel/Splitter";
+import { InputOrder, inputParser } from "./kernel/InputParser";
+import { BitDepth } from "./kernel/InstructionDescription";
+import { SimilarInstructions } from "./kernel/Disassembler";
+import React from "react";
 
 const Message = (props: {
   header: string, text: string, error?: boolean
@@ -17,9 +17,11 @@ const Message = (props: {
 }
 
 const bits2hex = (bits: Bits) =>
-  bits.bigEndian.replaceAll(/.{4}/, (bit) => parseInt(bit, 2).toString(16))
+  (console.log(bits.bigEndian),
+  bits.bigEndian.replaceAll(/.{4}/g, (bit) => parseInt(bit, 2).toString(16)))
 
 const Code = (props: { instructions: SimilarInstructions[] }) => {
+  console.log(props.instructions)
   return <div className='code'>
     <div className='arrows'>
       {/* TODO: Add arrows for jumps */}
@@ -28,39 +30,28 @@ const Code = (props: { instructions: SimilarInstructions[] }) => {
       props.instructions.map(inst => '0x' + inst.chunk.address.toString(16).padStart(4, '0')).join('\n')
     }</pre>
     <pre className='encoded'>{
-      props.instructions.map(inst => bits2hex(inst.chunk.bits)).join('\n')
+      props.instructions.map(inst => bits2hex(inst.chunk.bits).padStart(8, ' ')).join('\n')
     }</pre>
     <div className='decoded'>
-      {props.instructions.flatMap(inst => <>
-        <div>{inst.instructions[0].mnemonic}</div>
-        <div>{inst.instructions[0].args.map(arg => arg.textual).join(', ')}</div>
-      </>)}
+      {props.instructions.flatMap((inst, i) => <React.Fragment key={i}>
+        <div>{inst.instructions.at(0)?.mnemonic ?? '???'}</div>
+        <div>{inst.instructions.at(0)?.args.map(arg => arg.textual).join(', ') ?? ''}</div>
+      </React.Fragment>)}
     </div>
   </div>;
 }
-
-const disassembleChain =
-  (input: ValidInput, descriptions: InstructionDescription[], settings: FilterSettings) =>
-    disassemble(splitter(input), descriptions, settings)
 
 const App = () => {
   const sourceCode = "0010031302b3566300331e1301c50e33ff8e3e83000e3f0301df58630010029301de3023ffee3c2300130313fd9ff06ffc0296e300008067"
   const byteOrder = InputOrder.BYTE_ORDER_BE;
   const parcelSkip = 0;
   const bitDepth = BitDepth.BIT_32;
-  const input = inputParser(sourceCode, {
+  let disassemblerResult = performDisassemble(sourceCode, {
     order: byteOrder,
     parcelSkip: parcelSkip
+  }, {
+    bitDepth: bitDepth
   })
-  let disassemblerResult: SimilarInstructions[] | null
-  if (input.valid === 'valid') {
-    let splitterResult = splitter(input)
-    disassemblerResult = disassemble(splitterResult, descriptions, {
-      bitDepth: bitDepth
-    })
-  } else {
-    disassemblerResult = null
-  }
 
   return (
     <div className='app'>
@@ -93,11 +84,9 @@ const App = () => {
       </div>
       {sourceCode.length === 0 ?
         <Message header='PASTE CODE' text='CTRL + V' /> :
-        input.valid === 'invalid' ?
-          <Message header='FAILED TO DECODE' text={input.message} error /> :
-          <Code instructions={disassembleChain(input, descriptions, {
-            bitDepth
-          })} />
+        disassemblerResult.valid === 'invalid' ?
+          <Message header='FAILED TO DECODE' text={disassemblerResult.message} error /> :
+          <Code instructions={disassemblerResult.result} />
       }
     </div>
   );
