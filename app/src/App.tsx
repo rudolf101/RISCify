@@ -2,7 +2,7 @@ import "./App.css";
 import { Bits } from "./kernel/Bits";
 import performDisassemble from "./kernel/Kernel";
 
-import { InputOrder, inputParser } from "./kernel/InputParser";
+import { InputOrder } from "./kernel/InputParser";
 import { BitDepth } from "./kernel/InstructionDescription";
 import { SimilarInstructions } from "./kernel/Disassembler";
 import React, { useEffect, useState } from "react";
@@ -33,10 +33,20 @@ const Code = (props: { instructions: SimilarInstructions[] }) => {
       props.instructions.map(inst => bits2hex(inst.chunk.bits).padStart(8, ' ')).join('\n')
     }</pre>
     <div className='decoded'>
-      {props.instructions.flatMap((inst, i) => <React.Fragment key={i}>
-        <div>{inst.instructions.at(0)?.mnemonic ?? '???'}</div>
-        <div>{inst.instructions.at(0)?.args.map(arg => arg.textual).join(', ') ?? ''}</div>
-      </React.Fragment>)}
+      {props.instructions.flatMap((inst, i) => {
+        const someInst = inst.instructions.at(0)
+        if(!someInst) {
+          return <React.Fragment key={i}>
+            <div className="error">???</div>
+            <div></div>
+          </React.Fragment>
+        }
+
+        return <React.Fragment key={i}>
+          <div className="mnemonic">{someInst.mnemonic ?? '???'}</div>
+          <div>{someInst.args.map(arg => arg.textual).join(', ') ?? ''}</div>
+        </React.Fragment>
+      })}
     </div>
   </div>;
 }

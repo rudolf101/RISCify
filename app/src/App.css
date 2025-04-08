@@ -50,6 +50,14 @@
   gap: 0 1rem;
 }
 
+.decoded > .mnemonic {
+  color: var(--color-instruction);
+}
+
+.decoded > .error {
+  color: var(--color-dots)
+}
+
 .tools {
   display: flex;
   flex-direction: row;
