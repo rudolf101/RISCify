@@ -15,4 +15,4 @@ jobs:
         working-directory: ./frontend
         run: |
           npm i
-          CI=true react-scripts test
+          CI=true npm test
