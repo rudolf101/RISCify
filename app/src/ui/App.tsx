@@ -72,7 +72,8 @@ const Switch = <T,>(props: { cases: { text: string, value: T }[], onChange: (v: 
 }
 
 const App = () => {
-  const sourceCode = "0010031302b3566300331e1301c50e33ff8e3e83000e3f0301df58630010029301de3023ffee3c2300130313fd9ff06ffc0296e300008067"
+  // "0010031302b3566300331e1301c50e33ff8e3e83000e3f0301df58630010029301de3023ffee3c2300130313fd9ff06ffc0296e300008067"
+  const [sourceCode, setSourceCode] = useState("");
   const [byteOrder, setByteOrder] = useState(InputOrder.BYTE_ORDER_BE);
   const [parcelSkip, setParcelSkip] = useState(0);
   const [bitDepth, setBitDepth] = useState(BitDepth.BIT_32);
@@ -83,6 +84,20 @@ const App = () => {
   }, {
     bitDepth: bitDepth
   })
+
+  useEffect(() => {
+    const handler = (e: ClipboardEvent) => {
+      if (e.clipboardData) {
+        setSourceCode(e.clipboardData.getData('text'))
+      }
+    }
+
+    document.addEventListener('paste', handler)
+
+    return () => {
+      document.removeEventListener('paste', handler)
+    }
+  }, [])
 
   return (
     <div className='app'>
