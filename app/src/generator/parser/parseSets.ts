@@ -53,7 +53,7 @@ export function parseSets(
 function parseDepth(depth: string): BitDepth {
     if (depth === "32") return BitDepth.BIT_32;
     if (depth === "64") return BitDepth.BIT_64;
-    if (depth === "32|64") return BitDepth.BIT_32 | BitDepth.BIT_64;
+    if (depth === "32|64") return BitDepth.BIT_DEFAULT;
     throw new Error(`Unknown depth: ${depth}`);
 }
 
