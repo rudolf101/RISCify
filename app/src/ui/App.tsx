@@ -50,22 +50,10 @@ const Code = (props: { instructions: SimilarInstructions[], display: 'hex' | 'de
   </div>;
 }
 
-const Switch = <T,>(props: { cases: { text: string, value: T }[], onChange: (v: T) => void }) => {
-  const [selected, setSelected] = useState(0)
-
-  useEffect(() => {
-    setSelected(selected => {
-      if (selected !== 0 && selected >= props.cases.length) {
-        return selected
-      }
-      return 0
-    })
-  }, [props.cases])
-
+const Switch = <T,>(props: { cases: { text: string, value: T }[], value: T, onChange: (v: T) => void }) => {
   return <div className='switch'>
-    {props.cases.map((_case, i) => <span key={i} className={selected === i ? 'selected' : ''}
+    {props.cases.map((_case, i) => <span key={i} className={props.value === _case.value ? 'selected' : ''}
       onClick={() => {
-        setSelected(i)
         props.onChange(_case.value)
       }}>{_case.text}</span>)}
   </div>
@@ -105,6 +93,7 @@ const App = () => {
         <div className="tool">
           <Switch
             cases={[{ text: "RV32", value: BitDepth.BIT_32 }, { text: "RV64", value: BitDepth.BIT_64 }]}
+            value={bitDepth}
             onChange={setBitDepth}
           />
         </div>
@@ -129,6 +118,7 @@ const App = () => {
             }, {
               text: "LE", value: InputOrder.BYTE_ORDER_LE
             }]}
+            value={byteOrder}
             onChange={setByteOrder}
           />
         </div>
@@ -145,6 +135,7 @@ const App = () => {
               text: "1234",
               value: "dec" as const
             }]}
+            value={display}
             onChange={setDisplay}
           />
         </div>
