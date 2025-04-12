@@ -12,12 +12,17 @@ function spanToStr(span: number[]): string {
     return span.join(",");
 }
 
-function getBitDepthName(value: number): string | undefined {
-    const entry = Object.entries(BitDepth).find(
-        ([, val]) => typeof val === 'number' && val === value
-    );
-    return entry ? `BitDepth.${entry[0]}` : undefined;
+export function getBitDepthName(value: number): string {
+    return Object.entries(BitDepth)
+        .filter(([, val]) =>
+            typeof val === 'number' &&
+            (val & (val - 1)) === 0 &&
+            (value & val) === val
+        )
+        .map(([key]) => `BitDepth.${key}`)
+        .join(' | ');
 }
+
 function serialize(inst: Instruction): string {
     const d = inst.description;
     const lines: string[] = [];
