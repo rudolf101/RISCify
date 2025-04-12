@@ -2,6 +2,7 @@ import { generateAll } from "./generate";
 import fs from "fs";
 import path from "path";
 import { Instruction } from "../kernel/Instruction";
+import { BitDepth } from "../kernel/InstructionDescription";
 
 function q(str: string): string {
     return JSON.stringify(str);
@@ -11,11 +12,22 @@ function spanToStr(span: number[]): string {
     return span.join(",");
 }
 
+export function getBitDepthName(value: number): string {
+    return Object.entries(BitDepth)
+        .filter(([, val]) =>
+            typeof val === 'number' &&
+            (val & (val - 1)) === 0 &&
+            (value & val) === val
+        )
+        .map(([key]) => `BitDepth.${key}`)
+        .join(' | ');
+}
+
 function serialize(inst: Instruction): string {
     const d = inst.description;
     const lines: string[] = [];
 
-    lines.push(`new InstructionDescription(${q(d.rvset)}, ${d.wl}, ${d.length}, ${q(d.mnemonic)})`);
+    lines.push(`new InstructionDescription(${q(d.rvset)}, ${getBitDepthName(d.wl)}, ${d.length}, ${q(d.mnemonic)})`);
 
     for (const f of d.fields) {
         lines.push(`  .addField(new Matcher(${q(f.name)}, "${f.span.join(",")}", ${q(f.sample.data)}))`);
@@ -26,7 +38,7 @@ function serialize(inst: Instruction): string {
     }
 
     for (const a of d.args) {
-        lines.push(`  .addArg(new ArgumentPattern(${q(a.name)}, ${q(spanToStr(a.span))}, ${q(a.name)}))`);
+        lines.push(`  .addArg(new ArgumentPattern(${q(a.name)}, ${q(spanToStr(a.span))}, ${q(a.display)}))`);
     }
 
     if (d.argFormat) {
@@ -51,7 +63,7 @@ async function main() {
 
     const content = `// Auto-generated file. Do not edit manually.
 
-import { InstructionDescription } from "./InstructionDescription";
+import { BitDepth, InstructionDescription } from "./InstructionDescription";
 import { Matcher } from "./Matcher";
 import { ArgumentPattern } from "./ArgumentPattern";
 
