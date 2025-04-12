@@ -16,3 +16,8 @@ jobs:
         run: |
           npm i
           CI=true npm test
+
+      - name: Run lint
+        working-directory: ./app
+        run: |
+          CI=true npm run lint
