@@ -63,7 +63,7 @@ const Switch = <T,>(props: { cases: { text: string, value: T }[], onChange: (v: 
   }, [props.cases])
 
   return <div className='switch'>
-    {props.cases.map((_case, i) => <span className={selected === i ? 'selected' : ''}
+    {props.cases.map((_case, i) => <span key={i} className={selected === i ? 'selected' : ''}
       onClick={() => {
         setSelected(i)
         props.onChange(_case.value)
