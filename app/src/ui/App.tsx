@@ -20,17 +20,30 @@ const Message = (props: { header: string; text: string; error?: boolean }) => {
   );
 };
 
-const bits2hex = (bits: Bits) => {
-  let text = bits.bigEndian;
-  let hex = BigInt("0b" + text).toString(16);
-  return hex.padStart(text.length / 4, "0");
+type Display = "hex" | "dec" | "bin";
+
+const convertBits = (bits: Bits, display: Display): string => {
+  const text = bits.bigEndian;
+  if (display === "bin") {
+    return text;
+  }
+  const num = BigInt("0b" + text);
+  if (display === "hex") {
+    const hex = num.toString(16);
+    return hex.padStart(text.length / 4, "0");
+  }
+
+  const dec = num.toString(10);
+  const maxLen = BigInt("0b" + "1".repeat(text.length)).toString(10).length;
+  return dec.padStart(maxLen, "0");
 };
 
 const Code = (props: {
   instructions: SimilarInstructions[];
-  display: "hex" | "dec" | "bin";
+  display: Display;
 }) => {
   console.log(props.instructions);
+  const pad = props.display ==='hex' ? 8 : (props.display === 'bin' ? 32 : 10)
   return (
     <div className="code">
       <div className="arrows">{/* TODO: Add arrows for jumps */}</div>
@@ -43,7 +56,9 @@ const Code = (props: {
       </pre>
       <pre className="encoded">
         {props.instructions
-          .map((inst) => bits2hex(inst.chunk.bits).padStart(8, " "))
+          .map((inst) =>
+            convertBits(inst.chunk.bits, props.display).padStart(pad, " ")
+          )
           .join("\n")}
       </pre>
       <div className="decoded">
@@ -100,7 +115,7 @@ const App = () => {
   const [byteOrder, setByteOrder] = useState(InputOrder.BYTE_ORDER_BE);
   const [parcelSkip, setParcelSkip] = useState(0);
   const [bitDepth, setBitDepth] = useState(BitDepth.BIT_32);
-  const [display, setDisplay] = useState<"hex" | "dec" | "bin">("hex");
+  const [display, setDisplay] = useState<Display>("hex");
   let disassemblerResult = performDisassemble(
     sourceCode,
     {
