@@ -20,7 +20,7 @@ class UnumInterpretation extends ArgumentInterpretation {
 
     constructor(shift: number) {
         super();
-        this._multiplier = 1 >> shift;
+        this._multiplier = 1 << shift;
     }
 
     public textual(bits: Bits): string {
@@ -37,7 +37,7 @@ class NumInterpretation extends ArgumentInterpretation {
 
     constructor(shift: number) {
         super();
-        this._multiplier = 1 >> shift;
+        this._multiplier = 1 << shift;
     }
 
     public textual(bits: Bits): string {
