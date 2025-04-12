@@ -10,6 +10,7 @@ Fields:
 Sets:
 - name: "Zifencei"
   size: "32"
+  depth: "32|64"
   instructions:
   - mnemonic: "fence.i"
     fields:

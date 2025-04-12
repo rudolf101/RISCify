@@ -12,9 +12,5 @@
     "q.yml",
     "zfh.yml",
     "zawrs.yml"
-  ],
-  "Display": {
-    "RV32I": "RV32I/E",
-    "RV64I": "RV64I/E"
-  }
+  ]
 }

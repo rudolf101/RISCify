@@ -1,47 +1,31 @@
-import { YAMLData } from "./models";
+// generator/generate.ts
 
-const fs = require('fs');
-const path = require('path');
-const yaml = require('js-yaml');
+import fs from "fs";
+import path from "path";
+import yaml from "js-yaml";
 
-function loadYAML(filePath: string): YAMLData {
-    try {
-      const fileContents = fs.readFileSync(filePath, 'utf8');
-      return yaml.load(fileContents) as YAMLData;
-    } catch (e) {
-      throw new Error(`Error reading YAML file (${filePath}): ${e}`);
+import { DSLFile } from "./parser/types";
+import { parseArgs } from "./parser/parseArgs";
+import { parseFields } from "./parser/parseFields";
+import { parseSets } from "./parser/parseSets";
+import { Instruction } from "../kernel/Instruction";
+
+export async function generateAll(): Promise<Instruction[]> {
+    const dslDir = path.resolve(__dirname, "../../../dsl");
+    const files = fs.readdirSync(dslDir).filter(f => f.endsWith(".yml"));
+    const all: Instruction[] = [];
+
+    for (const file of files) {
+        const fullPath = path.join(dslDir, file);
+        const raw = fs.readFileSync(fullPath, "utf8");
+        const parsed = yaml.load(raw) as DSLFile;
+
+        const args = parseArgs(parsed.Args ?? {});
+        const fields = parseFields(parsed.Fields ?? {});
+        const restricts = parseFields(parsed.Restricts ?? {});
+        const instructions = parseSets(parsed.Sets, args, fields, restricts);
+        all.push(...instructions);
     }
-  }
-  
-  // Генерация TypeScript-константы с типом YAMLData
-  function generateTypescriptConstants(folderPath: string) {
-    const data: YAMLData[] = [];
-  
-    try {
-      const files = fs.readdirSync(folderPath);
-      files.forEach((file: string) => {
-        const filePath = path.join(folderPath, file);
-        if (file.endsWith('.yml') || file.endsWith('.yaml')) {
-          const yamlData = loadYAML(filePath);
-          data.push(yamlData);
-        }
-      });
-    } catch (e) {
-      throw new Error(`Error reading folder (${folderPath}): ${e}`);
-    }
-  
-    // Генерация TypeScript-кода
-    const tsCode = `
-  import { YAMLData } from './models'; 
-  
-  export const YAMLDataGen: YAMLData[] = ${JSON.stringify(data, null, 2)};
-  `;
-  
-    // Сохранение TypeScript-кода в файл
-    fs.writeFileSync(path.join('.', 'generatedData.ts'), tsCode);
-    console.log('TypeScript constants generated in "generatedData.ts"');
-  }
-  
-  // Пример использования: генерируем код из данных в папке "data"
-  generateTypescriptConstants('../../../dsl');
-  
+
+    return all;
+}

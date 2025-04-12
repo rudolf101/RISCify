@@ -33,28 +33,29 @@ Fields:
   d_funct3_lt:     { name: "funct3", span: "12:14", value: "100" }
   d_funct3_le:     { name: "funct3", span: "12:14", value: "000" }
   d_funct3_class:  { name: "funct3", span: "12:14", value: "100" }
-  d_funct5_add:    { name: "funct5", span: "27:14", value: "00000" }
-  d_funct5_sub:    { name: "funct5", span: "27:14", value: "10000" }
-  d_funct5_mul:    { name: "funct5", span: "27:14", value: "01000" }
-  d_funct5_div:    { name: "funct5", span: "27:14", value: "11000" }
-  d_funct5_sqrt:   { name: "funct5", span: "27:14", value: "11010" }
-  d_funct5_sgnj:   { name: "funct5", span: "27:14", value: "00100" }
-  d_funct5_minmax: { name: "funct5", span: "27:14", value: "10100" }
-  d_funct5_cvtff:  { name: "funct5", span: "27:14", value: "00010" }
-  d_funct5_cmp:    { name: "funct5", span: "27:14", value: "00101" }
-  d_funct5_class:  { name: "funct5", span: "27:14", value: "00111" }
-  d_funct5_cvtif:  { name: "funct5", span: "27:14", value: "00011" }
-  d_funct5_cvtfi:  { name: "funct5", span: "27:14", value: "01011" }
-  d_funct5_mvfi:   { name: "funct5", span: "27:14", value: "00111" }
-  d_funct5_mvif:   { name: "funct5", span: "27:14", value: "01111" }
+  d_funct5_add:    { name: "funct5", span: "27:31", value: "00000" }
+  d_funct5_sub:    { name: "funct5", span: "27:31", value: "10000" }
+  d_funct5_mul:    { name: "funct5", span: "27:31", value: "01000" }
+  d_funct5_div:    { name: "funct5", span: "27:31", value: "11000" }
+  d_funct5_sqrt:   { name: "funct5", span: "27:31", value: "11010" }
+  d_funct5_sgnj:   { name: "funct5", span: "27:31", value: "00100" }
+  d_funct5_minmax: { name: "funct5", span: "27:31", value: "10100" }
+  d_funct5_cvtff:  { name: "funct5", span: "27:31", value: "00010" }
+  d_funct5_cmp:    { name: "funct5", span: "27:31", value: "00101" }
+  d_funct5_class:  { name: "funct5", span: "27:31", value: "00111" }
+  d_funct5_cvtif:  { name: "funct5", span: "27:31", value: "00011" }
+  d_funct5_cvtfi:  { name: "funct5", span: "27:31", value: "01011" }
+  d_funct5_mvfi:   { name: "funct5", span: "27:31", value: "00111" }
+  d_funct5_mvif:   { name: "funct5", span: "27:31", value: "01111" }
   d_rs2_0:         { name: "rs2",    span: "20:24", value: "00000" }
   d_rs2_1:         { name: "rs2",    span: "20:24", value: "10000" }
   d_rs2_2:         { name: "rs2",    span: "20:24", value: "01000" }
   d_rs2_3:         { name: "rs2",    span: "20:24", value: "11000" }
 
 Sets:
-- name: "RV32D"
+- name: "D"
   size: "32"
+  depth: "32|64"
   instructions:
   - mnemonic: "flw"
     fields: [ d_opcode_lw, d_funct3_lw ]
@@ -136,8 +137,9 @@ Sets:
     fields: [ d_opcode_op, d_fmt, d_funct5_cvtfi, d_rs2_1 ]
     args: [ d_rd_x, d_rs1, d_rm ]
 
-- name: "RV64D"
+- name: "D"
   size: "32"
+  depth: "64"
   instructions:
   - mnemonic: "fcvt.l.d"
     fields: [ d_opcode_op, d_fmt, d_funct5_cvtif, d_rs2_2 ]

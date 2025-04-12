@@ -34,28 +34,29 @@ Fields:
   q_funct3_lt:     { name: "funct3", span: "12:14", value: "100" }
   q_funct3_le:     { name: "funct3", span: "12:14", value: "000" }
   q_funct3_class:  { name: "funct3", span: "12:14", value: "100" }
-  q_funct5_add:    { name: "funct5", span: "27:14", value: "00000" }
-  q_funct5_sub:    { name: "funct5", span: "27:14", value: "10000" }
-  q_funct5_mul:    { name: "funct5", span: "27:14", value: "01000" }
-  q_funct5_div:    { name: "funct5", span: "27:14", value: "11000" }
-  q_funct5_sqrt:   { name: "funct5", span: "27:14", value: "11010" }
-  q_funct5_sgnj:   { name: "funct5", span: "27:14", value: "00100" }
-  q_funct5_minmax: { name: "funct5", span: "27:14", value: "10100" }
-  q_funct5_cvtff:  { name: "funct5", span: "27:14", value: "00010" }
-  q_funct5_cmp:    { name: "funct5", span: "27:14", value: "00101" }
-  q_funct5_class:  { name: "funct5", span: "27:14", value: "00111" }
-  q_funct5_cvtif:  { name: "funct5", span: "27:14", value: "00011" }
-  q_funct5_cvtfi:  { name: "funct5", span: "27:14", value: "01011" }
-  q_funct5_mvfi:   { name: "funct5", span: "27:14", value: "00111" }
-  q_funct5_mvif:   { name: "funct5", span: "27:14", value: "01111" }
+  q_funct5_add:    { name: "funct5", span: "27:31", value: "00000" }
+  q_funct5_sub:    { name: "funct5", span: "27:31", value: "10000" }
+  q_funct5_mul:    { name: "funct5", span: "27:31", value: "01000" }
+  q_funct5_div:    { name: "funct5", span: "27:31", value: "11000" }
+  q_funct5_sqrt:   { name: "funct5", span: "27:31", value: "11010" }
+  q_funct5_sgnj:   { name: "funct5", span: "27:31", value: "00100" }
+  q_funct5_minmax: { name: "funct5", span: "27:31", value: "10100" }
+  q_funct5_cvtff:  { name: "funct5", span: "27:31", value: "00010" }
+  q_funct5_cmp:    { name: "funct5", span: "27:31", value: "00101" }
+  q_funct5_class:  { name: "funct5", span: "27:31", value: "00111" }
+  q_funct5_cvtif:  { name: "funct5", span: "27:31", value: "00011" }
+  q_funct5_cvtfi:  { name: "funct5", span: "27:31", value: "01011" }
+  q_funct5_mvfi:   { name: "funct5", span: "27:31", value: "00111" }
+  q_funct5_mvif:   { name: "funct5", span: "27:31", value: "01111" }
   q_rs2_0:         { name: "rs2",    span: "20:24", value: "00000" }
   q_rs2_1:         { name: "rs2",    span: "20:24", value: "10000" }
   q_rs2_2:         { name: "rs2",    span: "20:24", value: "01000" }
   q_rs2_3:         { name: "rs2",    span: "20:24", value: "11000" }
 
 Sets:
-- name: "RV32Q"
+- name: "Q"
   size: "32"
+  depth: "32|64"
   instructions:
   - mnemonic: "flw"
     fields: [ q_opcode_lw, q_funct3_lw ]
@@ -143,8 +144,9 @@ Sets:
     fields: [ q_opcode_op, q_fmt, q_funct5_cvtfi, q_rs2_1 ]
     args: [ q_rd_x, q_rs1, q_rm ]
 
-- name: "RV64Q"
+- name: "Q"
   size: "32"
+  depth: "64"
   instructions:
   - mnemonic: "fcvt.l.q"
     fields: [ q_opcode_op, q_fmt, q_funct5_cvtif, q_rs2_2 ]
