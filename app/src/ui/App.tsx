@@ -22,8 +22,12 @@ const Message = (props: { header: string; text: string; error?: boolean }) => {
 
 type Display = "hex" | "dec" | "bin";
 
-const convertBits = (bits: Bits, display: Display): string => {
-  const text = bits.bigEndian;
+const convertBits = (
+  bits: Bits,
+  display: Display,
+  order: InputOrder
+): string => {
+  const text = order === InputOrder.BYTE_ORDER_BE ? bits.bigEndian : bits.data;
   if (display === "bin") {
     return text;
   }
@@ -41,9 +45,10 @@ const convertBits = (bits: Bits, display: Display): string => {
 const Code = (props: {
   instructions: SimilarInstructions[];
   display: Display;
+  order: InputOrder;
 }) => {
   console.log(props.instructions);
-  const pad = props.display ==='hex' ? 8 : (props.display === 'bin' ? 32 : 10)
+  const pad = props.display === "hex" ? 8 : props.display === "bin" ? 32 : 10;
   return (
     <div className="code">
       <div className="arrows">{/* TODO: Add arrows for jumps */}</div>
@@ -57,7 +62,10 @@ const Code = (props: {
       <pre className="encoded">
         {props.instructions
           .map((inst) =>
-            convertBits(inst.chunk.bits, props.display).padStart(pad, " ")
+            convertBits(inst.chunk.bits, props.display, props.order).padStart(
+              pad,
+              " "
+            )
           )
           .join("\n")}
       </pre>
@@ -215,7 +223,11 @@ const App = () => {
           error
         />
       ) : (
-        <Code instructions={disassemblerResult.result} display={display} />
+        <Code
+          instructions={disassemblerResult.result}
+          display={display}
+          order={byteOrder}
+        />
       )}
     </div>
   );
