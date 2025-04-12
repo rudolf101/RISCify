@@ -1,0 +1,41 @@
+:root {
+  --color-panel: #ff8f40;
+  --color-jump: #7fd962;
+  --color-entity: #59c2ff;
+  --color-bg: #0d1017;
+  --color-fg: #bfbdb6;
+  --color-instruction: #ffb454;
+  --color-special: #e6b673;
+  --color-comment: rgba(172, 182, 191, 0.549);
+  --color-constant: #d2a6ff;
+  --color-dots: #f07178;
+  --color-hex: #95e6cb;
+}
+
+body {
+  margin: 0;
+  font-family: "JetBrains Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: normal;
+  font-style: normal;
+
+  background-color: var(--color-bg);
+  color: var(--color-fg);
+}
+
+pre {
+  font-family: "JetBrains Mono", monospace;
+  font-optical-sizing: auto;
+  font-weight: normal;
+  font-style: normal;
+  margin: 0;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+}
