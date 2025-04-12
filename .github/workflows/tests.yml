@@ -20,4 +20,4 @@ jobs:
       - name: Run lint
         working-directory: ./app
         run: |
-          CI=true npm lint
+          CI=true npm run lint
