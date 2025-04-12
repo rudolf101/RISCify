@@ -22,7 +22,7 @@ export default function performDisassemble(
     filterSettings: FilterSettings
 ): DisassembleOutput {
     var input = inputParser(dump, inputSettings);
-    if (input.valid == "invalid") {
+    if (input.valid === "invalid") {
         return {
             valid: "invalid",
             message: input.message

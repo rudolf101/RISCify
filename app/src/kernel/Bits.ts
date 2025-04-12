@@ -1,5 +1,5 @@
 import { Span } from "./Span";
-import { Matcher, Fields, Restrict } from "./Matcher";
+import { Matcher } from "./Matcher";
 
 export class Bits {
     private _data: string;

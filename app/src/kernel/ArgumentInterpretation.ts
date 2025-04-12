@@ -69,10 +69,6 @@ class RegInterpretation extends ArgumentInterpretation {
 }
 
 class FenceInterpretation extends ArgumentInterpretation {
-    constructor() {
-        super();
-    }
-
     public textual(bits: Bits): string {
         return [  '0',   'w',   'r',   'rw',
                   'o',  'ow',  'or',  'orw',
@@ -86,10 +82,6 @@ class FenceInterpretation extends ArgumentInterpretation {
 }
 
 class RmInterpretation extends ArgumentInterpretation {
-    constructor() {
-        super();
-    }
-
     public textual(bits: Bits): string {
         return ['rne', 'rtz', 'rdn', 'rup', 'rmm', '-', '-', 'dyn'][this.numerical(bits)]; 
     }
@@ -217,21 +209,21 @@ export function argumentInterpretationFactory(description: string): ArgumentInte
         case "rm": return new RmInterpretation();
     }
     if (description.startsWith("unumx(") && description.endsWith(")")) {
-        var kStr: string = description.substring(6, description.length - 1);
-        var k: number = +kStr;
+        let kStr: string = description.substring(6, description.length - 1);
+        let k: number = +kStr;
         if (!isNaN(k)) {
             return new UnumInterpretation(k); // беззнаковое целое число от 0 до 2^n-1, умноженное на 2^k
         }
     }
     else if (description.startsWith("numx(") && description.endsWith(")")) {
-        var kStr: string = description.substring(5, description.length - 1);
-        var k: number = +kStr;
+        let kStr: string = description.substring(5, description.length - 1);
+        let k: number = +kStr;
         if (!isNaN(k)) {
             return new NumInterpretation(k); // беззнаковое целое число от 0 до 2^n-1, умноженное на 2^k
         }
     }
     else if (description.startsWith("par(") && description.endsWith(")")) {
-        var subStr: string = description.substring(4, description.length - 1);
+        let subStr: string = description.substring(4, description.length - 1);
         return new ParInterpretation(argumentInterpretationFactory(subStr));
     }
     return new InvalidInterpretation();
