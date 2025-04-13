@@ -67,6 +67,14 @@
   color: var(--color-dots);
 }
 
+.decoded span.entity {
+  color: var(--color-entity);
+}
+
+.decoded span.const {
+  color: var(--color-constant);
+}
+
 .tools {
   display: flex;
   flex-direction: row;

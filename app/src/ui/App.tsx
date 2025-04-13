@@ -6,6 +6,7 @@ import { InputOrder } from "../kernel/InputParser";
 import { BitDepth } from "../kernel/InstructionDescription";
 import { SimilarInstructions } from "../kernel/Disassembler";
 import React, { useEffect, useState } from "react";
+import { Argument } from "../kernel/Argument";
 
 const Message = (props: { header: string; text: string; error?: boolean }) => {
   return (
@@ -40,6 +41,13 @@ const convertBits = (
   const dec = num.toString(10);
   const maxLen = BigInt("0b" + "1".repeat(text.length)).toString(10).length;
   return dec.padStart(maxLen, "0");
+};
+
+const argumentType = (arg: Argument) => {
+  if (arg.textual === arg.numerical.toString()) {
+    return "const";
+  }
+  return "entity";
 };
 
 const Code = (props: {
@@ -86,7 +94,12 @@ const Code = (props: {
             <React.Fragment key={i}>
               <div className="mnemonic">{someInst.mnemonic ?? "???"}</div>
               <div>
-                {someInst.args.map((arg) => arg.textual).join(", ") ?? ""}
+                {someInst.args
+                  .flatMap((arg) => [
+                    <span className={argumentType(arg)}>{arg.textual}</span>,
+                    ", ",
+                  ])
+                  .slice(0, -1)}
               </div>
             </React.Fragment>
           );
