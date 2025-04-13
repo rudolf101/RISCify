@@ -50,25 +50,26 @@ const Code = (props: {
   console.log(props.instructions);
   const pad = props.display === "hex" ? 8 : props.display === "bin" ? 32 : 10;
   return (
-    <div className="code">
+    <div
+      className="code"
+      style={{ gridTemplateRows: `repeat(${props.instructions.length}, auto)` }}
+    >
       <div className="arrows">{/* TODO: Add arrows for jumps */}</div>
-      <pre className="offsets">
-        {props.instructions
-          .map(
-            (inst) => "0x" + inst.chunk.address.toString(16).padStart(4, "0")
-          )
-          .join("\n")}
-      </pre>
-      <pre className="encoded">
-        {props.instructions
-          .map((inst) =>
-            convertBits(inst.chunk.bits, props.display, props.order).padStart(
+      <div className="offsets">
+        {props.instructions.map((inst) => (
+          <span>0x{inst.chunk.address.toString(16).padStart(4, "0")}</span>
+        ))}
+      </div>
+      <div className="encoded">
+        {props.instructions.map((inst) => (
+          <span>
+            {convertBits(inst.chunk.bits, props.display, props.order).padStart(
               pad,
               " "
-            )
-          )
-          .join("\n")}
-      </pre>
+            )}
+          </span>
+        ))}
+      </div>
       <div className="decoded">
         {props.instructions.flatMap((inst, i) => {
           const someInst = inst.instructions.at(0);

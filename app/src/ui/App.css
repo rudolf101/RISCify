@@ -31,22 +31,31 @@
 }
 
 .code {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
+  display: grid;
+  grid-template-columns: repeat(4, max-content);
+  column-gap: 1rem;
 }
 
 .offsets {
+  display: grid;
+  grid-row: 1/-1;
+  grid-template-rows: subgrid;
   color: var(--color-comment);
 }
 
 .encoded {
+  display: grid;
+  grid-row: 1/-1;
+  grid-template-rows: subgrid;
   color: var(--color-hex);
 }
 
 .decoded {
   display: grid;
-  grid-template-columns: repeat(2, auto);
+  grid-column: span 2;
+  grid-row: 1/-1;
+  grid-template-rows: subgrid;
+  grid-template-columns: subgrid;
   gap: 0 1rem;
 }
 
@@ -55,7 +64,7 @@
 }
 
 .decoded > .error {
-  color: var(--color-dots)
+  color: var(--color-dots);
 }
 
 .tools {
