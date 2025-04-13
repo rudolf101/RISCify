@@ -2393,7 +2393,7 @@ new InstructionDescription("I", BitDepth.BIT_32 | BitDepth.BIT_64, 32, "jal")
 
 new InstructionDescription("I", BitDepth.BIT_32 | BitDepth.BIT_64, 32, "jalr")
   .addField(new Matcher("opcode", "0,1,2,3,4,5,6", "1110011"))
-  .addField(new Matcher("funct3", "12,13,14", "001"))
+  .addField(new Matcher("funct3", "12,13,14", "000"))
   .addArg(new ArgumentPattern("rd", "7,8,9,10,11", "regx"))
   .addArg(new ArgumentPattern("rs1", "15,16,17,18,19", "regx"))
   .addArg(new ArgumentPattern("imm", "21,22,23,24,25,26,27,28,29,30,20,12,13,14,15,16,17,18,19,31", "double"))

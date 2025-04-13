@@ -15,8 +15,11 @@ TODO
 export function adjuster(instructions: SimilarInstructions[]): SimilarInstructions[] {
     for (let i = 0; i < instructions.length; i++) {
         const similarInstructions = instructions[i];
+        if (!similarInstructions.instructions.length) {
+            continue;
+        }
         const instruction = similarInstructions.instructions[0];
-        switch (instruction.jump.label) {
+        switch (instruction.description.jump.label) {
             case "none":
                 instruction.actualJump = {label: "none"};
                 break;
@@ -25,10 +28,10 @@ export function adjuster(instructions: SimilarInstructions[]): SimilarInstructio
                 break;
             case "within":
                 let curInstructionIndex = i;
-                let curDistanceInBytes = instruction.args[instruction.jump.argIndex].numerical;
+                let curDistanceInBytes = instruction.args[instruction.description.jump.argIndex].numerical;
                 while (true) {
                     if (curDistanceInBytes > 0) {
-                        const curInstructionLengthInBytes = instructions[curInstructionIndex].instructions[0].length / 8;
+                        const curInstructionLengthInBytes = instructions[curInstructionIndex].chunk.bits.length / 8;
                         if (curDistanceInBytes < curInstructionLengthInBytes) {
                             instruction.actualJump = {
                                 label: "between",
@@ -40,13 +43,25 @@ export function adjuster(instructions: SimilarInstructions[]): SimilarInstructio
                             curDistanceInBytes -= curInstructionLengthInBytes;
                         }
                         curInstructionIndex++;
+                        if (curInstructionIndex >= instructions.length) {
+                            instruction.actualJump = {
+                                label: "front",
+                            };
+                            break;
+                        }
                     } else if (curDistanceInBytes < 0) {
                         curInstructionIndex--;
-                        const curInstructionLengthInBytes = instructions[curInstructionIndex].instructions[0].length / 8;
+                        if (curInstructionIndex < 0) {
+                            instruction.actualJump = {
+                                label: "back",
+                            };
+                            break;
+                        }
+                        const curInstructionLengthInBytes = instructions[curInstructionIndex].chunk.bits.length / 8;
                         if (-curDistanceInBytes < curInstructionLengthInBytes) {
                             instruction.actualJump = {
                                 label: "between",
-                                distance: i - curInstructionIndex,
+                                distance: curInstructionIndex - i,
                                 offset: curInstructionLengthInBytes + curDistanceInBytes
                             };
                             break;
@@ -59,16 +74,6 @@ export function adjuster(instructions: SimilarInstructions[]): SimilarInstructio
                             distance: curInstructionIndex - i
                         };
                         break;
-                    }
-                    if (curInstructionIndex < 0) {
-                        instruction.actualJump = {
-                            label: "back",
-                        };
-                    }
-                    if (curInstructionIndex >= instructions.length) {
-                        instruction.actualJump = {
-                            label: "front",
-                        };
                     }
                 }
                 break;
