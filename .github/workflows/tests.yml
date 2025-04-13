@@ -8,13 +8,21 @@ jobs:
   run-tests:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+          cache-dependency-path: ./app/yarn.lock
+
+      - name: Install deps
+        working-directory: ./app
+        run: |
+          npm i
 
       - name: Run tests
         working-directory: ./app
         run: |
-          npm i
           CI=true npm test
 
       - name: Run lint
