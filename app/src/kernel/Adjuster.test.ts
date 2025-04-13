@@ -112,7 +112,7 @@ b3 e2 62 00
             {bitDepth: BitDepth.BIT_32}
         ) as DisassembleOutputValid
         expect(result.valid).toEqual("valid")
-        expect(result.result.map(i => [i.instructions[0].mnemonic, i.instructions[0].formatted(), i.instructions[0].actualJump])).toEqual([
+        expect(simplifiedRepresentation(result.result)).toEqual([
             ["lui", "x6, 262144", {"label": "none"}],
             ["mv", "x5, x0", {"label": "none"}],
             ["beq", "x6, x0, 32", {"label": "concrete", "distance": 8}],
