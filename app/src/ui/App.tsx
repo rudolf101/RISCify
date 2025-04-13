@@ -28,7 +28,7 @@ const convertBits = (
   display: Display,
   order: InputOrder
 ): string => {
-  const text = order === InputOrder.BYTE_ORDER_BE ? bits.bigEndian : bits.data;
+  const text = bits.bigEndian;
   if (display === "bin") {
     return text;
   }
