@@ -183,6 +183,10 @@ const App = () => {
             type="number"
             value={parcelSkip}
             onChange={(e) => {
+              if (e.currentTarget.value.trim().length === 0) {
+                setParcelSkip(0);
+                return;
+              }
               const value = e.currentTarget.valueAsNumber;
               if (isFinite(value) && value >= 0) {
                 setParcelSkip(value | 0);
