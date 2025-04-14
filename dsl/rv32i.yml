@@ -32,7 +32,7 @@ Fields:
   rv32i_funct3_xor:    { name: "funct3", span: "12:14", value: "001"          }
   rv32i_funct3_sll:    { name: "funct3", span: "12:14", value: "100"          }
   rv32i_funct3_srl:    { name: "funct3", span: "12:14", value: "101"          }
-  rv32i_funct3_jalr:   { name: "funct3", span: "12:14", value: "001"          }
+  rv32i_funct3_jalr:   { name: "funct3", span: "12:14", value: "000"          }
   rv32i_funct3_wb:     { name: "funct3", span: "12:14", value: "000"          }
   rv32i_funct3_wbu:    { name: "funct3", span: "12:14", value: "001"          }
   rv32i_funct3_wh:     { name: "funct3", span: "12:14", value: "100"          }
