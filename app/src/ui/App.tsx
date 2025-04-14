@@ -21,7 +21,7 @@ const Message = (props: { header: string; text: string; error?: boolean }) => {
   );
 };
 
-type Display = "hex" | "dec" | "bin";
+type Display = "hex" | "bin";
 
 const convertBits = (
   bits: Bits,
@@ -29,18 +29,19 @@ const convertBits = (
   order: InputOrder
 ): string => {
   const text = bits.bigEndian;
+  let spaced: string[];
   if (display === "bin") {
-    return text;
-  }
-  const num = BigInt("0b" + text);
-  if (display === "hex") {
+    spaced = Array.from(text.matchAll(/.{8}/g)).map((res) => res[0]);
+  } else {
+    const num = BigInt("0b" + text);
     const hex = num.toString(16);
-    return hex.padStart(text.length / 4, "0");
+    const paddedHex = hex.padStart(text.length / 4, "0");
+    spaced = Array.from(paddedHex.matchAll(/.{2}/g)).map((res) => res[0]);
   }
-
-  const dec = num.toString(10);
-  const maxLen = BigInt("0b" + "1".repeat(text.length)).toString(10).length;
-  return dec.padStart(maxLen, "0");
+  if (order === InputOrder.BYTE_ORDER_LE) {
+    spaced.reverse();
+  }
+  return spaced.join(" ");
 };
 
 const argumentType = (arg: Argument) => {
@@ -217,10 +218,6 @@ const App = () => {
               {
                 text: "0b01",
                 value: "bin" as const,
-              },
-              {
-                text: "1234",
-                value: "dec" as const,
               },
             ]}
             value={display}
