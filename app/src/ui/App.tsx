@@ -78,6 +78,8 @@ const Code = (props: {
     current && current.i === i && current.j === j ? "selected" : "";
   const isSpanning = (i: number) =>
     props.display === "bin" && current && current.i === i ? "spanning" : "";
+  const currentSpan = (i: number) =>
+    current && current.i === i ? current.span : undefined;
   return (
     <div
       className={`code`}
@@ -96,7 +98,7 @@ const Code = (props: {
               inst.chunk.bits,
               props.display,
               props.order,
-              current?.span
+              currentSpan(i)
             )}
           </span>
         ))}
@@ -115,7 +117,9 @@ const Code = (props: {
 
           return (
             <React.Fragment key={i}>
-              <div className={`mnemonic ${isSpanning(i)}`}>{someInst.mnemonic ?? "???"}</div>
+              <div className={`mnemonic ${isSpanning(i)}`}>
+                {someInst.mnemonic ?? "???"}
+              </div>
               <div className={isSpanning(i)}>
                 {someInst.args
                   .flatMap((arg, j) => [
