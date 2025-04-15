@@ -32,7 +32,9 @@ const convertBits = (
 ): ReactNode[] => {
   const text = bits.bigEndian;
   let spaced: ReactNode[][];
-  let spanSet = span ? new Set(span.map(i => text.length - 1 - i)) : new Set();
+  let spanSet = span
+    ? new Set(span.map((i) => text.length - 1 - i))
+    : new Set();
   if (display === "bin") {
     spaced = Array.from(text.matchAll(/.{8}/g)).map((res, i) =>
       Array.from(res[0]).map((e, j) => (
@@ -72,11 +74,13 @@ const Code = (props: {
   } | null>(null);
   console.log(props.instructions);
   console.log(current);
+  const isCurrent = (i: number, j: number) =>
+    current && current.i === i && current.j === j ? "selected" : "";
+  const isSpanning = (i: number) =>
+    props.display === "bin" && current && current.i === i ? "spanning" : "";
   return (
     <div
-      className={`code ${
-        props.display === "bin" && current !== null ? "spanning" : ""
-      }`}
+      className={`code`}
       style={{ gridTemplateRows: `repeat(${props.instructions.length}, auto)` }}
     >
       <div className="arrows">{/* TODO: Add arrows for jumps */}</div>
@@ -86,8 +90,8 @@ const Code = (props: {
         ))}
       </div>
       <div className="encoded">
-        {props.instructions.map((inst) => (
-          <span>
+        {props.instructions.map((inst, i) => (
+          <span className={isSpanning(i)}>
             {convertBits(
               inst.chunk.bits,
               props.display,
@@ -111,12 +115,12 @@ const Code = (props: {
 
           return (
             <React.Fragment key={i}>
-              <div className="mnemonic">{someInst.mnemonic ?? "???"}</div>
-              <div>
+              <div className={`mnemonic ${isSpanning(i)}`}>{someInst.mnemonic ?? "???"}</div>
+              <div className={isSpanning(i)}>
                 {someInst.args
                   .flatMap((arg, j) => [
                     <span
-                      className={argumentType(arg)}
+                      className={`${argumentType(arg)} ${isCurrent(i, j)}`}
                       onMouseEnter={() =>
                         setCurrent({
                           span: arg.span,

@@ -76,9 +76,9 @@
   color: var(--color-constant);
 }
 
-.spanning .encoded span span:not(.selected),
-.spanning .decoded span,
-.spanning .decoded > .mnemonic {
+.spanning span:not(.selected),
+.mnemonic.spanning,
+div.spanning {
   color: var(--color-comment);
 }
 
