@@ -48,6 +48,7 @@
   grid-row: 1/-1;
   grid-template-rows: subgrid;
   color: var(--color-hex);
+  text-align: right;
 }
 
 .decoded {
@@ -73,6 +74,12 @@
 
 .decoded span.const {
   color: var(--color-constant);
+}
+
+.spanning .encoded span span:not(.selected),
+.spanning .decoded span,
+.spanning .decoded > .mnemonic {
+  color: var(--color-comment);
 }
 
 .tools {

@@ -5,8 +5,9 @@ import performDisassemble from "../kernel/Kernel";
 import { InputOrder } from "../kernel/InputParser";
 import { BitDepth } from "../kernel/InstructionDescription";
 import { SimilarInstructions } from "../kernel/Disassembler";
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
 import { Argument } from "../kernel/Argument";
+import { Span } from "../kernel/Span";
 
 const Message = (props: { header: string; text: string; error?: boolean }) => {
   return (
@@ -26,22 +27,30 @@ type Display = "hex" | "bin";
 const convertBits = (
   bits: Bits,
   display: Display,
-  order: InputOrder
-): string => {
+  order: InputOrder,
+  span?: Span
+): ReactNode[] => {
   const text = bits.bigEndian;
-  let spaced: string[];
+  let spaced: ReactNode[][];
+  let spanSet = span ? new Set(span.map(i => text.length - 1 - i)) : new Set();
   if (display === "bin") {
-    spaced = Array.from(text.matchAll(/.{8}/g)).map((res) => res[0]);
+    spaced = Array.from(text.matchAll(/.{8}/g)).map((res, i) =>
+      Array.from(res[0]).map((e, j) => (
+        <span className={spanSet.has(i * 8 + j) ? "selected" : ""}>{e}</span>
+      ))
+    );
   } else {
     const num = BigInt("0b" + text);
     const hex = num.toString(16);
     const paddedHex = hex.padStart(text.length / 4, "0");
-    spaced = Array.from(paddedHex.matchAll(/.{2}/g)).map((res) => res[0]);
+    spaced = Array.from(paddedHex.matchAll(/.{2}/g)).map((res) =>
+      Array.from(res[0]).map((e) => <span>{e}</span>)
+    );
   }
   if (order === InputOrder.BYTE_ORDER_LE) {
     spaced.reverse();
   }
-  return spaced.join(" ");
+  return spaced.flatMap((e) => e.concat([" "])).slice(0, -1);
 };
 
 const argumentType = (arg: Argument) => {
@@ -56,11 +65,18 @@ const Code = (props: {
   display: Display;
   order: InputOrder;
 }) => {
+  const [current, setCurrent] = useState<{
+    span: Span;
+    i: number;
+    j: number;
+  } | null>(null);
   console.log(props.instructions);
-  const pad = props.display === "hex" ? 8 : props.display === "bin" ? 32 : 10;
+  console.log(current);
   return (
     <div
-      className="code"
+      className={`code ${
+        props.display === "bin" && current !== null ? "spanning" : ""
+      }`}
       style={{ gridTemplateRows: `repeat(${props.instructions.length}, auto)` }}
     >
       <div className="arrows">{/* TODO: Add arrows for jumps */}</div>
@@ -72,9 +88,11 @@ const Code = (props: {
       <div className="encoded">
         {props.instructions.map((inst) => (
           <span>
-            {convertBits(inst.chunk.bits, props.display, props.order).padStart(
-              pad,
-              " "
+            {convertBits(
+              inst.chunk.bits,
+              props.display,
+              props.order,
+              current?.span
             )}
           </span>
         ))}
@@ -96,8 +114,20 @@ const Code = (props: {
               <div className="mnemonic">{someInst.mnemonic ?? "???"}</div>
               <div>
                 {someInst.args
-                  .flatMap((arg) => [
-                    <span className={argumentType(arg)}>{arg.textual}</span>,
+                  .flatMap((arg, j) => [
+                    <span
+                      className={argumentType(arg)}
+                      onMouseEnter={() =>
+                        setCurrent({
+                          span: arg.span,
+                          i,
+                          j,
+                        })
+                      }
+                      onMouseLeave={() => setCurrent(null)}
+                    >
+                      {arg.textual}
+                    </span>,
                     ", ",
                   ])
                   .slice(0, -1)}
