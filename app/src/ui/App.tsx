@@ -5,7 +5,9 @@ import performDisassemble from "../kernel/Kernel";
 import { InputOrder } from "../kernel/InputParser";
 import { BitDepth } from "../kernel/InstructionDescription";
 import { SimilarInstructions } from "../kernel/Disassembler";
-import React, { useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useState } from "react";
+import { Argument } from "../kernel/Argument";
+import { Span } from "../kernel/Span";
 
 const Message = (props: { header: string; text: string; error?: boolean }) => {
   return (
@@ -20,26 +22,44 @@ const Message = (props: { header: string; text: string; error?: boolean }) => {
   );
 };
 
-type Display = "hex" | "dec" | "bin";
+type Display = "hex" | "bin";
 
 const convertBits = (
   bits: Bits,
   display: Display,
-  order: InputOrder
-): string => {
-  const text = order === InputOrder.BYTE_ORDER_BE ? bits.bigEndian : bits.data;
+  order: InputOrder,
+  span?: Span
+): ReactNode[] => {
+  const text = bits.bigEndian;
+  let spaced: ReactNode[][];
+  let spanSet = span
+    ? new Set(span.map((i) => text.length - 1 - i))
+    : new Set();
   if (display === "bin") {
-    return text;
-  }
-  const num = BigInt("0b" + text);
-  if (display === "hex") {
+    spaced = Array.from(text.matchAll(/.{8}/g)).map((res, i) =>
+      Array.from(res[0]).map((e, j) => (
+        <span className={spanSet.has(i * 8 + j) ? "selected" : ""}>{e}</span>
+      ))
+    );
+  } else {
+    const num = BigInt("0b" + text);
     const hex = num.toString(16);
-    return hex.padStart(text.length / 4, "0");
+    const paddedHex = hex.padStart(text.length / 4, "0");
+    spaced = Array.from(paddedHex.matchAll(/.{2}/g)).map((res) =>
+      Array.from(res[0]).map((e) => <span>{e}</span>)
+    );
   }
+  if (order === InputOrder.BYTE_ORDER_LE) {
+    spaced.reverse();
+  }
+  return spaced.flatMap((e) => e.concat([" "])).slice(0, -1);
+};
 
-  const dec = num.toString(10);
-  const maxLen = BigInt("0b" + "1".repeat(text.length)).toString(10).length;
-  return dec.padStart(maxLen, "0");
+const argumentType = (arg: Argument) => {
+  if (arg.textual === arg.numerical.toString()) {
+    return "const";
+  }
+  return "entity";
 };
 
 const Code = (props: {
@@ -47,28 +67,53 @@ const Code = (props: {
   display: Display;
   order: InputOrder;
 }) => {
+  const [current, setCurrent] = useState<{
+    span: Span;
+    i: number;
+    j: number;
+  } | null>(null);
   console.log(props.instructions);
-  const pad = props.display === "hex" ? 8 : props.display === "bin" ? 32 : 10;
+  console.log(current);
+  const isCurrent = (i: number, j: number) =>
+    current && current.i === i && current.j === j ? "selected" : "";
+  const isGlobalSpanning = () =>
+    props.display === "bin" && current ? "spanning" : "";
+  const isSelected = (i: number) =>
+    props.display === "bin" && current && current.i === i ? "selected" : "";
+  const currentSpan = (i: number) =>
+    current && current.i === i ? current.span : undefined;
+  const setCurrentCallback =
+    (i: number, j: number, { span }: Argument) =>
+    () =>
+      setCurrent({
+        i,
+        j,
+        span,
+      });
+  const resetCurrent = () => setCurrent(null);
   return (
-    <div className="code">
+    <div
+      className={`code ${isGlobalSpanning()}`}
+      style={{ gridTemplateRows: `repeat(${props.instructions.length}, auto)` }}
+    >
       <div className="arrows">{/* TODO: Add arrows for jumps */}</div>
-      <pre className="offsets">
-        {props.instructions
-          .map(
-            (inst) => "0x" + inst.chunk.address.toString(16).padStart(4, "0")
-          )
-          .join("\n")}
-      </pre>
-      <pre className="encoded">
-        {props.instructions
-          .map((inst) =>
-            convertBits(inst.chunk.bits, props.display, props.order).padStart(
-              pad,
-              " "
-            )
-          )
-          .join("\n")}
-      </pre>
+      <div className="offsets">
+        {props.instructions.map((inst) => (
+          <span>0x{inst.chunk.address.toString(16).padStart(4, "0")}</span>
+        ))}
+      </div>
+      <div className="encoded">
+        {props.instructions.map((inst, i) => (
+          <span className={`${isGlobalSpanning()} ${isSelected(i)}`}>
+            {convertBits(
+              inst.chunk.bits,
+              props.display,
+              props.order,
+              currentSpan(i)
+            )}
+          </span>
+        ))}
+      </div>
       <div className="decoded">
         {props.instructions.flatMap((inst, i) => {
           const someInst = inst.instructions.at(0);
@@ -83,9 +128,29 @@ const Code = (props: {
 
           return (
             <React.Fragment key={i}>
-              <div className="mnemonic">{someInst.mnemonic ?? "???"}</div>
-              <div>
-                {someInst.args.map((arg) => arg.textual).join(", ") ?? ""}
+              <div className={`mnemonic ${isGlobalSpanning()}`}>
+                {someInst.mnemonic ?? "???"}
+              </div>
+              <div className={isGlobalSpanning()}>
+                {someInst.args
+                  .flatMap((arg, j) => [
+                    <span
+                      key={j}
+                      className={`${argumentType(arg)} ${isCurrent(i, j)}`}
+                      onMouseEnter={setCurrentCallback(i, j, arg)}
+                      onMouseLeave={resetCurrent}
+                    >
+                      {arg.textual}
+                    </span>,
+                    <span
+                      className={isCurrent(i, j)}
+                      onMouseEnter={setCurrentCallback(i, j, arg)}
+                      onMouseLeave={resetCurrent}
+                    >
+                      {", "}
+                    </span>,
+                  ])
+                  .slice(0, -1)}
               </div>
             </React.Fragment>
           );
@@ -168,6 +233,10 @@ const App = () => {
             type="number"
             value={parcelSkip}
             onChange={(e) => {
+              if (e.currentTarget.value.trim().length === 0) {
+                setParcelSkip(0);
+                return;
+              }
               const value = e.currentTarget.valueAsNumber;
               if (isFinite(value) && value >= 0) {
                 setParcelSkip(value | 0);
@@ -203,10 +272,6 @@ const App = () => {
               {
                 text: "0b01",
                 value: "bin" as const,
-              },
-              {
-                text: "1234",
-                value: "dec" as const,
               },
             ]}
             value={display}
