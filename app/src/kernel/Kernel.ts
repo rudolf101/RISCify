@@ -4,17 +4,17 @@ import { disassemble, FilterSettings, SimilarInstructions } from "./Disassembler
 import { inputParser, InputSettings } from "./InputParser";
 import { splitter } from "./Splitter";
 
-type DisassembleOutputValid = {
+export type DisassembleOutputValid = {
     valid: "valid",
     result: SimilarInstructions[]
 };
 
-type DisassembleOutputInvalid = {
+export type DisassembleOutputInvalid = {
     valid: "invalid",
     message: string
 };
 
-type DisassembleOutput = DisassembleOutputValid | DisassembleOutputInvalid;
+export type DisassembleOutput = DisassembleOutputValid | DisassembleOutputInvalid;
 
 export default function performDisassemble(
     dump: string,
