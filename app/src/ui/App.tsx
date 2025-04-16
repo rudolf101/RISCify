@@ -82,6 +82,15 @@ const Code = (props: {
     props.display === "bin" && current && current.i === i ? "selected" : "";
   const currentSpan = (i: number) =>
     current && current.i === i ? current.span : undefined;
+  const setCurrentCallback =
+    (i: number, j: number, { span }: Argument) =>
+    () =>
+      setCurrent({
+        i,
+        j,
+        span,
+      });
+  const resetCurrent = () => setCurrent(null);
   return (
     <div
       className={`code ${isGlobalSpanning()}`}
@@ -128,20 +137,21 @@ const Code = (props: {
                     <span
                       key={j}
                       className={`${argumentType(arg)} ${isCurrent(i, j)}`}
-                      onMouseEnter={() =>
-                        setCurrent({
-                          span: arg.span,
-                          i,
-                          j,
-                        })
-                      }
-                      onMouseLeave={() => setCurrent(null)}
+                      onMouseEnter={setCurrentCallback(i, j, arg)}
+                      onMouseLeave={resetCurrent}
                     >
                       {arg.textual}
                     </span>,
-                    ", ",
+                    <span
+                      className={isCurrent(i, j)}
+                      onMouseEnter={setCurrentCallback(i, j, arg)}
+                      onMouseLeave={resetCurrent}
+                    >
+                      ,
+                    </span>,
+                    " ",
                   ])
-                  .slice(0, -1)}
+                  .slice(0, -2)}
               </div>
             </React.Fragment>
           );
