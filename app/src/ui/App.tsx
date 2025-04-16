@@ -147,11 +147,10 @@ const Code = (props: {
                       onMouseEnter={setCurrentCallback(i, j, arg)}
                       onMouseLeave={resetCurrent}
                     >
-                      ,
+                      {", "}
                     </span>,
-                    " ",
                   ])
-                  .slice(0, -2)}
+                  .slice(0, -1)}
               </div>
             </React.Fragment>
           );
