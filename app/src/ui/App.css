@@ -77,8 +77,7 @@
 }
 
 .spanning span:not(.selected),
-.mnemonic.spanning,
-div.spanning {
+.mnemonic.spanning {
   color: var(--color-comment);
 }
 

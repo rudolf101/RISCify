@@ -76,13 +76,15 @@ const Code = (props: {
   console.log(current);
   const isCurrent = (i: number, j: number) =>
     current && current.i === i && current.j === j ? "selected" : "";
-  const isSpanning = (i: number) =>
-    props.display === "bin" && current && current.i === i ? "spanning" : "";
+  const isGlobalSpanning = () =>
+    props.display === "bin" && current ? "spanning" : "";
+  const isSelected = (i: number) =>
+    props.display === "bin" && current && current.i === i ? "selected" : "";
   const currentSpan = (i: number) =>
     current && current.i === i ? current.span : undefined;
   return (
     <div
-      className={`code`}
+      className={`code ${isGlobalSpanning()}`}
       style={{ gridTemplateRows: `repeat(${props.instructions.length}, auto)` }}
     >
       <div className="arrows">{/* TODO: Add arrows for jumps */}</div>
@@ -93,7 +95,7 @@ const Code = (props: {
       </div>
       <div className="encoded">
         {props.instructions.map((inst, i) => (
-          <span className={isSpanning(i)}>
+          <span className={`${isGlobalSpanning()} ${isSelected(i)}`}>
             {convertBits(
               inst.chunk.bits,
               props.display,
@@ -117,13 +119,14 @@ const Code = (props: {
 
           return (
             <React.Fragment key={i}>
-              <div className={`mnemonic ${isSpanning(i)}`}>
+              <div className={`mnemonic ${isGlobalSpanning()}`}>
                 {someInst.mnemonic ?? "???"}
               </div>
-              <div className={isSpanning(i)}>
+              <div className={isGlobalSpanning()}>
                 {someInst.args
                   .flatMap((arg, j) => [
                     <span
+                      key={j}
                       className={`${argumentType(arg)} ${isCurrent(i, j)}`}
                       onMouseEnter={() =>
                         setCurrent({
