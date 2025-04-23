@@ -23,6 +23,7 @@ const Message = (props: { header: string; text: string; error?: boolean }) => {
 };
 
 type Display = "hex" | "bin";
+type Jump = "relative" | "absolute";
 
 const convertBits = (
   bits: Bits,
@@ -189,6 +190,7 @@ const App = () => {
   const [parcelSkip, setParcelSkip] = useState(0);
   const [bitDepth, setBitDepth] = useState(BitDepth.BIT_32);
   const [display, setDisplay] = useState<Display>("hex");
+  const [jump, setJump] = useState<Jump>("relative");
   let disassemblerResult = performDisassemble(
     sourceCode,
     {
@@ -276,6 +278,23 @@ const App = () => {
             ]}
             value={display}
             onChange={setDisplay}
+          />
+        </div>
+        <div className="tool">
+          <span>JUMP STYLE</span>
+          <Switch
+            cases={[
+              {
+                text: "REL",
+                value: "relative" as const,
+              },
+              {
+                text: "ABS",
+                value: "absolute" as const,
+              },
+            ]}
+            value={jump}
+            onChange={setJump}
           />
         </div>
       </div>
