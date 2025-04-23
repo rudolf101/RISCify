@@ -17,14 +17,11 @@ export type InputSettings = {
     order: InputOrder,
 
     /*
-    Команды в RISC-V могут иметь разную длину,
-    но она всегда кратна одному парселю (2 байта, 16 бит).
-    Иногда в начале дампа может быть кусок прошлой команды.
-    Его надо скипнуть.
-    В этом поле указывается неотрицательное количество парселей,
-    которые нужно скипнуть.
+    Количество пропускаемых байт в начале инпута.
+    Изначально планировалось скипать по одному парселю (2 байта),
+    но потом было решено, что нужно скипать байты.
     */
-    parcelSkip: number,
+    bytesSkip: number,
 }
 
 export type ValidInput = {
@@ -65,7 +62,7 @@ export function inputParser(input: string, settings: InputSettings): Input {
         startAddress: 0,
         bytesConcat: "",
     }
-    let notSkippedBytesCount = settings.parcelSkip * 2;
+    let notSkippedBytesCount = settings.bytesSkip;
     let currentAddress = -1;
 
     try {
@@ -84,7 +81,7 @@ export function inputParser(input: string, settings: InputSettings): Input {
                     }
                 }
                 if (result.startAddress === 0) {
-                    result.startAddress = address + settings.parcelSkip;
+                    result.startAddress = address + settings.bytesSkip;
                     if (currentAddress === -1) {
                         currentAddress = result.startAddress
                     } else {
@@ -160,7 +157,6 @@ export function inputParser(input: string, settings: InputSettings): Input {
             message: (error as object).toString()
         }
     }
-    // TODO
     /*
     Преобразует пользовательский инпут в соответствии с настройками.
     Заметки:
