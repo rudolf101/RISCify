@@ -39,7 +39,12 @@ const convertBits = (
   if (display === "bin") {
     spaced = Array.from(text.matchAll(/.{8}/g)).map((res, i) =>
       Array.from(res[0]).map((e, j) => (
-        <span key={i * 8 + j} className={spanSet.has(i * 8 + j) ? "selected" : ""}>{e}</span>
+        <span
+          key={i * 8 + j}
+          className={spanSet.has(i * 8 + j) ? "selected" : ""}
+        >
+          {e}
+        </span>
       ))
     );
   } else {
@@ -130,6 +135,8 @@ const Code = (props: {
               </React.Fragment>
             );
           }
+          const jumpIdx =
+            someInst.jump.label === "within" ? someInst.jump.argIndex : -1;
 
           return (
             <React.Fragment key={i}>
@@ -138,24 +145,26 @@ const Code = (props: {
               </div>
               <div className={isGlobalSpanning()}>
                 {someInst.args
-                  .flatMap((arg, j) => (
-                    <React.Fragment key={j}>
-                      <span
-                        className={`${argumentType(arg)} ${isCurrent(i, j)}`}
-                        onMouseEnter={setCurrentCallback(i, j, arg)}
-                        onMouseLeave={resetCurrent}
-                      >
-                        {arg.textual}
-                      </span>
-                      <span
-                        className={isCurrent(i, j)}
-                        onMouseEnter={setCurrentCallback(i, j, arg)}
-                        onMouseLeave={resetCurrent}
-                      >
-                        {", "}
-                      </span>
-                    </React.Fragment>
-                  ))
+                  .flatMap((arg, j) => [
+                    <span
+                      key={j * 2}
+                      className={`${
+                        j === jumpIdx ? "jump" : argumentType(arg)
+                      } ${isCurrent(i, j)}`}
+                      onMouseEnter={setCurrentCallback(i, j, arg)}
+                      onMouseLeave={resetCurrent}
+                    >
+                      {arg.textual}
+                    </span>,
+                    <span
+                      key={j * 2 + 1}
+                      className={isCurrent(i, j)}
+                      onMouseEnter={setCurrentCallback(i, j, arg)}
+                      onMouseLeave={resetCurrent}
+                    >
+                      {", "}
+                    </span>,
+                  ])
                   .slice(0, -1)}
               </div>
             </React.Fragment>
