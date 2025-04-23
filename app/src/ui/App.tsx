@@ -68,10 +68,14 @@ const argumentType = (arg: Argument) => {
   return "entity";
 };
 
+const convertJump = (offset: number, jumpOffset: number, jumpStyle: Jump) =>
+  jumpStyle === "relative" ? jumpOffset : offset + jumpOffset;
+
 const Code = (props: {
   instructions: SimilarInstructions[];
   display: Display;
   order: InputOrder;
+  jump: Jump;
 }) => {
   const [current, setCurrent] = useState<{
     span: Span;
@@ -154,7 +158,13 @@ const Code = (props: {
                       onMouseEnter={setCurrentCallback(i, j, arg)}
                       onMouseLeave={resetCurrent}
                     >
-                      {arg.textual}
+                      {j === jumpIdx
+                        ? convertJump(
+                            inst.chunk.address,
+                            arg.numerical,
+                            props.jump
+                          )
+                        : arg.textual}
                     </span>,
                     <span
                       key={j * 2 + 1}
@@ -198,7 +208,6 @@ const Switch = <T,>(props: {
 };
 
 const App = () => {
-  // "0010031302b3566300331e1301c50e33ff8e3e83000e3f0301df58630010029301de3023ffee3c2300130313fd9ff06ffc0296e300008067"
   const [sourceCode, setSourceCode] = useState("");
   const [byteOrder, setByteOrder] = useState(InputOrder.BYTE_ORDER_BE);
   const [parcelSkip, setParcelSkip] = useState(0);
@@ -335,6 +344,7 @@ const App = () => {
           instructions={disassemblerResult.result}
           display={display}
           order={byteOrder}
+          jump={jump}
         />
       )}
     </div>
