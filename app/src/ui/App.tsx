@@ -39,15 +39,15 @@ const convertBits = (
   if (display === "bin") {
     spaced = Array.from(text.matchAll(/.{8}/g)).map((res, i) =>
       Array.from(res[0]).map((e, j) => (
-        <span className={spanSet.has(i * 8 + j) ? "selected" : ""}>{e}</span>
+        <span key={i * 8 + j} className={spanSet.has(i * 8 + j) ? "selected" : ""}>{e}</span>
       ))
     );
   } else {
     const num = BigInt("0b" + text);
     const hex = num.toString(16);
     const paddedHex = hex.padStart(text.length / 4, "0");
-    spaced = Array.from(paddedHex.matchAll(/.{2}/g)).map((res) =>
-      Array.from(res[0]).map((e) => <span>{e}</span>)
+    spaced = Array.from(paddedHex.matchAll(/.{2}/g)).map((res, j) =>
+      Array.from(res[0]).map((e, i) => <span key={i * 8 + j}>{e}</span>)
     );
   }
   if (order === InputOrder.BYTE_ORDER_LE) {
@@ -73,7 +73,7 @@ const Code = (props: {
     i: number;
     j: number;
   } | null>(null);
-  
+
   const isCurrent = (i: number, j: number) =>
     current && current.i === i && current.j === j ? "selected" : "";
   const isGlobalSpanning = () =>
@@ -99,12 +99,17 @@ const Code = (props: {
       <div className="arrows">{/* TODO: Add arrows for jumps */}</div>
       <div className="offsets">
         {props.instructions.map((inst) => (
-          <span>0x{inst.chunk.address.toString(16).padStart(4, "0")}</span>
+          <span key={inst.chunk.address}>
+            0x{inst.chunk.address.toString(16).padStart(4, "0")}
+          </span>
         ))}
       </div>
       <div className="encoded">
         {props.instructions.map((inst, i) => (
-          <span className={`${isGlobalSpanning()} ${isSelected(i)}`}>
+          <span
+            key={inst.chunk.address}
+            className={`${isGlobalSpanning()} ${isSelected(i)}`}
+          >
             {convertBits(
               inst.chunk.bits,
               props.display,
@@ -133,23 +138,24 @@ const Code = (props: {
               </div>
               <div className={isGlobalSpanning()}>
                 {someInst.args
-                  .flatMap((arg, j) => [
-                    <span
-                      key={j}
-                      className={`${argumentType(arg)} ${isCurrent(i, j)}`}
-                      onMouseEnter={setCurrentCallback(i, j, arg)}
-                      onMouseLeave={resetCurrent}
-                    >
-                      {arg.textual}
-                    </span>,
-                    <span
-                      className={isCurrent(i, j)}
-                      onMouseEnter={setCurrentCallback(i, j, arg)}
-                      onMouseLeave={resetCurrent}
-                    >
-                      {", "}
-                    </span>,
-                  ])
+                  .flatMap((arg, j) => (
+                    <React.Fragment key={j}>
+                      <span
+                        className={`${argumentType(arg)} ${isCurrent(i, j)}`}
+                        onMouseEnter={setCurrentCallback(i, j, arg)}
+                        onMouseLeave={resetCurrent}
+                      >
+                        {arg.textual}
+                      </span>
+                      <span
+                        className={isCurrent(i, j)}
+                        onMouseEnter={setCurrentCallback(i, j, arg)}
+                        onMouseLeave={resetCurrent}
+                      >
+                        {", "}
+                      </span>
+                    </React.Fragment>
+                  ))
                   .slice(0, -1)}
               </div>
             </React.Fragment>
