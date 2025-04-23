@@ -1,6 +1,6 @@
 import "./App.css";
 import { Bits } from "../kernel/Bits";
-import performDisassemble from "../kernel/Kernel";
+import performDisassemble, { DisassembleOutput } from "../kernel/Kernel";
 
 import { InputOrder } from "../kernel/InputParser";
 import { BitDepth } from "../kernel/InstructionDescription";
@@ -73,8 +73,7 @@ const Code = (props: {
     i: number;
     j: number;
   } | null>(null);
-  console.log(props.instructions);
-  console.log(current);
+  
   const isCurrent = (i: number, j: number) =>
     current && current.i === i && current.j === j ? "selected" : "";
   const isGlobalSpanning = () =>
@@ -191,16 +190,26 @@ const App = () => {
   const [bitDepth, setBitDepth] = useState(BitDepth.BIT_32);
   const [display, setDisplay] = useState<Display>("hex");
   const [jump, setJump] = useState<Jump>("relative");
-  let disassemblerResult = performDisassemble(
-    sourceCode,
-    {
-      order: byteOrder,
-      parcelSkip: parcelSkip,
-    },
-    {
-      bitDepth: bitDepth,
-    }
-  );
+  const [disassemblerResult, setDisassemblerResult] =
+    useState<DisassembleOutput>({
+      valid: "valid",
+      result: [],
+    });
+
+  useEffect(() => {
+    const result = performDisassemble(
+      sourceCode,
+      {
+        order: byteOrder,
+        parcelSkip: parcelSkip,
+      },
+      {
+        bitDepth: bitDepth,
+      }
+    );
+    setDisassemblerResult(result);
+    console.log(result);
+  }, [sourceCode, byteOrder, parcelSkip, bitDepth]);
 
   useEffect(() => {
     const handler = (e: ClipboardEvent) => {
