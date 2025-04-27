@@ -15,7 +15,7 @@ describe("adjuster", () => {
 
     test("smoke with one j", () => {
         const result = performDisassemble(`6f f0 5f fe`,
-            {order: InputOrder.BYTE_ORDER_LE, parcelSkip: 0},
+            {order: InputOrder.BYTE_ORDER_LE, bytesSkip: 0},
             {bitDepth: BitDepth.BIT_32}
         ) as DisassembleOutputValid
         expect(result.valid).toEqual("valid")
@@ -27,7 +27,7 @@ describe("adjuster", () => {
         const result = performDisassemble(`
 13 00 00 00
 0b 00 00 00`,
-            {order: InputOrder.BYTE_ORDER_LE, parcelSkip: 0},
+            {order: InputOrder.BYTE_ORDER_LE, bytesSkip: 0},
             {bitDepth: BitDepth.BIT_32}
         ) as DisassembleOutputValid
         expect(result.valid).toEqual("valid")
@@ -39,7 +39,7 @@ describe("adjuster", () => {
         const result = performDisassemble(`
 13 00 00 00
 6f f0 ff ff`,
-            {order: InputOrder.BYTE_ORDER_LE, parcelSkip: 0},
+            {order: InputOrder.BYTE_ORDER_LE, bytesSkip: 0},
             {bitDepth: BitDepth.BIT_32}
         ) as DisassembleOutputValid
         expect(result.valid).toEqual("valid")
@@ -51,7 +51,7 @@ describe("adjuster", () => {
         const result = performDisassemble(`
 6f 00 60 00
 13 00 00 00`,
-            {order: InputOrder.BYTE_ORDER_LE, parcelSkip: 0},
+            {order: InputOrder.BYTE_ORDER_LE, bytesSkip: 0},
             {bitDepth: BitDepth.BIT_32}
         ) as DisassembleOutputValid
         expect(result.valid).toEqual("valid")
@@ -62,7 +62,7 @@ describe("adjuster", () => {
     test("smoke with out jump", () => {
         const result = performDisassemble(`
 e7 00 05 00`,
-            {order: InputOrder.BYTE_ORDER_LE, parcelSkip: 0},
+            {order: InputOrder.BYTE_ORDER_LE, bytesSkip: 0},
             {bitDepth: BitDepth.BIT_32}
         ) as DisassembleOutputValid
         expect(result.valid).toEqual("valid")
@@ -74,7 +74,7 @@ e7 00 05 00`,
         const result = performDisassemble(`
 13 00 00 00
 6f f0 5f fe`,
-            {order: InputOrder.BYTE_ORDER_LE, parcelSkip: 0},
+            {order: InputOrder.BYTE_ORDER_LE, bytesSkip: 0},
             {bitDepth: BitDepth.BIT_32}
         ) as DisassembleOutputValid
         expect(result.valid).toEqual("valid")
@@ -86,7 +86,7 @@ e7 00 05 00`,
         const result = performDisassemble(`
 6f 00 a0 00
 13 00 00 00`,
-            {order: InputOrder.BYTE_ORDER_LE, parcelSkip: 0},
+            {order: InputOrder.BYTE_ORDER_LE, bytesSkip: 0},
             {bitDepth: BitDepth.BIT_32}
         ) as DisassembleOutputValid
         expect(result.valid).toEqual("valid")
@@ -108,7 +108,7 @@ b3 e2 62 00
 6f f0 5f fe
 13 85 02 00
 `,
-            {order: InputOrder.BYTE_ORDER_LE, parcelSkip: 0},
+            {order: InputOrder.BYTE_ORDER_LE, bytesSkip: 0},
             {bitDepth: BitDepth.BIT_32}
         ) as DisassembleOutputValid
         expect(result.valid).toEqual("valid")

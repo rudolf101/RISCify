@@ -210,7 +210,7 @@ const Switch = <T,>(props: {
 const App = () => {
   const [sourceCode, setSourceCode] = useState("");
   const [byteOrder, setByteOrder] = useState(InputOrder.BYTE_ORDER_BE);
-  const [parcelSkip, setParcelSkip] = useState(0);
+  const [bytesSkip, setBytesSkip] = useState(0);
   const [bitDepth, setBitDepth] = useState(BitDepth.BIT_32);
   const [display, setDisplay] = useState<Display>("hex");
   const [jump, setJump] = useState<Jump>("relative");
@@ -225,7 +225,7 @@ const App = () => {
       sourceCode,
       {
         order: byteOrder,
-        parcelSkip: parcelSkip,
+        bytesSkip: bytesSkip,
       },
       {
         bitDepth: bitDepth,
@@ -233,7 +233,7 @@ const App = () => {
     );
     setDisassemblerResult(result);
     console.log(result);
-  }, [sourceCode, byteOrder, parcelSkip, bitDepth]);
+  }, [sourceCode, byteOrder, bytesSkip, bitDepth]);
 
   useEffect(() => {
     const handler = (e: ClipboardEvent) => {
@@ -263,18 +263,18 @@ const App = () => {
           />
         </div>
         <div className="tool">
-          <span>SKIP PARCELS</span>
+          <span>SKIP BYTES</span>
           <input
             type="number"
-            value={parcelSkip}
+            value={bytesSkip}
             onChange={(e) => {
               if (e.currentTarget.value.trim().length === 0) {
-                setParcelSkip(0);
+                setBytesSkip(0);
                 return;
               }
               const value = e.currentTarget.valueAsNumber;
               if (isFinite(value) && value >= 0) {
-                setParcelSkip(value | 0);
+                setBytesSkip(value | 0);
               }
             }}
           />

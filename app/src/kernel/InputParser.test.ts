@@ -2,7 +2,7 @@ import {InputOrder, inputParser} from "./InputParser";
 
 describe("inputParser", () => {
     test("empty", () => {
-        expect(inputParser("", {order: InputOrder.BYTE_ORDER_LE, parcelSkip: 0})).toEqual({
+        expect(inputParser("", {order: InputOrder.BYTE_ORDER_LE, bytesSkip: 0})).toEqual({
             valid: "valid",
             startAddress: 0,
             bytesConcat: ""
@@ -13,10 +13,10 @@ describe("inputParser", () => {
     test("simple example", () => {
         expect(inputParser("0x0010: 01234567", {
             order: InputOrder.BYTE_ORDER_BE,
-            parcelSkip: 0
+            bytesSkip: 0
         })).toEqual({
             valid: "valid",
-            startAddress: 16,
+            startAddress: 0x10,
             bytesConcat: ["10000000", "11000100", "10100010", "11100110"].join("")
         });
     });
@@ -24,10 +24,10 @@ describe("inputParser", () => {
     test("simple example with LE", () => {
         expect(inputParser("0x0010: 01234567", {
             order: InputOrder.BYTE_ORDER_LE,
-            parcelSkip: 0
+            bytesSkip: 0
         })).toEqual({
             valid: "valid",
-            startAddress: 16,
+            startAddress: 0x10,
             bytesConcat: ["11100110", "10100010", "11000100", "10000000"].join("")
         });
     });
@@ -35,10 +35,10 @@ describe("inputParser", () => {
     test("simple example2", () => {
         expect(inputParser("0x0014: 09abcdef", {
             order: InputOrder.BYTE_ORDER_BE,
-            parcelSkip: 0
+            bytesSkip: 0
         })).toEqual({
             valid: "valid",
-            startAddress: 20,
+            startAddress: 0x14,
             bytesConcat: ["10010000", "11010101", "10110011", "11110111"].join("")
         });
     });
@@ -46,10 +46,10 @@ describe("inputParser", () => {
     test("simple example2 with upper case", () => {
         expect(inputParser("0x0014: 09ABCDEF", {
             order: InputOrder.BYTE_ORDER_BE,
-            parcelSkip: 0
+            bytesSkip: 0
         })).toEqual({
             valid: "valid",
-            startAddress: 20,
+            startAddress: 0x14,
             bytesConcat: ["10010000", "11010101", "10110011", "11110111"].join("")
         });
     });
@@ -57,10 +57,10 @@ describe("inputParser", () => {
     test("simple example3", () => {
         expect(inputParser("0x0010: 01234567\n0x0014: 09abcdef", {
             order: InputOrder.BYTE_ORDER_BE,
-            parcelSkip: 0
+            bytesSkip: 0
         })).toEqual({
             valid: "valid",
-            startAddress: 16,
+            startAddress: 0x10,
             bytesConcat: [
                 "10000000", "11000100", "10100010", "11100110",
                 "10010000", "11010101", "10110011", "11110111"
@@ -71,10 +71,10 @@ describe("inputParser", () => {
     test("simple example4", () => {
         expect(inputParser("0x0010: 0a1b2c3d 4e5f", {
             order: InputOrder.BYTE_ORDER_BE,
-            parcelSkip: 0
+            bytesSkip: 0
         })).toEqual({
             valid: "valid",
-            startAddress: 16,
+            startAddress: 0x10,
             bytesConcat: [
                 "01010000", "11011000", "00110100", "10111100",
                 "01110010", "11111010"
@@ -85,10 +85,10 @@ describe("inputParser", () => {
     test("simple example4 with LE", () => {
         expect(inputParser("0x0010: 0a1b2c3d 4e5f", {
             order: InputOrder.BYTE_ORDER_LE,
-            parcelSkip: 0
+            bytesSkip: 0
         })).toEqual({
             valid: "valid",
-            startAddress: 16,
+            startAddress: 0x10,
             bytesConcat: [
                 "10111100", "00110100", "11011000", "01010000",
                 "11111010", "01110010"
@@ -99,21 +99,32 @@ describe("inputParser", () => {
     test("without 0x", () => {
         expect(inputParser("0010: 09abcdef", {
             order: InputOrder.BYTE_ORDER_BE,
-            parcelSkip: 0
+            bytesSkip: 0
         })).toEqual({
             valid: "valid",
-            startAddress: 16,
+            startAddress: 0x10,
             bytesConcat: ["10010000", "11010101", "10110011", "11110111"].join("")
+        });
+    });
+
+    test("byte skip", () => {
+        expect(inputParser("0x0014: 09abcdef", {
+            order: InputOrder.BYTE_ORDER_BE,
+            bytesSkip: 1
+        })).toEqual({
+            valid: "valid",
+            startAddress: 0x15,
+            bytesConcat: ["11010101", "10110011", "11110111"].join("")
         });
     });
 
     test("parcel skip", () => {
         expect(inputParser("0x0014: 09abcdef", {
             order: InputOrder.BYTE_ORDER_BE,
-            parcelSkip: 1
+            bytesSkip: 2
         })).toEqual({
             valid: "valid",
-            startAddress: 21,
+            startAddress: 0x16,
             bytesConcat: ["10110011", "11110111"].join("")
         });
     });
@@ -121,10 +132,10 @@ describe("inputParser", () => {
     test("parcel skip with LE", () => {
         expect(inputParser("0x0014: 09abcdef", {
             order: InputOrder.BYTE_ORDER_LE,
-            parcelSkip: 1
+            bytesSkip: 2
         })).toEqual({
             valid: "valid",
-            startAddress: 21,
+            startAddress: 0x16,
             bytesConcat: ["11010101", "10010000"].join("")
         });
     });
@@ -132,10 +143,10 @@ describe("inputParser", () => {
     test("2 parcel skip", () => {
         expect(inputParser("0x0014: 09abcdef", {
             order: InputOrder.BYTE_ORDER_BE,
-            parcelSkip: 2
+            bytesSkip: 4
         })).toEqual({
             valid: "valid",
-            startAddress: 22,
+            startAddress: 0x18,
             bytesConcat: ""
         });
     });
@@ -143,10 +154,10 @@ describe("inputParser", () => {
     test("2 parcel skip with LE", () => {
         expect(inputParser("0x0014: 09abcdef", {
             order: InputOrder.BYTE_ORDER_LE,
-            parcelSkip: 2
+            bytesSkip: 4
         })).toEqual({
             valid: "valid",
-            startAddress: 22,
+            startAddress: 0x18,
             bytesConcat: ""
         });
     });
@@ -155,21 +166,21 @@ describe("inputParser", () => {
     test("bad input", () => {
         expect(inputParser("0x0014: a", {
             order: InputOrder.BYTE_ORDER_BE,
-            parcelSkip: 0
+            bytesSkip: 0
         }).valid).toEqual("invalid");
     });
 
     test("bad input2", () => {
         expect(inputParser(": 09abcdef", {
             order: InputOrder.BYTE_ORDER_BE,
-            parcelSkip: 0
+            bytesSkip: 0
         }).valid).toEqual("invalid");
     });
 
     test("bad input: bad addresses", () => {
         expect(inputParser("0x0010: 09abcdef 0x0012: 09abcdef", {
             order: InputOrder.BYTE_ORDER_BE,
-            parcelSkip: 0
+            bytesSkip: 0
         }).valid).toEqual("invalid");
     });
 
@@ -181,7 +192,7 @@ describe("inputParser", () => {
 0x0000003f91b1a02e:   20 69 9c 60 b3 04 f5 40 97 60 e4 ff e7 80 20 6a
 `, {
             order: InputOrder.BYTE_ORDER_BE,
-            parcelSkip: 0
+            bytesSkip: 0
         }).valid).toEqual("valid");
     });
 });
