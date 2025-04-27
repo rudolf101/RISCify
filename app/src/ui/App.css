@@ -76,6 +76,10 @@
   color: var(--color-constant);
 }
 
+.decoded span.jump {
+  color: var(--color-special);
+}
+
 .spanning span:not(.selected),
 .mnemonic.spanning {
   color: var(--color-comment);

@@ -1,6 +1,6 @@
 import "./App.css";
 import { Bits } from "../kernel/Bits";
-import performDisassemble from "../kernel/Kernel";
+import performDisassemble, { DisassembleOutput } from "../kernel/Kernel";
 
 import { InputOrder } from "../kernel/InputParser";
 import { BitDepth } from "../kernel/InstructionDescription";
@@ -23,6 +23,7 @@ const Message = (props: { header: string; text: string; error?: boolean }) => {
 };
 
 type Display = "hex" | "bin";
+type Jump = "relative" | "absolute";
 
 const convertBits = (
   bits: Bits,
@@ -38,15 +39,20 @@ const convertBits = (
   if (display === "bin") {
     spaced = Array.from(text.matchAll(/.{8}/g)).map((res, i) =>
       Array.from(res[0]).map((e, j) => (
-        <span className={spanSet.has(i * 8 + j) ? "selected" : ""}>{e}</span>
+        <span
+          key={i * 8 + j}
+          className={spanSet.has(i * 8 + j) ? "selected" : ""}
+        >
+          {e}
+        </span>
       ))
     );
   } else {
     const num = BigInt("0b" + text);
     const hex = num.toString(16);
     const paddedHex = hex.padStart(text.length / 4, "0");
-    spaced = Array.from(paddedHex.matchAll(/.{2}/g)).map((res) =>
-      Array.from(res[0]).map((e) => <span>{e}</span>)
+    spaced = Array.from(paddedHex.matchAll(/.{2}/g)).map((res, j) =>
+      Array.from(res[0]).map((e, i) => <span key={i * 8 + j}>{e}</span>)
     );
   }
   if (order === InputOrder.BYTE_ORDER_LE) {
@@ -62,18 +68,21 @@ const argumentType = (arg: Argument) => {
   return "entity";
 };
 
+const convertJump = (offset: number, jumpOffset: number, jumpStyle: Jump) =>
+  jumpStyle === "relative" ? jumpOffset : offset + jumpOffset;
+
 const Code = (props: {
   instructions: SimilarInstructions[];
   display: Display;
   order: InputOrder;
+  jump: Jump;
 }) => {
   const [current, setCurrent] = useState<{
     span: Span;
     i: number;
     j: number;
   } | null>(null);
-  console.log(props.instructions);
-  console.log(current);
+
   const isCurrent = (i: number, j: number) =>
     current && current.i === i && current.j === j ? "selected" : "";
   const isGlobalSpanning = () =>
@@ -99,12 +108,17 @@ const Code = (props: {
       <div className="arrows">{/* TODO: Add arrows for jumps */}</div>
       <div className="offsets">
         {props.instructions.map((inst) => (
-          <span>0x{inst.chunk.address.toString(16).padStart(4, "0")}</span>
+          <span key={inst.chunk.address}>
+            0x{inst.chunk.address.toString(16).padStart(4, "0")}
+          </span>
         ))}
       </div>
       <div className="encoded">
         {props.instructions.map((inst, i) => (
-          <span className={`${isGlobalSpanning()} ${isSelected(i)}`}>
+          <span
+            key={inst.chunk.address}
+            className={`${isGlobalSpanning()} ${isSelected(i)}`}
+          >
             {convertBits(
               inst.chunk.bits,
               props.display,
@@ -125,6 +139,8 @@ const Code = (props: {
               </React.Fragment>
             );
           }
+          const jumpIdx =
+            someInst.jump.label === "within" ? someInst.jump.argIndex : -1;
 
           return (
             <React.Fragment key={i}>
@@ -135,14 +151,23 @@ const Code = (props: {
                 {someInst.args
                   .flatMap((arg, j) => [
                     <span
-                      key={j}
-                      className={`${argumentType(arg)} ${isCurrent(i, j)}`}
+                      key={j * 2}
+                      className={`${
+                        j === jumpIdx ? "jump" : argumentType(arg)
+                      } ${isCurrent(i, j)}`}
                       onMouseEnter={setCurrentCallback(i, j, arg)}
                       onMouseLeave={resetCurrent}
                     >
-                      {arg.textual}
+                      {j === jumpIdx
+                        ? convertJump(
+                            inst.chunk.address,
+                            arg.numerical,
+                            props.jump
+                          )
+                        : arg.textual}
                     </span>,
                     <span
+                      key={j * 2 + 1}
                       className={isCurrent(i, j)}
                       onMouseEnter={setCurrentCallback(i, j, arg)}
                       onMouseLeave={resetCurrent}
@@ -183,22 +208,32 @@ const Switch = <T,>(props: {
 };
 
 const App = () => {
-  // "0010031302b3566300331e1301c50e33ff8e3e83000e3f0301df58630010029301de3023ffee3c2300130313fd9ff06ffc0296e300008067"
   const [sourceCode, setSourceCode] = useState("");
   const [byteOrder, setByteOrder] = useState(InputOrder.BYTE_ORDER_BE);
   const [parcelSkip, setParcelSkip] = useState(0);
   const [bitDepth, setBitDepth] = useState(BitDepth.BIT_32);
   const [display, setDisplay] = useState<Display>("hex");
-  let disassemblerResult = performDisassemble(
-    sourceCode,
-    {
-      order: byteOrder,
-      parcelSkip: parcelSkip,
-    },
-    {
-      bitDepth: bitDepth,
-    }
-  );
+  const [jump, setJump] = useState<Jump>("relative");
+  const [disassemblerResult, setDisassemblerResult] =
+    useState<DisassembleOutput>({
+      valid: "valid",
+      result: [],
+    });
+
+  useEffect(() => {
+    const result = performDisassemble(
+      sourceCode,
+      {
+        order: byteOrder,
+        parcelSkip: parcelSkip,
+      },
+      {
+        bitDepth: bitDepth,
+      }
+    );
+    setDisassemblerResult(result);
+    console.log(result);
+  }, [sourceCode, byteOrder, parcelSkip, bitDepth]);
 
   useEffect(() => {
     const handler = (e: ClipboardEvent) => {
@@ -278,6 +313,23 @@ const App = () => {
             onChange={setDisplay}
           />
         </div>
+        <div className="tool">
+          <span>JUMP STYLE</span>
+          <Switch
+            cases={[
+              {
+                text: "REL",
+                value: "relative" as const,
+              },
+              {
+                text: "ABS",
+                value: "absolute" as const,
+              },
+            ]}
+            value={jump}
+            onChange={setJump}
+          />
+        </div>
       </div>
       {sourceCode.length === 0 ? (
         <Message header="PASTE CODE" text="CTRL + V" />
@@ -292,6 +344,7 @@ const App = () => {
           instructions={disassemblerResult.result}
           display={display}
           order={byteOrder}
+          jump={jump}
         />
       )}
     </div>
