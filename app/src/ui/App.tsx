@@ -55,7 +55,7 @@ const convertBits = (
       Array.from(res[0]).map((e, i) => <span key={i * 8 + j}>{e}</span>)
     );
   }
-  if (order === InputOrder.BYTE_ORDER_LE) {
+  if (order === InputOrder.BYTE_ORDER_BE) {
     spaced.reverse();
   }
   return spaced.flatMap((e) => e.concat([" "])).slice(0, -1);
