@@ -4,7 +4,12 @@
   "description": "In-browser RISC-V disassembler",
   "icons": [
     {
-      "src": "favicon.svg",
+      "src": "favicon-light.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    },
+    {
+      "src": "favicon-dark.svg",
       "sizes": "any",
       "type": "image/svg+xml"
     }
