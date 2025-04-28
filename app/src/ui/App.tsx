@@ -71,6 +71,10 @@ const argumentType = (arg: Argument) => {
 const convertJump = (offset: number, jumpOffset: number, jumpStyle: Jump) =>
   jumpStyle === "relative" ? jumpOffset : offset + jumpOffset;
 
+const Arrows = (props: { instructions: SimilarInstructions[] }) => {
+  return <svg></svg>;
+};
+
 const Code = (props: {
   instructions: SimilarInstructions[];
   display: Display;
@@ -105,7 +109,9 @@ const Code = (props: {
       className={`code ${isGlobalSpanning()}`}
       style={{ gridTemplateRows: `repeat(${props.instructions.length}, auto)` }}
     >
-      <div className="arrows">{/* TODO: Add arrows for jumps */}</div>
+      <div className="arrows">
+        <Arrows instructions={props.instructions} />
+      </div>
       <div className="offsets">
         {props.instructions.map((inst) => (
           <span key={inst.chunk.address}>
