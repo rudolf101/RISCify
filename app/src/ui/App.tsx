@@ -72,7 +72,23 @@ const convertJump = (offset: number, jumpOffset: number, jumpStyle: Jump) =>
   jumpStyle === "relative" ? jumpOffset : offset + jumpOffset;
 
 const Arrows = (props: { instructions: SimilarInstructions[] }) => {
-  return <svg></svg>;
+  const fontSize = parseInt(window.getComputedStyle(document.body)["fontSize"]);
+  const lineHeight = 1.3;
+  const height = fontSize * lineHeight * props.instructions.length;
+  const width = 100;
+  return (
+    <svg
+      className="arrows"
+      viewBox={`0 0 ${width} ${height}`}
+      style={{ width: `${width}px`, height: `${height}px` }}
+    >
+      <polyline
+        fill="red"
+        stroke="red"
+        points={`0,0 10,10`}
+      />
+    </svg>
+  );
 };
 
 const Code = (props: {
@@ -109,9 +125,7 @@ const Code = (props: {
       className={`code ${isGlobalSpanning()}`}
       style={{ gridTemplateRows: `repeat(${props.instructions.length}, auto)` }}
     >
-      <div className="arrows">
-        <Arrows instructions={props.instructions} />
-      </div>
+      <Arrows instructions={props.instructions} />
       <div className="offsets">
         {props.instructions.map((inst) => (
           <span key={inst.chunk.address}>
