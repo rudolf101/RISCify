@@ -71,9 +71,41 @@ const argumentType = (arg: Argument) => {
 const convertJump = (offset: number, jumpOffset: number, jumpStyle: Jump) =>
   jumpStyle === "relative" ? jumpOffset : offset + jumpOffset;
 
-// TODO: Pack jumps
-const packJumps = (jumps: [number, number][]): [number, number, number][] =>
-  jumps.map((j) => [j[0], j[1], 1] as [number, number, number]);
+const packJumps = (jumps: [number, number][]): [number, number, number][] => {
+  const sortedJumps = jumps.sort((j1, j2) => {
+    const d1 = Math.abs(j1[0] - j1[1]);
+    const d2 = Math.abs(j2[0] - j2[1]);
+    if (d1 < d2) {
+      return -1;
+    }
+    if (d2 < d1) {
+      return 1;
+    }
+    return j1[0] - j2[0];
+  });
+  const result: [number, number, number][] = new Array(jumps.length);
+  const levels: number[] = [0];
+  for (const [i, [from, to]] of sortedJumps.entries()) {
+    const dist = Math.abs(from - to);
+    let currentLevel = 0;
+    for (const [i, level] of levels.entries()) {
+      if (level <= 0) {
+        levels[i] = dist;
+        currentLevel = i + 1;
+        break;
+      }
+    }
+    if (currentLevel === 0) {
+      levels.push(dist);
+      currentLevel = levels.length;
+    }
+    result[i] = [from, to, currentLevel];
+    levels.forEach((_, i) => {
+      levels[i]--;
+    });
+  }
+  return result;
+};
 
 const Arrows = (props: { instructions: SimilarInstructions[] }) => {
   const fontSize = parseInt(window.getComputedStyle(document.body)["fontSize"]);
