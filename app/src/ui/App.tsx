@@ -71,22 +71,49 @@ const argumentType = (arg: Argument) => {
 const convertJump = (offset: number, jumpOffset: number, jumpStyle: Jump) =>
   jumpStyle === "relative" ? jumpOffset : offset + jumpOffset;
 
+// TODO: Pack jumps
+const packJumps = (jumps: [number, number][]): [number, number, number][] =>
+  jumps.map((j) => [j[0], j[1], 1] as [number, number, number]);
+
 const Arrows = (props: { instructions: SimilarInstructions[] }) => {
   const fontSize = parseInt(window.getComputedStyle(document.body)["fontSize"]);
-  const lineHeight = 1.3;
-  const height = fontSize * lineHeight * props.instructions.length;
+  const lineHeight = fontSize * 1.3;
+  const height = lineHeight * props.instructions.length;
   const width = 100;
+
+  const jumps = props.instructions.flatMap((e, i) => {
+    if (e.instructions.length < 1) {
+      return [];
+    }
+    const jump = e.instructions[0].actualJump;
+    if (jump.label === "concrete") {
+      return [[i, i + jump.distance] as [number, number]];
+    }
+    // TODO: Support between
+    return [];
+  });
+  const packedJumps = packJumps(jumps);
+  console.log(packedJumps);
+
   return (
     <svg
       className="arrows"
       viewBox={`0 0 ${width} ${height}`}
       style={{ width: `${width}px`, height: `${height}px` }}
     >
-      <polyline
-        fill="red"
-        stroke="red"
-        points={`0,0 10,10`}
-      />
+      {packedJumps.map((jump) => {
+        let x1 = width;
+        let x2 = width - fontSize * jump[2];
+        let y1 = jump[0] * lineHeight + lineHeight / 2;
+        let y2 = jump[1] * lineHeight + lineHeight / 2;
+        return (
+          <polyline
+            fill="none"
+            stroke="red"
+            points={`${x1},${y1} ${x2},${y1} ${x2},${y2} ${x1},${y2}`}
+          />
+        );
+      })}
     </svg>
   );
 };
