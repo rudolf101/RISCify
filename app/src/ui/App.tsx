@@ -133,15 +133,38 @@ const Arrows = (props: { instructions: SimilarInstructions[] }) => {
       viewBox={`0 0 ${width} ${height}`}
       style={{ width: `${width}px`, height: `${height}px` }}
     >
+      <defs>
+        <marker
+          id="head"
+          orient="auto"
+          markerUnits="userSpaceOnUse"
+          markerWidth="9"
+          markerHeight="16"
+          refX="8"
+          refY="8"
+        >
+          <polyline
+            strokeWidth="2"
+            points="1,1 8,8 1,15"
+            fill="none"
+            stroke="currentColor"
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          ></polyline>
+        </marker>
+      </defs>
       {packedJumps.map((jump) => {
-        let x1 = width;
-        let x2 = width - fontSize * jump[2];
+        let x1 = width - 1;
+        let x2 = x1 - fontSize * jump[2];
         let y1 = jump[0] * lineHeight + lineHeight / 2;
         let y2 = jump[1] * lineHeight + lineHeight / 2;
         return (
           <polyline
+            key={jump[0]}
             fill="none"
-            stroke="red"
+            strokeWidth={2}
+            stroke="currentColor"
+            markerEnd="url(#head)"
             points={`${x1},${y1} ${x2},${y1} ${x2},${y2} ${x1},${y2}`}
           />
         );
