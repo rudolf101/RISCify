@@ -68,8 +68,14 @@ const argumentType = (arg: Argument) => {
   return "entity";
 };
 
+const hexWithSign = (n: number) => {
+  const num = Math.abs(n).toString(16);
+  const sign = n >= 0 ? "" : "-";
+  const bytes = Math.ceil(num.length / 2) * 2;
+  return sign + `0x${num.padStart(bytes, "0")}`;
+};
 const convertJump = (offset: number, jumpOffset: number, jumpStyle: Jump) =>
-  jumpStyle === "relative" ? jumpOffset : offset + jumpOffset;
+  hexWithSign(jumpStyle === "relative" ? jumpOffset : offset + jumpOffset);
 
 const Code = (props: {
   instructions: SimilarInstructions[];
