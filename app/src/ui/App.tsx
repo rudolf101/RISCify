@@ -125,7 +125,7 @@ const Arrows = (props: { instructions: SimilarInstructions[] }) => {
     return [];
   });
   const packedJumps = packJumps(jumps);
-  console.log(packedJumps);
+  packedJumps.reverse();
 
   return (
     <svg
@@ -159,14 +159,21 @@ const Arrows = (props: { instructions: SimilarInstructions[] }) => {
         let y1 = jump[0] * lineHeight + lineHeight / 2;
         let y2 = jump[1] * lineHeight + lineHeight / 2;
         return (
-          <polyline
-            key={jump[0]}
-            fill="none"
-            strokeWidth={2}
-            stroke="currentColor"
-            markerEnd="url(#head)"
-            points={`${x1},${y1} ${x2},${y1} ${x2},${y2} ${x1},${y2}`}
-          />
+          <React.Fragment key={jump[0]}>
+            <polyline
+              fill="none"
+              strokeWidth={8}
+              stroke="var(--color-bg)"
+              points={`${x1},${y1} ${x2},${y1} ${x2},${y2} ${x1},${y2}`}
+            />
+            <polyline
+              fill="none"
+              strokeWidth={2}
+              stroke="currentColor"
+              markerEnd="url(#head)"
+              points={`${x1},${y1} ${x2},${y1} ${x2},${y2} ${x1},${y2}`}
+            />
+          </React.Fragment>
         );
       })}
     </svg>
