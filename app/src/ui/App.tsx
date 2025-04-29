@@ -71,21 +71,28 @@ const argumentType = (arg: Argument) => {
 const convertJump = (offset: number, jumpOffset: number, jumpStyle: Jump) =>
   jumpStyle === "relative" ? jumpOffset : offset + jumpOffset;
 
-const packJumps = (jumps: [number, number][]): [number, number, number][] => {
+type LocalJump = {
+  from: number;
+  to: number;
+};
+type LevelledJump = LocalJump & {
+  level: number;
+};
+const packJumps = (jumps: LocalJump[]): LevelledJump[] => {
   const sortedJumps = jumps.sort((j1, j2) => {
-    const d1 = Math.abs(j1[0] - j1[1]);
-    const d2 = Math.abs(j2[0] - j2[1]);
+    const d1 = Math.abs(j1.from - j1.to);
+    const d2 = Math.abs(j2.from - j2.to);
     if (d1 < d2) {
       return -1;
     }
     if (d2 < d1) {
       return 1;
     }
-    return j1[0] - j2[0];
+    return j1.from - j2.from;
   });
-  const result: [number, number, number][] = new Array(jumps.length);
+  const result: LevelledJump[] = new Array(jumps.length);
   const levels: number[] = [0];
-  for (const [i, [from, to]] of sortedJumps.entries()) {
+  for (const [i, { from, to }] of sortedJumps.entries()) {
     const dist = Math.abs(from - to);
     let currentLevel = 0;
     for (const [i, level] of levels.entries()) {
@@ -99,7 +106,7 @@ const packJumps = (jumps: [number, number][]): [number, number, number][] => {
       levels.push(dist);
       currentLevel = levels.length;
     }
-    result[i] = [from, to, currentLevel];
+    result[i] = { from, to, level: currentLevel };
     levels.forEach((_, i) => {
       levels[i]--;
     });
@@ -119,7 +126,7 @@ const Arrows = (props: { instructions: SimilarInstructions[] }) => {
     }
     const jump = e.instructions[0].actualJump;
     if (jump.label === "concrete") {
-      return [[i, i + jump.distance] as [number, number]];
+      return [{ from: i, to: i + jump.distance } as LocalJump];
     }
     // TODO: Support between
     return [];
@@ -155,11 +162,11 @@ const Arrows = (props: { instructions: SimilarInstructions[] }) => {
       </defs>
       {packedJumps.map((jump) => {
         let x1 = width - 1;
-        let x2 = x1 - fontSize * jump[2];
-        let y1 = jump[0] * lineHeight + lineHeight / 2;
-        let y2 = jump[1] * lineHeight + lineHeight / 2;
+        let x2 = x1 - fontSize * jump.level;
+        let y1 = jump.from * lineHeight + lineHeight / 2;
+        let y2 = jump.to * lineHeight + lineHeight / 2;
         return (
-          <React.Fragment key={jump[0]}>
+          <React.Fragment key={jump.from}>
             <polyline
               fill="none"
               strokeWidth={8}
