@@ -90,7 +90,7 @@ const packJumps = (jumps: [number, number][]): [number, number, number][] => {
     let currentLevel = 0;
     for (const [i, level] of levels.entries()) {
       if (level <= 0) {
-        levels[i] = dist;
+        levels[i] = dist + 2;
         currentLevel = i + 1;
         break;
       }
