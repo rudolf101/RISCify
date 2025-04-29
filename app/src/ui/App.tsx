@@ -77,6 +77,144 @@ const hexWithSign = (n: number) => {
 const convertJump = (offset: number, jumpOffset: number, jumpStyle: Jump) =>
   hexWithSign(jumpStyle === "relative" ? jumpOffset : offset + jumpOffset);
 
+type LocalJump = {
+  from: number;
+  to: number;
+  broken: boolean;
+};
+type LevelledJump = LocalJump & {
+  level: number;
+};
+const packJumps = (jumps: LocalJump[]): LevelledJump[] => {
+  const sortedJumps = jumps.sort((j1, j2) => {
+    const d1 = Math.abs(j1.from - j1.to);
+    const d2 = Math.abs(j2.from - j2.to);
+    if (d1 < d2) {
+      return -1;
+    }
+    if (d2 < d1) {
+      return 1;
+    }
+    return j1.from - j2.from;
+  });
+  const result: LevelledJump[] = new Array(jumps.length);
+  const levels: number[] = [0];
+  for (const [i, { from, to, broken }] of sortedJumps.entries()) {
+    const dist = Math.abs(from - to);
+    let currentLevel = 0;
+    for (const [i, level] of levels.entries()) {
+      if (level <= 0) {
+        levels[i] = dist + 2;
+        currentLevel = i + 1;
+        break;
+      }
+    }
+    if (currentLevel === 0) {
+      levels.push(dist);
+      currentLevel = levels.length;
+    }
+    result[i] = { from, to, broken, level: currentLevel };
+    levels.forEach((_, i) => {
+      levels[i]--;
+    });
+  }
+  return result;
+};
+
+const Arrows = (props: { instructions: SimilarInstructions[] }) => {
+  const fontSize = parseInt(window.getComputedStyle(document.body)["fontSize"]);
+  const lineHeight = fontSize * 1.3;
+  const height = lineHeight * props.instructions.length;
+  const width = 100;
+
+  const jumps = props.instructions.flatMap((e, i) => {
+    if (e.instructions.length < 1) {
+      return [];
+    }
+    const jump = e.instructions[0].actualJump;
+    if (jump.label === "concrete") {
+      return [{ from: i, to: i + jump.distance, broken: false }];
+    }
+    if (jump.label === "between") {
+      return [{ from: i, to: i + jump.distance, broken: true }];
+    }
+    return [];
+  });
+  const packedJumps = packJumps(jumps);
+  packedJumps.reverse();
+
+  return (
+    <svg
+      className="arrows"
+      viewBox={`0 0 ${width} ${height}`}
+      style={{ width: `${width}px`, height: `${height}px` }}
+    >
+      <defs>
+        <marker
+          id="head-green"
+          orient="auto"
+          markerUnits="userSpaceOnUse"
+          markerWidth="9"
+          markerHeight="16"
+          refX="8"
+          refY="8"
+        >
+          <polyline
+            strokeWidth="2"
+            points="1,1 8,8 1,15"
+            fill="none"
+            stroke={"currentColor"}
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          ></polyline>
+        </marker>
+        <marker
+          id="head-red"
+          orient="auto"
+          markerUnits="userSpaceOnUse"
+          markerWidth="9"
+          markerHeight="16"
+          refX="8"
+          refY="8"
+        >
+          <polyline
+            strokeWidth="2"
+            points="1,1 8,8 1,15"
+            fill="none"
+            stroke={"var(--color-dots)"}
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          ></polyline>
+        </marker>
+      </defs>
+      {packedJumps.map((jump) => {
+        let x1 = width - 1;
+        let x2 = x1 - fontSize * jump.level;
+        let y1 = jump.from * lineHeight + lineHeight / 2;
+        let y2 = jump.to * lineHeight + lineHeight / 2;
+        return (
+          <React.Fragment key={jump.from}>
+            <polyline
+              fill="none"
+              strokeWidth={8}
+              stroke="var(--color-bg)"
+              points={`${x1},${y1} ${x2},${y1} ${x2},${y2} ${x1},${y2}`}
+            />
+            <polyline
+              style={{ color: jump.broken ? "var(--color-dots)" : undefined }}
+              fill="none"
+              strokeWidth={2}
+              stroke="currentColor"
+              markerEnd={`url(${jump.broken ? "#head-red" : "#head-green"})`}
+              points={`${x1},${y1} ${x2},${y1} ${x2},${y2} ${x1},${y2}`}
+            />
+          </React.Fragment>
+        );
+      })}
+    </svg>
+  );
+};
+
 const Code = (props: {
   instructions: SimilarInstructions[];
   display: Display;
@@ -111,7 +249,7 @@ const Code = (props: {
       className={`code ${isGlobalSpanning()}`}
       style={{ gridTemplateRows: `repeat(${props.instructions.length}, auto)` }}
     >
-      <div className="arrows">{/* TODO: Add arrows for jumps */}</div>
+      <Arrows instructions={props.instructions} />
       <div className="offsets">
         {props.instructions.map((inst) => (
           <span key={inst.chunk.address}>
