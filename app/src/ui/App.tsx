@@ -74,6 +74,7 @@ const convertJump = (offset: number, jumpOffset: number, jumpStyle: Jump) =>
 type LocalJump = {
   from: number;
   to: number;
+  broken: boolean;
 };
 type LevelledJump = LocalJump & {
   level: number;
@@ -92,7 +93,7 @@ const packJumps = (jumps: LocalJump[]): LevelledJump[] => {
   });
   const result: LevelledJump[] = new Array(jumps.length);
   const levels: number[] = [0];
-  for (const [i, { from, to }] of sortedJumps.entries()) {
+  for (const [i, { from, to, broken }] of sortedJumps.entries()) {
     const dist = Math.abs(from - to);
     let currentLevel = 0;
     for (const [i, level] of levels.entries()) {
@@ -106,7 +107,7 @@ const packJumps = (jumps: LocalJump[]): LevelledJump[] => {
       levels.push(dist);
       currentLevel = levels.length;
     }
-    result[i] = { from, to, level: currentLevel };
+    result[i] = { from, to, broken, level: currentLevel };
     levels.forEach((_, i) => {
       levels[i]--;
     });
@@ -126,9 +127,11 @@ const Arrows = (props: { instructions: SimilarInstructions[] }) => {
     }
     const jump = e.instructions[0].actualJump;
     if (jump.label === "concrete") {
-      return [{ from: i, to: i + jump.distance } as LocalJump];
+      return [{ from: i, to: i + jump.distance, broken: false }];
     }
-    // TODO: Support between
+    if (jump.label === "between") {
+      return [{ from: i, to: i + jump.distance, broken: true }];
+    }
     return [];
   });
   const packedJumps = packJumps(jumps);
@@ -142,7 +145,7 @@ const Arrows = (props: { instructions: SimilarInstructions[] }) => {
     >
       <defs>
         <marker
-          id="head"
+          id="head-green"
           orient="auto"
           markerUnits="userSpaceOnUse"
           markerWidth="9"
@@ -154,7 +157,25 @@ const Arrows = (props: { instructions: SimilarInstructions[] }) => {
             strokeWidth="2"
             points="1,1 8,8 1,15"
             fill="none"
-            stroke="currentColor"
+            stroke={"currentColor"}
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          ></polyline>
+        </marker>
+        <marker
+          id="head-red"
+          orient="auto"
+          markerUnits="userSpaceOnUse"
+          markerWidth="9"
+          markerHeight="16"
+          refX="8"
+          refY="8"
+        >
+          <polyline
+            strokeWidth="2"
+            points="1,1 8,8 1,15"
+            fill="none"
+            stroke={"var(--color-dots)"}
             strokeLinejoin="round"
             strokeLinecap="round"
           ></polyline>
@@ -174,10 +195,11 @@ const Arrows = (props: { instructions: SimilarInstructions[] }) => {
               points={`${x1},${y1} ${x2},${y1} ${x2},${y2} ${x1},${y2}`}
             />
             <polyline
+              style={{ color: jump.broken ? "var(--color-dots)" : undefined }}
               fill="none"
               strokeWidth={2}
               stroke="currentColor"
-              markerEnd="url(#head)"
+              markerEnd={`url(${jump.broken ? "#head-red" : "#head-green"})`}
               points={`${x1},${y1} ${x2},${y1} ${x2},${y2} ${x1},${y2}`}
             />
           </React.Fragment>
