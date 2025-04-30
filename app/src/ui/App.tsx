@@ -121,7 +121,10 @@ const packJumps = (jumps: LocalJump[]): LevelledJump[] => {
   return result;
 };
 
-const Arrows = (props: { instructions: SimilarInstructions[] }) => {
+const Arrows = (props: {
+  instructions: SimilarInstructions[];
+  current?: number;
+}) => {
   const fontSize = parseInt(window.getComputedStyle(document.body)["fontSize"]);
   const lineHeight = fontSize * 1.3;
   const height = lineHeight * props.instructions.length;
@@ -142,6 +145,42 @@ const Arrows = (props: { instructions: SimilarInstructions[] }) => {
   });
   const packedJumps = packJumps(jumps);
   packedJumps.reverse();
+
+  const renderJump = (jump: LevelledJump) => {
+    let x1 = width - 1;
+    let x2 = x1 - fontSize * jump.level;
+    let y1 = jump.from * lineHeight + lineHeight / 2;
+    let y2 = jump.to * lineHeight + lineHeight / 2;
+    return (
+      <React.Fragment key={jump.from}>
+        <polyline
+          fill="none"
+          strokeWidth={8}
+          stroke="var(--color-bg)"
+          points={`${x1},${y1} ${x2},${y1} ${x2},${y2} ${x1},${y2}`}
+        />
+        <polyline
+          fill="none"
+          strokeWidth={2}
+          stroke={
+            props.current && props.current !== jump.from
+              ? "var(--color-comment)"
+              : jump.broken
+              ? "var(--color-dots)"
+              : "currentColor"
+          }
+          markerEnd={`url(${
+            props.current && props.current !== jump.from
+              ? "#head-grey"
+              : jump.broken
+              ? "#head-red"
+              : "#head-green"
+          })`}
+          points={`${x1},${y1} ${x2},${y1} ${x2},${y2} ${x1},${y2}`}
+        />
+      </React.Fragment>
+    );
+  };
 
   return (
     <svg
@@ -186,31 +225,31 @@ const Arrows = (props: { instructions: SimilarInstructions[] }) => {
             strokeLinecap="round"
           ></polyline>
         </marker>
+        <marker
+          id="head-grey"
+          orient="auto"
+          markerUnits="userSpaceOnUse"
+          markerWidth="9"
+          markerHeight="16"
+          refX="8"
+          refY="8"
+        >
+          <polyline
+            strokeWidth="2"
+            points="1,1 8,8 1,15"
+            fill="none"
+            stroke={"var(--color-comment)"}
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          ></polyline>
+        </marker>
       </defs>
-      {packedJumps.map((jump) => {
-        let x1 = width - 1;
-        let x2 = x1 - fontSize * jump.level;
-        let y1 = jump.from * lineHeight + lineHeight / 2;
-        let y2 = jump.to * lineHeight + lineHeight / 2;
-        return (
-          <React.Fragment key={jump.from}>
-            <polyline
-              fill="none"
-              strokeWidth={8}
-              stroke="var(--color-bg)"
-              points={`${x1},${y1} ${x2},${y1} ${x2},${y2} ${x1},${y2}`}
-            />
-            <polyline
-              style={{ color: jump.broken ? "var(--color-dots)" : undefined }}
-              fill="none"
-              strokeWidth={2}
-              stroke="currentColor"
-              markerEnd={`url(${jump.broken ? "#head-red" : "#head-green"})`}
-              points={`${x1},${y1} ${x2},${y1} ${x2},${y2} ${x1},${y2}`}
-            />
-          </React.Fragment>
-        );
-      })}
+      {packedJumps
+        .filter((jump) => jump.from !== props.current)
+        .map(renderJump)}
+      {packedJumps
+        .filter((jump) => jump.from === props.current)
+        .map(renderJump)}
     </svg>
   );
 };
@@ -249,7 +288,7 @@ const Code = (props: {
       className={`code ${isGlobalSpanning()}`}
       style={{ gridTemplateRows: `repeat(${props.instructions.length}, auto)` }}
     >
-      <Arrows instructions={props.instructions} />
+      <Arrows instructions={props.instructions} current={current?.i} />
       <div className="offsets">
         {props.instructions.map((inst) => (
           <span key={inst.chunk.address}>
