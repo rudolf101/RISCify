@@ -5,7 +5,7 @@ import performDisassemble, { DisassembleOutput } from "../kernel/Kernel";
 import { InputOrder } from "../kernel/InputParser";
 import { BitDepth } from "../kernel/InstructionDescription";
 import { SimilarInstructions } from "../kernel/Disassembler";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useMemo, useState } from "react";
 import { Argument } from "../kernel/Argument";
 import { Span } from "../kernel/Span";
 
@@ -103,16 +103,17 @@ const packJumps = (jumps: LocalJump[]): LevelledJump[] => {
     .fill(null)
     .map((_) => new Array(jumps.length).fill(false));
   for (const [i, { from, to, broken }] of sortedJumps.entries()) {
-    const dist = Math.abs(from - to);
     let currentLevel = 0;
-    const _from = Math.min(from, to)
-    const _to = Math.max(from, to)
-    const usedLevels = levels.slice(_from, _to + 1).reduce((a, b) => a.map((e, i) => e || b[i]))
+    const _from = Math.min(from, to);
+    const _to = Math.max(from, to);
+    const usedLevels = levels
+      .slice(_from, _to + 1)
+      .reduce((a, b) => a.map((e, i) => e || b[i]));
     for (const [i, level] of usedLevels.entries()) {
       if (!level) {
         levels.slice(_from, _to + 1).forEach((a) => {
           a[i] = true;
-        })
+        });
         currentLevel = i + 1;
         break;
       }
@@ -131,22 +132,25 @@ const Arrows = (props: {
   const height = lineHeight * props.instructions.length;
   const width = 100;
 
-  const jumps = props.instructions.flatMap((e, i) => {
-    if (e.instructions.length < 1) {
+  const packedJumps = useMemo(() => {
+    const jumps = props.instructions.flatMap((e, i) => {
+      if (e.instructions.length < 1) {
+        return [];
+      }
+      const jump = e.instructions[0].actualJump;
+      if (jump.label === "concrete") {
+        return [{ from: i, to: i + jump.distance, broken: false }];
+      }
+      if (jump.label === "between") {
+        return [{ from: i, to: i + jump.distance, broken: true }];
+      }
       return [];
-    }
-    const jump = e.instructions[0].actualJump;
-    if (jump.label === "concrete") {
-      return [{ from: i, to: i + jump.distance, broken: false }];
-    }
-    if (jump.label === "between") {
-      return [{ from: i, to: i + jump.distance, broken: true }];
-    }
-    return [];
-  });
-  console.log(jumps);
-  const packedJumps = packJumps(jumps);
-  packedJumps.reverse();
+    });
+    const packedJumps = packJumps(jumps);
+    packedJumps.reverse();
+
+    return packedJumps;
+  }, [props.instructions]);
 
   const renderJump = (jump: LevelledJump) => {
     let x1 = width - 1;
