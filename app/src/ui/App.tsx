@@ -5,7 +5,7 @@ import performDisassemble, { DisassembleOutput } from "../kernel/Kernel";
 import { InputOrder } from "../kernel/InputParser";
 import { BitDepth } from "../kernel/InstructionDescription";
 import { SimilarInstructions } from "../kernel/Disassembler";
-import React, { ReactNode, useEffect, useState } from "react";
+import React, { ReactNode, useEffect, useMemo, useState } from "react";
 import { Argument } from "../kernel/Argument";
 import { Span } from "../kernel/Span";
 
@@ -98,50 +98,95 @@ const packJumps = (jumps: LocalJump[]): LevelledJump[] => {
     return j1.from - j2.from;
   });
   const result: LevelledJump[] = new Array(jumps.length);
-  const levels: number[] = [0];
+  const length = jumps.reduce((a, b) => Math.max(a, b.from, b.to), 0);
+  const levels: boolean[][] = new Array(length)
+    .fill(null)
+    .map((_) => new Array(jumps.length).fill(false));
   for (const [i, { from, to, broken }] of sortedJumps.entries()) {
-    const dist = Math.abs(from - to);
     let currentLevel = 0;
-    for (const [i, level] of levels.entries()) {
-      if (level <= 0) {
-        levels[i] = dist + 2;
+    const _from = Math.min(from, to);
+    const _to = Math.max(from, to);
+    const usedLevels = levels
+      .slice(_from, _to + 1)
+      .reduce((a, b) => a.map((e, i) => e || b[i]));
+    for (const [i, level] of usedLevels.entries()) {
+      if (!level) {
+        levels.slice(_from, _to + 1).forEach((a) => {
+          a[i] = true;
+        });
         currentLevel = i + 1;
         break;
       }
     }
-    if (currentLevel === 0) {
-      levels.push(dist);
-      currentLevel = levels.length;
-    }
     result[i] = { from, to, broken, level: currentLevel };
-    levels.forEach((_, i) => {
-      levels[i]--;
-    });
   }
   return result;
 };
 
-const Arrows = (props: { instructions: SimilarInstructions[] }) => {
+const Arrows = (props: {
+  instructions: SimilarInstructions[];
+  current?: number;
+}) => {
   const fontSize = parseInt(window.getComputedStyle(document.body)["fontSize"]);
   const lineHeight = fontSize * 1.3;
   const height = lineHeight * props.instructions.length;
   const width = 100;
 
-  const jumps = props.instructions.flatMap((e, i) => {
-    if (e.instructions.length < 1) {
+  const packedJumps = useMemo(() => {
+    const jumps = props.instructions.flatMap((e, i) => {
+      if (e.instructions.length < 1) {
+        return [];
+      }
+      const jump = e.instructions[0].actualJump;
+      if (jump.label === "concrete") {
+        return [{ from: i, to: i + jump.distance, broken: false }];
+      }
+      if (jump.label === "between") {
+        return [{ from: i, to: i + jump.distance, broken: true }];
+      }
       return [];
-    }
-    const jump = e.instructions[0].actualJump;
-    if (jump.label === "concrete") {
-      return [{ from: i, to: i + jump.distance, broken: false }];
-    }
-    if (jump.label === "between") {
-      return [{ from: i, to: i + jump.distance, broken: true }];
-    }
-    return [];
-  });
-  const packedJumps = packJumps(jumps);
-  packedJumps.reverse();
+    });
+    const packedJumps = packJumps(jumps);
+    packedJumps.reverse();
+
+    return packedJumps;
+  }, [props.instructions]);
+
+  const renderJump = (jump: LevelledJump) => {
+    let x1 = width - 1;
+    let x2 = x1 - fontSize * jump.level;
+    let y1 = jump.from * lineHeight + lineHeight / 2;
+    let y2 = jump.to * lineHeight + lineHeight / 2;
+    return (
+      <React.Fragment key={jump.from}>
+        <polyline
+          fill="none"
+          strokeWidth={8}
+          stroke="var(--color-bg)"
+          points={`${x1},${y1} ${x2},${y1} ${x2},${y2} ${x1},${y2}`}
+        />
+        <polyline
+          fill="none"
+          strokeWidth={2}
+          stroke={
+            props.current && props.current !== jump.from
+              ? "var(--color-comment)"
+              : jump.broken
+              ? "var(--color-dots)"
+              : "currentColor"
+          }
+          markerEnd={`url(${
+            props.current && props.current !== jump.from
+              ? "#head-grey"
+              : jump.broken
+              ? "#head-red"
+              : "#head-green"
+          })`}
+          points={`${x1},${y1} ${x2},${y1} ${x2},${y2} ${x1},${y2}`}
+        />
+      </React.Fragment>
+    );
+  };
 
   return (
     <svg
@@ -186,31 +231,31 @@ const Arrows = (props: { instructions: SimilarInstructions[] }) => {
             strokeLinecap="round"
           ></polyline>
         </marker>
+        <marker
+          id="head-grey"
+          orient="auto"
+          markerUnits="userSpaceOnUse"
+          markerWidth="9"
+          markerHeight="16"
+          refX="8"
+          refY="8"
+        >
+          <polyline
+            strokeWidth="2"
+            points="1,1 8,8 1,15"
+            fill="none"
+            stroke={"var(--color-comment)"}
+            strokeLinejoin="round"
+            strokeLinecap="round"
+          ></polyline>
+        </marker>
       </defs>
-      {packedJumps.map((jump) => {
-        let x1 = width - 1;
-        let x2 = x1 - fontSize * jump.level;
-        let y1 = jump.from * lineHeight + lineHeight / 2;
-        let y2 = jump.to * lineHeight + lineHeight / 2;
-        return (
-          <React.Fragment key={jump.from}>
-            <polyline
-              fill="none"
-              strokeWidth={8}
-              stroke="var(--color-bg)"
-              points={`${x1},${y1} ${x2},${y1} ${x2},${y2} ${x1},${y2}`}
-            />
-            <polyline
-              style={{ color: jump.broken ? "var(--color-dots)" : undefined }}
-              fill="none"
-              strokeWidth={2}
-              stroke="currentColor"
-              markerEnd={`url(${jump.broken ? "#head-red" : "#head-green"})`}
-              points={`${x1},${y1} ${x2},${y1} ${x2},${y2} ${x1},${y2}`}
-            />
-          </React.Fragment>
-        );
-      })}
+      {packedJumps
+        .filter((jump) => jump.from !== props.current)
+        .map(renderJump)}
+      {packedJumps
+        .filter((jump) => jump.from === props.current)
+        .map(renderJump)}
     </svg>
   );
 };
@@ -249,7 +294,7 @@ const Code = (props: {
       className={`code ${isGlobalSpanning()}`}
       style={{ gridTemplateRows: `repeat(${props.instructions.length}, auto)` }}
     >
-      <Arrows instructions={props.instructions} />
+      <Arrows instructions={props.instructions} current={current?.i} />
       <div className="offsets">
         {props.instructions.map((inst) => (
           <span key={inst.chunk.address}>
