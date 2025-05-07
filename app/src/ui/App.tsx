@@ -335,6 +335,7 @@ const Code = (props: {
             <React.Fragment key={i}>
               <div className={`mnemonic ${isGlobalSpanning()}`}>
                 {someInst.mnemonic ?? "???"}
+                {inst.instructions.length > 1 ? <span className="ellipsis"></span> : null}
               </div>
               <div className={isGlobalSpanning()}>
                 {someInst.args

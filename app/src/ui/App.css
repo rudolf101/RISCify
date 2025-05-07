@@ -70,6 +70,12 @@
   color: var(--color-instruction);
 }
 
+.decoded > .mnemonic > .ellipsis::before {
+  content: '…';
+  color: var(--color-dots);
+  cursor: pointer;
+}
+
 .decoded > .error {
   color: var(--color-dots);
 }
