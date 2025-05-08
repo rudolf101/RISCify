@@ -126,6 +126,7 @@ const packJumps = (jumps: LocalJump[]): LevelledJump[] => {
 const Arrows = (props: {
   instructions: SimilarInstructions[];
   current?: number;
+  skip: { from: number; length: number };
 }) => {
   const fontSize = parseInt(window.getComputedStyle(document.body)["fontSize"]);
   const lineHeight = fontSize * 1.3;
@@ -148,8 +149,14 @@ const Arrows = (props: {
     const packedJumps = packJumps(jumps);
     packedJumps.reverse();
 
-    return packedJumps;
-  }, [props.instructions]);
+    const skippedPackedJumps = packedJumps.map(({ from, to, ...rest }) => ({
+      from: from > props.skip.from ? from + props.skip.length : from,
+      to: to > props.skip.from ? to + props.skip.length : to,
+      ...rest,
+    }));
+
+    return skippedPackedJumps;
+  }, [props.instructions, props.skip]);
 
   const width = (packedJumps.reduce((a, b) => Math.max(a, b.level), 0) + 1) * fontSize;
 
@@ -272,6 +279,8 @@ const Code = (props: {
     i: number;
     j: number;
   } | null>(null);
+  const [instructionVariantShowed, setInstructionVariantShowed] = useState(-1);
+  const [overrides, setOverrides] = useState<Map<number, number>>(new Map());
 
   const isCurrent = (i: number, j: number) =>
     current && current.i === i && current.j === j ? "selected" : "";
@@ -290,12 +299,38 @@ const Code = (props: {
         span,
       });
   const resetCurrent = () => setCurrent(null);
+  const openInstructionVariants = (i: number) => () =>
+    setInstructionVariantShowed(i);
+  const closeInstructionVariants = () => setInstructionVariantShowed(-1);
+  const setAndCloseInstructionVariant = (i: number, j: number) => () => {
+    setInstructionVariantShowed(-1);
+    setOverrides(new Map(overrides).set(i, j));
+  };
+  const skip =
+    instructionVariantShowed > 0
+      ? {
+          from: instructionVariantShowed,
+          length:
+            (props.instructions.at(instructionVariantShowed)?.instructions
+              .length ?? 1) - 1,
+        }
+      : { from: 0, length: 0 };
+
+  useEffect(() => {
+    setInstructionVariantShowed(-1);
+    setOverrides(new Map());
+  }, [props.instructions]);
+
   return (
     <div
       className={`code ${isGlobalSpanning()}`}
       style={{ gridTemplateRows: `repeat(${props.instructions.length}, auto)` }}
     >
-      <Arrows instructions={props.instructions} current={current?.i} />
+      <Arrows
+        instructions={props.instructions}
+        current={current?.i}
+        skip={skip}
+      />
       <div className="offsets">
         {props.instructions.map((inst) => (
           <span key={inst.chunk.address}>
@@ -320,7 +355,7 @@ const Code = (props: {
       </div>
       <div className="decoded">
         {props.instructions.flatMap((inst, i) => {
-          const someInst = inst.instructions.at(0);
+          const someInst = inst.instructions.at(overrides.get(i) ?? 0);
           if (!someInst) {
             return (
               <React.Fragment key={i}>
@@ -332,10 +367,68 @@ const Code = (props: {
           const jumpIdx =
             someInst.jump.label === "within" ? someInst.jump.argIndex : -1;
 
+          let variants = null;
+          if (instructionVariantShowed === i) {
+            variants = (
+              <div className="variants">
+                {inst.instructions.map((someInst, j) => {
+                  if (j === (overrides.get(i) ?? 0)) {
+                    return null;
+                  }
+                  const jumpIdx =
+                    someInst.jump.label === "within"
+                      ? someInst.jump.argIndex
+                      : -1;
+                  return (
+                    <React.Fragment key={j}>
+                      <div
+                        className="mnemonic"
+                        onClick={setAndCloseInstructionVariant(i, j)}
+                      >
+                        {someInst.mnemonic}
+                      </div>
+                      <div className={isGlobalSpanning()}>
+                        {someInst.args
+                          .flatMap((arg, j) => [
+                            <span
+                              key={j * 2}
+                              className={
+                                j === jumpIdx ? "jump" : argumentType(arg)
+                              }
+                            >
+                              {j === jumpIdx
+                                ? convertJump(
+                                    inst.chunk.address,
+                                    arg.numerical,
+                                    props.jump
+                                  )
+                                : arg.textual}
+                            </span>,
+                            <span key={j * 2 + 1}>{", "}</span>,
+                          ])
+                          .slice(0, -1)}
+                      </div>
+                    </React.Fragment>
+                  );
+                })}
+              </div>
+            );
+          }
+
           return (
-            <React.Fragment key={i}>
+            <div key={i} className="instruction">
               <div className={`mnemonic ${isGlobalSpanning()}`}>
                 {someInst.mnemonic ?? "???"}
+                {inst.instructions.length > 1 ? (
+                  <span
+                    className="ellipsis"
+                    onClick={
+                      instructionVariantShowed === i
+                        ? closeInstructionVariants
+                        : openInstructionVariants(i)
+                    }
+                  ></span>
+                ) : null}
               </div>
               <div className={isGlobalSpanning()}>
                 {someInst.args
@@ -367,7 +460,8 @@ const Code = (props: {
                   ])
                   .slice(0, -1)}
               </div>
-            </React.Fragment>
+              {variants}
+            </div>
           );
         })}
       </div>
