@@ -74,6 +74,7 @@
 }
 
 .decoded > .instruction > .variants {
+  border: 1px solid var(--color-entity);
   display: grid;
   grid-column: span 2;
   grid-template-columns: subgrid;
@@ -82,6 +83,10 @@
 .decoded > .instruction > .mnemonic,
 .decoded > .instruction > .variants > .mnemonic {
   color: var(--color-instruction);
+}
+
+.decoded > .instruction > .variants > .mnemonic {
+  cursor: pointer;
 }
 
 .decoded > .instruction > .mnemonic > .ellipsis::before {

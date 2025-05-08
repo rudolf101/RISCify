@@ -279,6 +279,7 @@ const Code = (props: {
     j: number;
   } | null>(null);
   const [instructionVariantShowed, setInstructionVariantShowed] = useState(-1);
+  const [overrides, setOverrides] = useState<Map<number, number>>(new Map());
 
   const isCurrent = (i: number, j: number) =>
     current && current.i === i && current.j === j ? "selected" : "";
@@ -300,6 +301,10 @@ const Code = (props: {
   const openInstructionVariants = (i: number) => () =>
     setInstructionVariantShowed(i);
   const closeInstructionVariants = () => setInstructionVariantShowed(-1);
+  const setAndCloseInstructionVariant = (i: number, j: number) => () => {
+    setInstructionVariantShowed(-1);
+    setOverrides(new Map(overrides).set(i, j));
+  };
   const skip =
     instructionVariantShowed > 0
       ? {
@@ -309,6 +314,12 @@ const Code = (props: {
               .length ?? 1) - 1,
         }
       : { from: 0, length: 0 };
+
+  useEffect(() => {
+    setInstructionVariantShowed(-1);
+    setOverrides(new Map());
+  }, [props.instructions]);
+
   return (
     <div
       className={`code ${isGlobalSpanning()}`}
@@ -343,7 +354,7 @@ const Code = (props: {
       </div>
       <div className="decoded">
         {props.instructions.flatMap((inst, i) => {
-          const someInst = inst.instructions.at(0);
+          const someInst = inst.instructions.at(overrides.get(i) ?? 0);
           if (!someInst) {
             return (
               <React.Fragment key={i}>
@@ -359,8 +370,8 @@ const Code = (props: {
           if (instructionVariantShowed === i) {
             variants = (
               <div className="variants">
-                {inst.instructions.map((someInst, i) => {
-                  if (i === 0) {
+                {inst.instructions.map((someInst, j) => {
+                  if (j === (overrides.get(i) ?? 0)) {
                     return null;
                   }
                   const jumpIdx =
@@ -368,8 +379,13 @@ const Code = (props: {
                       ? someInst.jump.argIndex
                       : -1;
                   return (
-                    <React.Fragment key={i}>
-                      <div className="mnemonic">{someInst.mnemonic}</div>
+                    <React.Fragment key={j}>
+                      <div
+                        className="mnemonic"
+                        onClick={setAndCloseInstructionVariant(i, j)}
+                      >
+                        {someInst.mnemonic}
+                      </div>
                       <div className={isGlobalSpanning()}>
                         {someInst.args
                           .flatMap((arg, j) => [
