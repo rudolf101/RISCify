@@ -58,6 +58,7 @@
 }
 
 .decoded {
+  position: relative;
   display: grid;
   grid-column: span 2;
   grid-row: 1/-1;
@@ -66,17 +67,29 @@
   gap: 0 1rem;
 }
 
-.decoded > .mnemonic {
+.decoded > .instruction {
+  display: grid;
+  grid-column: span 2;
+  grid-template-columns: subgrid;
+}
+
+.decoded > .instruction > .variants {
+  display: grid;
+  grid-column: span 2;
+  grid-template-columns: subgrid;
+}
+
+.decoded > .instruction > .mnemonic {
   color: var(--color-instruction);
 }
 
-.decoded > .mnemonic > .ellipsis::before {
+.decoded > .instruction > .mnemonic > .ellipsis::before {
   content: '…';
   color: var(--color-dots);
   cursor: pointer;
 }
 
-.decoded > .error {
+.decoded > .instruction > .error {
   color: var(--color-dots);
 }
 

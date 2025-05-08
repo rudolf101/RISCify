@@ -266,11 +266,15 @@ const Code = (props: {
   order: InputOrder;
   jump: Jump;
 }) => {
+  const fontSize = parseInt(window.getComputedStyle(document.body)["fontSize"]);
+  const lineHeight = fontSize * 1.3;
+
   const [current, setCurrent] = useState<{
     span: Span;
     i: number;
     j: number;
   } | null>(null);
+  const [instructionVariantShowed, setInstructionVariantShowed] = useState(-1);
 
   const isCurrent = (i: number, j: number) =>
     current && current.i === i && current.j === j ? "selected" : "";
@@ -289,6 +293,9 @@ const Code = (props: {
         span,
       });
   const resetCurrent = () => setCurrent(null);
+  const openInstructionVariants = (i: number) => () =>
+    setInstructionVariantShowed(i);
+  const closeInstructionVariants = () => setInstructionVariantShowed(-1);
   return (
     <div
       className={`code ${isGlobalSpanning()}`}
@@ -331,11 +338,30 @@ const Code = (props: {
           const jumpIdx =
             someInst.jump.label === "within" ? someInst.jump.argIndex : -1;
 
+          let variants = null;
+          if (instructionVariantShowed === i) {
+            variants = (
+              <div className="variants">
+                <span>Hello</span>
+                <span>Yogurt</span>
+              </div>
+            );
+          }
+
           return (
-            <React.Fragment key={i}>
+            <div key={i} className="instruction">
               <div className={`mnemonic ${isGlobalSpanning()}`}>
                 {someInst.mnemonic ?? "???"}
-                {inst.instructions.length > 1 ? <span className="ellipsis"></span> : null}
+                {inst.instructions.length > 1 ? (
+                  <span
+                    className="ellipsis"
+                    onClick={
+                      instructionVariantShowed === i
+                        ? closeInstructionVariants
+                        : openInstructionVariants(i)
+                    }
+                  ></span>
+                ) : null}
               </div>
               <div className={isGlobalSpanning()}>
                 {someInst.args
@@ -367,7 +393,8 @@ const Code = (props: {
                   ])
                   .slice(0, -1)}
               </div>
-            </React.Fragment>
+              {variants}
+            </div>
           );
         })}
       </div>
