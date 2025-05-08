@@ -90,7 +90,7 @@
 }
 
 .decoded > .instruction > .mnemonic > .ellipsis::before {
-  content: "…";
+  content: "...";
   color: var(--color-dots);
   cursor: pointer;
 }
