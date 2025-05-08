@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/RISCify/static/css/main.cadb8559.css",
-    "main.js": "/RISCify/static/js/main.0fe1ee62.js",
+    "main.css": "/RISCify/static/css/main.4b9c5a01.css",
+    "main.js": "/RISCify/static/js/main.da350345.js",
     "static/js/453.a6a97343.chunk.js": "/RISCify/static/js/453.a6a97343.chunk.js",
     "index.html": "/RISCify/index.html",
-    "main.cadb8559.css.map": "/RISCify/static/css/main.cadb8559.css.map",
-    "main.0fe1ee62.js.map": "/RISCify/static/js/main.0fe1ee62.js.map",
+    "main.4b9c5a01.css.map": "/RISCify/static/css/main.4b9c5a01.css.map",
+    "main.da350345.js.map": "/RISCify/static/js/main.da350345.js.map",
     "453.a6a97343.chunk.js.map": "/RISCify/static/js/453.a6a97343.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.cadb8559.css",
-    "static/js/main.0fe1ee62.js"
+    "static/css/main.4b9c5a01.css",
+    "static/js/main.da350345.js"
   ]
 }
