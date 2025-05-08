@@ -342,8 +342,41 @@ const Code = (props: {
           if (instructionVariantShowed === i) {
             variants = (
               <div className="variants">
-                <span>Hello</span>
-                <span>Yogurt</span>
+                {inst.instructions.map((someInst, i) => {
+                  if (i === 0) {
+                    return null;
+                  }
+                  const jumpIdx =
+                    someInst.jump.label === "within"
+                      ? someInst.jump.argIndex
+                      : -1;
+                  return (
+                    <React.Fragment key={i}>
+                      <div className="mnemonic">{someInst.mnemonic}</div>
+                      <div className={isGlobalSpanning()}>
+                        {someInst.args
+                          .flatMap((arg, j) => [
+                            <span
+                              key={j * 2}
+                              className={
+                                j === jumpIdx ? "jump" : argumentType(arg)
+                              }
+                            >
+                              {j === jumpIdx
+                                ? convertJump(
+                                    inst.chunk.address,
+                                    arg.numerical,
+                                    props.jump
+                                  )
+                                : arg.textual}
+                            </span>,
+                            <span key={j * 2 + 1}>{", "}</span>,
+                          ])
+                          .slice(0, -1)}
+                      </div>
+                    </React.Fragment>
+                  );
+                })}
               </div>
             );
           }
