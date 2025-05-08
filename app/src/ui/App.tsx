@@ -130,7 +130,6 @@ const Arrows = (props: {
   const fontSize = parseInt(window.getComputedStyle(document.body)["fontSize"]);
   const lineHeight = fontSize * 1.3;
   const height = lineHeight * props.instructions.length;
-  const width = 100;
 
   const packedJumps = useMemo(() => {
     const jumps = props.instructions.flatMap((e, i) => {
@@ -151,6 +150,8 @@ const Arrows = (props: {
 
     return packedJumps;
   }, [props.instructions]);
+
+  const width = (packedJumps.reduce((a, b) => Math.max(a, b.level), 0) + 1) * fontSize;
 
   const renderJump = (jump: LevelledJump) => {
     let x1 = width - 1;
