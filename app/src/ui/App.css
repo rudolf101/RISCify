@@ -74,7 +74,8 @@
 }
 
 .decoded > .instruction > .variants {
-  border: 1px solid var(--color-entity);
+  outline: 1px solid var(--color-entity);
+  margin-top: 1px;
   display: grid;
   grid-column: span 2;
   grid-template-columns: subgrid;
@@ -83,14 +84,20 @@
 .decoded > .instruction > .mnemonic,
 .decoded > .instruction > .variants > .mnemonic {
   color: var(--color-instruction);
+  display: flex;
 }
 
 .decoded > .instruction > .variants > .mnemonic {
   cursor: pointer;
 }
 
+.decoded > .instruction > .mnemonic > .ellipsis {
+  flex: 1;
+  cursor: pointer;
+}
+
 .decoded > .instruction > .mnemonic > .ellipsis::before {
-  content: "...";
+  content: "…";
   color: var(--color-dots);
   cursor: pointer;
 }
