@@ -126,6 +126,7 @@ const packJumps = (jumps: LocalJump[]): LevelledJump[] => {
 const Arrows = (props: {
   instructions: SimilarInstructions[];
   current?: number;
+  skip: { from: number; length: number };
 }) => {
   const fontSize = parseInt(window.getComputedStyle(document.body)["fontSize"]);
   const lineHeight = fontSize * 1.3;
@@ -149,8 +150,14 @@ const Arrows = (props: {
     const packedJumps = packJumps(jumps);
     packedJumps.reverse();
 
-    return packedJumps;
-  }, [props.instructions]);
+    const skippedPackedJumps = packedJumps.map(({ from, to, ...rest }) => ({
+      from: from > props.skip.from ? from + props.skip.length : from,
+      to: to > props.skip.from ? to + props.skip.length : to,
+      ...rest,
+    }));
+
+    return skippedPackedJumps;
+  }, [props.instructions, props.skip]);
 
   const renderJump = (jump: LevelledJump) => {
     let x1 = width - 1;
@@ -266,9 +273,6 @@ const Code = (props: {
   order: InputOrder;
   jump: Jump;
 }) => {
-  const fontSize = parseInt(window.getComputedStyle(document.body)["fontSize"]);
-  const lineHeight = fontSize * 1.3;
-
   const [current, setCurrent] = useState<{
     span: Span;
     i: number;
@@ -296,12 +300,25 @@ const Code = (props: {
   const openInstructionVariants = (i: number) => () =>
     setInstructionVariantShowed(i);
   const closeInstructionVariants = () => setInstructionVariantShowed(-1);
+  const skip =
+    instructionVariantShowed > 0
+      ? {
+          from: instructionVariantShowed,
+          length:
+            (props.instructions.at(instructionVariantShowed)?.instructions
+              .length ?? 1) - 1,
+        }
+      : { from: 0, length: 0 };
   return (
     <div
       className={`code ${isGlobalSpanning()}`}
       style={{ gridTemplateRows: `repeat(${props.instructions.length}, auto)` }}
     >
-      <Arrows instructions={props.instructions} current={current?.i} />
+      <Arrows
+        instructions={props.instructions}
+        current={current?.i}
+        skip={skip}
+      />
       <div className="offsets">
         {props.instructions.map((inst) => (
           <span key={inst.chunk.address}>
