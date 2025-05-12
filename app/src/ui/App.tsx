@@ -130,7 +130,7 @@ const Arrows = (props: {
 }) => {
   const fontSize = parseInt(window.getComputedStyle(document.body)["fontSize"]);
   const lineHeight = fontSize * 1.3;
-  const height = lineHeight * props.instructions.length;
+  const height = lineHeight * (props.instructions.length + props.skip.length);
 
   const packedJumps = useMemo(() => {
     const jumps = props.instructions.flatMap((e, i) => {
@@ -307,7 +307,7 @@ const Code = (props: {
     setOverrides(new Map(overrides).set(i, j));
   };
   const skip =
-    instructionVariantShowed > 0
+    instructionVariantShowed >= 0
       ? {
           from: instructionVariantShowed,
           length:
