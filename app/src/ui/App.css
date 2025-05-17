@@ -24,6 +24,8 @@
 
 .app > .right > textarea {
   color: inherit;
+  font-family: inherit;
+  font-size: inherit;
   background: none;
   outline: none;
   border: none;
