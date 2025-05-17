@@ -644,7 +644,13 @@ const App = () => {
           />
         )}
       </div>
-      <div className={`right ${edit ? "show" : ""}`}>Blah blah</div>
+      <div className={`right ${edit ? "show" : ""}`}>
+        <textarea
+          value={sourceCode}
+          onPaste={(e) => e.stopPropagation()}
+          onChange={(e) => setSourceCode(e.currentTarget.value)}
+        ></textarea>
+      </div>
     </div>
   );
 };
