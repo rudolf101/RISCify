@@ -380,6 +380,7 @@ const Code = (props: {
                     someInst.jump.label === "within"
                       ? someInst.jump.argIndex
                       : -1;
+                  const argSeparators = someInst.argFormat?.split("_") ?? [];
                   return (
                     <React.Fragment key={j}>
                       <div
@@ -405,7 +406,7 @@ const Code = (props: {
                               : arg.textual}
                           </span>,
                           <span key={j * 2 + 1}>
-                            {argSeparators.at(j + 1)}
+                            {argSeparators.at(j + 1) ?? " "}
                           </span>,
                         ])}
                       </div>
@@ -416,7 +417,7 @@ const Code = (props: {
             );
           }
 
-          const argSeparators = someInst.argFormat?.split("_") ?? "";
+          const argSeparators = someInst.argFormat?.split("_") ?? [];
 
           return (
             <div key={i} className="instruction">
@@ -457,7 +458,7 @@ const Code = (props: {
                     onMouseEnter={setCurrentCallback(i, j, arg)}
                     onMouseLeave={resetCurrent}
                   >
-                    {argSeparators.at(j + 1)}
+                    {argSeparators.at(j + 1) ?? " "}
                   </span>,
                 ])}
               </div>
