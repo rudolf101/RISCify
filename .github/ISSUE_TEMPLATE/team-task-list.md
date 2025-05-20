@@ -3,7 +3,7 @@ name: Team Task List
 about: Hub for tracking tasks during the week
 title: ''
 labels: weekly-task-list
-assignees: rudolf101
+assignees: ''
 
 ---
 
