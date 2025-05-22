@@ -465,7 +465,7 @@ const Code = (props: {
                     )}
                     onMouseLeave={resetCurrent}
                   >
-                    {argSeparators.at(j + 1) ?? " "}
+                    {argSeparators.at(j + 1) ?? (j === someInst.args.length - 1 ? "" : ", ")}
                   </span>,
                 ])}
               </div>
