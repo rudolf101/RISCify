@@ -454,8 +454,15 @@ const Code = (props: {
                   </span>,
                   <span
                     key={j * 2 + 1}
-                    className={isCurrent(i, j)}
-                    onMouseEnter={setCurrentCallback(i, j, arg)}
+                    className={isCurrent(
+                      i,
+                      argSeparators.at(j + 1) === "(" ? j + 1 : j
+                    )}
+                    onMouseEnter={setCurrentCallback(
+                      i,
+                      argSeparators.at(j + 1) === "(" ? j + 1 : j,
+                      arg
+                    )}
                     onMouseLeave={resetCurrent}
                   >
                     {argSeparators.at(j + 1) ?? " "}
