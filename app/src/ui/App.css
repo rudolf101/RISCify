@@ -188,9 +188,18 @@
   cursor: pointer;
 }
 
+.tool > button:focus {
+  border-color: var(--color-focus);
+  color: var(--color-focus);
+}
+
 .tool > button.selected {
   background-color: var(--color-panel);
   color: var(--color-bg);
+}
+
+.tool > button.selected:focus {
+  background-color: var(--color-focus);
 }
 
 .switch {
@@ -207,4 +216,14 @@
 .switch > .selected {
   background-color: var(--color-panel);
   color: var(--color-bg);
+}
+
+.switch > *:focus-within {
+  background-color: var(--color-focus);
+  color: var(--color-bg);
+}
+
+.switch > * > input[type=radio] {
+  width: 0;
+  margin: 0;
 }

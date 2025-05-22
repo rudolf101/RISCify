@@ -10,6 +10,8 @@
   --color-constant: #d2a6ff;
   --color-dots: #f07178;
   --color-hex: #95e6cb;
+
+  --color-focus: #d2a6ff;
 }
 
 body {
