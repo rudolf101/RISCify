@@ -380,6 +380,7 @@ const Code = (props: {
                     someInst.jump.label === "within"
                       ? someInst.jump.argIndex
                       : -1;
+                  const argSeparators = someInst.argFormat?.split("_") ?? [];
                   return (
                     <React.Fragment key={j}>
                       <div
@@ -389,25 +390,25 @@ const Code = (props: {
                         {someInst.mnemonic}
                       </div>
                       <div className={isGlobalSpanning()}>
-                        {someInst.args
-                          .flatMap((arg, j) => [
-                            <span
-                              key={j * 2}
-                              className={
-                                j === jumpIdx ? "jump" : argumentType(arg)
-                              }
-                            >
-                              {j === jumpIdx
-                                ? convertJump(
-                                    inst.chunk.address,
-                                    arg.numerical,
-                                    props.jump
-                                  )
-                                : arg.textual}
-                            </span>,
-                            <span key={j * 2 + 1}>{", "}</span>,
-                          ])
-                          .slice(0, -1)}
+                        {someInst.args.flatMap((arg, j) => [
+                          <span
+                            key={j * 2}
+                            className={
+                              j === jumpIdx ? "jump" : argumentType(arg)
+                            }
+                          >
+                            {j === jumpIdx
+                              ? convertJump(
+                                  inst.chunk.address,
+                                  arg.numerical,
+                                  props.jump
+                                )
+                              : arg.textual}
+                          </span>,
+                          <span key={j * 2 + 1}>
+                            {argSeparators.at(j + 1) ?? " "}
+                          </span>,
+                        ])}
                       </div>
                     </React.Fragment>
                   );
@@ -415,6 +416,8 @@ const Code = (props: {
               </div>
             );
           }
+
+          const argSeparators = someInst.argFormat?.split("_") ?? [];
 
           return (
             <div key={i} className="instruction">
@@ -432,34 +435,42 @@ const Code = (props: {
                 ) : null}
               </div>
               <div className={isGlobalSpanning()}>
-                {someInst.args
-                  .flatMap((arg, j) => [
-                    <span
-                      key={j * 2}
-                      className={`${
-                        j === jumpIdx ? "jump" : argumentType(arg)
-                      } ${isCurrent(i, j)}`}
-                      onMouseEnter={setCurrentCallback(i, j, arg)}
-                      onMouseLeave={resetCurrent}
-                    >
-                      {j === jumpIdx
-                        ? convertJump(
-                            inst.chunk.address,
-                            arg.numerical,
-                            props.jump
-                          )
-                        : arg.textual}
-                    </span>,
-                    <span
-                      key={j * 2 + 1}
-                      className={isCurrent(i, j)}
-                      onMouseEnter={setCurrentCallback(i, j, arg)}
-                      onMouseLeave={resetCurrent}
-                    >
-                      {", "}
-                    </span>,
-                  ])
-                  .slice(0, -1)}
+                {someInst.args.flatMap((arg, j) => [
+                  <span
+                    key={j * 2}
+                    className={`${
+                      j === jumpIdx ? "jump" : argumentType(arg)
+                    } ${isCurrent(i, j)}`}
+                    onMouseEnter={setCurrentCallback(i, j, arg)}
+                    onMouseLeave={resetCurrent}
+                  >
+                    {j === jumpIdx
+                      ? convertJump(
+                          inst.chunk.address,
+                          arg.numerical,
+                          props.jump
+                        )
+                      : arg.textual}
+                  </span>,
+                  <span
+                    key={j * 2 + 1}
+                    className={isCurrent(
+                      i,
+                      argSeparators.at(j + 1) === "(" ? j + 1 : j
+                    )}
+                    onMouseEnter={setCurrentCallback(
+                      i,
+                      argSeparators.at(j + 1) === "(" ? j + 1 : j,
+                      argSeparators.at(j + 1) === "("
+                        ? someInst.args[j + 1]
+                        : arg
+                    )}
+                    onMouseLeave={resetCurrent}
+                  >
+                    {argSeparators.at(j + 1) ??
+                      (j === someInst.args.length - 1 ? "" : ", ")}
+                  </span>,
+                ])}
               </div>
               {variants}
             </div>
