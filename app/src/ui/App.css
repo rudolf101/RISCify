@@ -188,7 +188,7 @@
   cursor: pointer;
 }
 
-.tool > button:focus {
+.tool > button:focus-visible {
   border-color: var(--color-focus);
   color: var(--color-focus);
 }
@@ -198,7 +198,7 @@
   color: var(--color-bg);
 }
 
-.tool > button.selected:focus {
+.tool > button.selected:focus-visible {
   background-color: var(--color-focus);
 }
 
@@ -218,7 +218,7 @@
   color: var(--color-bg);
 }
 
-.switch > *:focus-within {
+.switch > *:has(:focus-visible) {
   background-color: var(--color-focus);
   color: var(--color-bg);
 }

@@ -555,7 +555,10 @@ const App = () => {
 
   useEffect(() => {
     if (edit) {
+      ref.current?.setSelectionRange(0, 0);
       ref.current?.focus();
+      ref.current?.setSelectionRange(0, 0);
+      // double setSelectionRange need for the same behavior of focus in Firefox and Chrome
     }
   }, [edit]);
 
