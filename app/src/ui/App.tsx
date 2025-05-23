@@ -5,7 +5,14 @@ import performDisassemble, { DisassembleOutput } from "../kernel/Kernel";
 import { InputOrder } from "../kernel/InputParser";
 import { BitDepth } from "../kernel/InstructionDescription";
 import { SimilarInstructions } from "../kernel/Disassembler";
-import React, { ReactNode, useEffect, useId, useMemo, useState } from "react";
+import React, {
+  ReactNode,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Argument } from "../kernel/Argument";
 import { Span } from "../kernel/Span";
 
@@ -514,6 +521,8 @@ const App = () => {
       result: [],
     });
 
+  let ref = useRef<HTMLTextAreaElement>(null);
+
   useEffect(() => {
     const result = performDisassemble(
       sourceCode,
@@ -543,6 +552,12 @@ const App = () => {
       document.removeEventListener("paste", handler);
     };
   }, []);
+
+  useEffect(() => {
+    if (edit) {
+      ref.current?.focus();
+    }
+  }, [edit]);
 
   return (
     <div className="app">
@@ -654,6 +669,7 @@ const App = () => {
       </div>
       <div className={`right ${edit ? "show" : ""}`}>
         <textarea
+          ref={ref}
           value={sourceCode}
           onPaste={(e) => e.stopPropagation()}
           onChange={(e) => setSourceCode(e.currentTarget.value)}
