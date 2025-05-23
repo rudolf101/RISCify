@@ -461,11 +461,14 @@ const Code = (props: {
                     onMouseEnter={setCurrentCallback(
                       i,
                       argSeparators.at(j + 1) === "(" ? j + 1 : j,
-                      arg
+                      argSeparators.at(j + 1) === "("
+                        ? someInst.args[j + 1]
+                        : arg
                     )}
                     onMouseLeave={resetCurrent}
                   >
-                    {argSeparators.at(j + 1) ?? (j === someInst.args.length - 1 ? "" : ", ")}
+                    {argSeparators.at(j + 1) ??
+                      (j === someInst.args.length - 1 ? "" : ", ")}
                   </span>,
                 ])}
               </div>
