@@ -226,4 +226,5 @@
 .switch > * > input[type=radio] {
   width: 0;
   margin: 0;
+  outline: none;
 }
