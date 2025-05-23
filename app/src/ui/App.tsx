@@ -5,7 +5,14 @@ import performDisassemble, { DisassembleOutput } from "../kernel/Kernel";
 import { InputOrder } from "../kernel/InputParser";
 import { BitDepth } from "../kernel/InstructionDescription";
 import { SimilarInstructions } from "../kernel/Disassembler";
-import React, { ReactNode, useEffect, useMemo, useState } from "react";
+import React, {
+  ReactNode,
+  useEffect,
+  useId,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { Argument } from "../kernel/Argument";
 import { Span } from "../kernel/Span";
 
@@ -486,18 +493,26 @@ const Switch = <T,>(props: {
   value: T;
   onChange: (v: T) => void;
 }) => {
+  const id = useId();
   return (
     <div className="switch">
       {props.cases.map((_case, i) => (
-        <span
+        <label
           key={i}
+          htmlFor={`${id}-${i}`}
           className={props.value === _case.value ? "selected" : ""}
-          onClick={() => {
-            props.onChange(_case.value);
-          }}
         >
+          <input
+            type="radio"
+            name={id}
+            id={`${id}-${i}`}
+            checked={props.value === _case.value}
+            onChange={() => {
+              props.onChange(_case.value);
+            }}
+          />
           {_case.text}
-        </span>
+        </label>
       ))}
     </div>
   );
@@ -516,6 +531,8 @@ const App = () => {
       valid: "valid",
       result: [],
     });
+
+  let ref = useRef<HTMLTextAreaElement>(null);
 
   useEffect(() => {
     const result = performDisassemble(
@@ -546,6 +563,15 @@ const App = () => {
       document.removeEventListener("paste", handler);
     };
   }, []);
+
+  useEffect(() => {
+    if (edit) {
+      ref.current?.setSelectionRange(0, 0);
+      ref.current?.focus();
+      ref.current?.setSelectionRange(0, 0);
+      // double setSelectionRange need for the same behavior of focus in Firefox and Chrome
+    }
+  }, [edit]);
 
   return (
     <div className="app">
@@ -657,6 +683,7 @@ const App = () => {
       </div>
       <div className={`right ${edit ? "show" : ""}`}>
         <textarea
+          ref={ref}
           value={sourceCode}
           onPaste={(e) => e.stopPropagation()}
           onChange={(e) => setSourceCode(e.currentTarget.value)}

@@ -54,14 +54,6 @@
   font-size: 1.5rem;
 }
 
-.tools {
-  color: var(--color-panel);
-  border: 1px solid var(--color-panel);
-  padding: 0.3125rem 0.5rem;
-  margin: 3rem 0;
-  width: max-content;
-}
-
 .code {
   display: grid;
   grid-template-columns: repeat(4, max-content);
@@ -157,7 +149,18 @@
 .tools {
   display: flex;
   flex-direction: row;
-  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem 1.5rem;
+  color: var(--color-panel);
+  border: 1px solid var(--color-panel);
+  padding: 0.3125rem 0.5rem;
+  margin: 3rem 0;
+
+  position: sticky;
+  top: 1rem;
+  background-color: var(--color-bg);
+  z-index: 1;
 }
 
 .tool {
@@ -185,9 +188,18 @@
   cursor: pointer;
 }
 
+.tool > button:focus-visible {
+  border-color: var(--color-focus);
+  color: var(--color-focus);
+}
+
 .tool > button.selected {
   background-color: var(--color-panel);
   color: var(--color-bg);
+}
+
+.tool > button.selected:focus-visible {
+  background-color: var(--color-focus);
 }
 
 .switch {
@@ -204,4 +216,15 @@
 .switch > .selected {
   background-color: var(--color-panel);
   color: var(--color-bg);
+}
+
+.switch > *:has(:focus-visible) {
+  background-color: var(--color-focus);
+  color: var(--color-bg);
+}
+
+.switch > * > input[type=radio] {
+  width: 0;
+  margin: 0;
+  outline: none;
 }
