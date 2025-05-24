@@ -6,8 +6,13 @@ export class Matcher {
     private _span: Span;
     private _sample: Bits;
 
-    constructor(name: string, spanStr: string, sampleStr: string) {
-        this._name = name;
+    constructor(name: string | undefined, spanStr: string, sampleStr: string) {
+        if (name == undefined) {
+            this._name = "";
+        }
+        else {
+            this._name = name;
+        }
         this._span = parseSpan(spanStr);
         this._sample = new Bits(sampleStr);
     }

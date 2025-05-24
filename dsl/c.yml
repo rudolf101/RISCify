@@ -1,0 +1,159 @@
+Args:
+  c_rdc:           { name: "rd'"   , span: "2:4"                   , display: "regcx"    }
+  c_rs1c:          { name: "rs1'"  , span: "7:9"                   , display: "regcx"    }
+  c_rs2c:          { name: "rs2'"  , span: "2:4"                   , display: "regcx"    }
+  c_frdc:          { name: "rd'"   , span: "2:4"                   , display: "regcf"    }
+  c_frs1c:         { name: "rs1'"  , span: "7:9"                   , display: "regcf"    }
+  c_frs2c:         { name: "rs2'"  , span: "2:4"                   , display: "regcf"    }
+  c_full_rd:       { name: "rd"    , span: "7:11"                  , display: "regx"     }
+  c_full_rs1:      { name: "rs1"   , span: "7:11"                  , display: "regx"     }
+  c_full_rs1_rd:   { name: "rs1/rd", span: "7:11"                  , display: "regx"     }
+  c_full_frd:      { name: "rd"    , span: "7:11"                  , display: "regf"     }
+  c_full_frs1:     { name: "rs1"   , span: "7:11"                  , display: "regf"     }
+  c_full_frs1_frd: { name: "rs1/rd", span: "7:11"                  , display: "regf"     }
+  c_addi4spn_uimm: { name: "uimm"  , span: "6,5,11,12,7:10"        , display: "unumx(2)" }
+  c_w_uimm:        { name: "uimm"  , span: "6,10,11,12,5"          , display: "unumx(2)" }
+  c_d_uimm:        { name: "uimm"  , span: "10,11,12,5,6"          , display: "unumx(3)" }
+  c_q_uimm:        { name: "uimm"  , span: "11,12,5,6,10"          , display: "unumx(4)" }
+  c_imm_1:         { name: "imm"   , span: "2:6,12"                , display: "num"      }
+  c_uimm_1:        { name: "imm"   , span: "2:6,12"                , display: "unum"     }
+  c_addi16sp_imm:  { name: "imm"   , span: "6,2,5,3,4,12"          , display: "numx(4)"  }
+  c_j_jal_imm:     { name: "imm"   , span: "3-5,11,2,7,6,9,10,8,12", display: "numx(1)"  }
+  c_lui_imm:       { name: "imm"   , span: "2:6,12"                , display: "num"      }
+  c_branch_imm:    { name: "imm"   , span: "3,4,10,11,2,5,6,12"    , display: "numx(1)"  }
+
+Fields:
+  c_illegal:         { name: "illegal", span: "0:15", value: "0000000000000000" }
+  # Quadrants
+  c_opcode_q0:       { name: "opcode", span: "0:1", value: "00" }
+  c_opcode_q1:       { name: "opcode", span: "0:1", value: "10" }
+  c_opcode_q2:       { name: "opcode", span: "0:1", value: "02" }
+  # Q0
+  c_funct3_addi4spn: { name: "funct3", span: "13:15"  , value: "000" }
+  c_funct3_fld:      { name: "funct3", span: "13:15"  , value: "100" }
+  c_funct3_lq:       { name: "funct3", span: "13:15"  , value: "100" }
+  c_funct3_lw:       { name: "funct3", span: "13:15"  , value: "010" }
+  c_funct3_flw:      { name: "funct3", span: "13:15"  , value: "110" }
+  c_funct3_ld:       { name: "funct3", span: "13:15"  , value: "110" }
+  c_funct3_reserved: { name: "funct3", span: "13:15"  , value: "001" }
+  c_funct3_fsd:      { name: "funct3", span: "13:15"  , value: "101" }
+  c_funct3_sq:       { name: "funct3", span: "13:15"  , value: "101" }
+  c_funct3_sw:       { name: "funct3", span: "13:15"  , value: "011" }
+  c_funct3_fsw:      { name: "funct3", span: "13:15"  , value: "111" }
+  c_funct3_sd:       { name: "funct3", span: "13:15"  , value: "111" }
+  # Q1
+  c_funct3_addi:     { name: "funct3", span: "13:15"  , value: "000" }
+  c_funct3_jal:      { name: "funct3", span: "13:15"  , value: "100" }
+  c_funct3_addiw:    { name: "funct3", span: "13:15"  , value: "100" }
+  c_funct3_li:       { name: "funct3", span: "13:15"  , value: "010" }
+  c_funct3_lui:      { name: "funct3", span: "13:15"  , value: "110" }
+  c_funct3_addi16sp: { name: "funct3", span: "13:15"  , value: "110" }
+  c_funct3_misc_alu: { name: "funct3", span: "13:15"  , value: "001" }
+  c_funct3_j:        { name: "funct3", span: "13:15"  , value: "101" }
+  c_funct3_beqz:     { name: "funct3", span: "13:15"  , value: "011" }
+  c_funct3_bnez:     { name: "funct3", span: "13:15"  , value: "111" }
+  # Q2
+  c_funct3_slli:     { name: "funct3", span: "13:15"  , value: "000" }
+  c_funct3_fldsp:    { name: "funct3", span: "13:15"  , value: "100" }
+  c_funct3_lqsp:     { name: "funct3", span: "13:15"  , value: "100" }
+  c_funct3_lwsp:     { name: "funct3", span: "13:15"  , value: "010" }
+  c_funct3_flwsp:    { name: "funct3", span: "13:15"  , value: "110" }
+  c_funct3_ldsp:     { name: "funct3", span: "13:15"  , value: "110" }
+  #c_funct3_reserved:{ name: "funct3", span: "13:15"  , value: "001" }
+  c_funct3_fsdsp:    { name: "funct3", span: "13:15"  , value: "101" }
+  c_funct3_sqsp:     { name: "funct3", span: "13:15"  , value: "101" }
+  c_funct3_swsp:     { name: "funct3", span: "13:15"  , value: "011" }
+  c_funct3_fswsp:    { name: "funct3", span: "13:15"  , value: "111" }
+  c_funct3_sdsp:     { name: "funct3", span: "13:15"  , value: "111" }
+  # Imm arith
+  c_funct2_srli:      { name: "funct2", span: "10,11", value: "00" }
+  c_funct2_srai:      { name: "funct2", span: "10,11", value: "10" }
+  c_funct2_andi:      { name: "funct2", span: "10,11", value: "01" }
+  # Fixed arguments
+  c_imm_1_zero:      { name: "imm", span: "2:6,12", value: "000000" }
+  # Arith
+  c_funct6_sub:       { name: "funct6", span: "10,15", value: "110001" }
+  c_funct6_xor:       { name: "funct6", span: "10,15", value: "110001" }
+  c_funct6_or:        { name: "funct6", span: "10,15", value: "110001" }
+  c_funct6_and:       { name: "funct6", span: "10,15", value: "110001" }
+  c_funct6_subw:      { name: "funct6", span: "10,15", value: "111001" }
+  c_funct6_addw:      { name: "funct6", span: "10,15", value: "111001" }
+
+Restricts:
+  no_zero:          { span: "0:15", value: "0000000000000000" }
+  r_upper_no_zero:  { span: "7:11", value: "00000" }
+  r_upper_no_two:   { span: "7:11", value: "01000" }
+  r_lower_no_zero:  { span: "2:6" , value: "00000" }
+
+Sets:
+
+- name: "C"
+  size: "16"
+  depth: "32|64|128"
+  instructions:
+  - mnemonic: "illegal"
+    fields: [ c_illegal ]
+  - mnemonic: "c.addi4spn"
+    fields: [ c_opcode_q0, c_funct3_addi4spn ]
+    restricts: [ no_zero ]
+    args: [ c_rdc, c_addi4spn_uimm ]
+  - mnemonic: "c.lw"
+    fields: [ c_opcode_q0, c_funct3_lw ]
+    args: [ c_rdc, c_w_uimm, c_rs1c ]
+    format: "_, _(_)"
+  - mnemonic: "c.sw"
+    fields: [ c_opcode_q0, c_funct3_sw ]
+    args: [ c_rs2c, c_w_uimm, c_rs1c ]
+    format: "_, _(_)"
+
+- name: "C"
+  size: "16"
+  depth: "32|64"
+  instructions:
+  - mnemonic: "c.fld"
+    fields: [ c_opcode_q0, c_funct3_fld ]
+    args: [ c_frdc, c_d_uimm, c_rs1c ]
+    format: "_, _(_)"
+  - mnemonic: "c.fsd"
+    fields: [ c_opcode_q0, c_funct3_fsd ]
+    args: [ c_frs2c, c_d_uimm, c_rs1c ]
+    format: "_, _(_)"
+
+- name: "C"
+  size: "16"
+  depth: "128"
+  instructions:
+  - mnemonic: "c.lq"
+    fields: [ c_opcode_q0, c_funct3_lq ]
+    args: [ c_rdc, c_q_uimm, c_rs1c ]
+    format: "_, _(_)"
+  - mnemonic: "c.sq"
+    fields: [ c_opcode_q0, c_funct3_sq ]
+    args: [ c_rs2c, c_q_uimm, c_rs1c ]
+    format: "_, _(_)"
+
+- name: "C"
+  size: "16"
+  depth: "32"
+  instructions:
+  - mnemonic: "c.flw"
+    fields: [ c_opcode_q0, c_funct3_flw ]
+    args: [ c_frdc, c_w_uimm, c_rs1c ]
+    format: "_, _(_)"
+  - mnemonic: "c.fsw"
+    fields: [ c_opcode_q0, c_funct3_fsw ]
+    args: [ c_frs2c, c_w_uimm, c_rs1c ]
+    format: "_, _(_)"
+
+- name: "C"
+  size: "16"
+  depth: "64|128"
+  instructions:
+  - mnemonic: "c.ld"
+    fields: [ c_opcode_q0, c_funct3_ld ]
+    args: [ c_rdc, c_d_uimm, c_rs1c ]
+    format: "_, _(_)"
+  - mnemonic: "c.sd"
+    fields: [ c_opcode_q0, c_funct3_sd ]
+    args: [ c_rs2c, c_d_uimm, c_rs1c ]
+    format: "_, _(_)"

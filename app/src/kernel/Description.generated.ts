@@ -973,6 +973,108 @@ new InstructionDescription("A", BitDepth.BIT_64, 32, "amomaxu.d.aqrl")
   .addArg(new ArgumentPattern("rs1", "15,16,17,18,19", "par(regx)"))
   .setJump({ label: "none" }),
 
+new InstructionDescription("C", BitDepth.BIT_32 | BitDepth.BIT_64 | BitDepth.BIT_128, 16, "illegal")
+  .addField(new Matcher("illegal", "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15", "0000000000000000"))
+  .setJump({ label: "none" }),
+
+new InstructionDescription("C", BitDepth.BIT_32 | BitDepth.BIT_64 | BitDepth.BIT_128, 16, "c.addi4spn")
+  .addField(new Matcher("opcode", "0,1", "00"))
+  .addField(new Matcher("funct3", "13,14,15", "000"))
+  .addRestrict(new Matcher(undefined, "0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15", "0000000000000000"))
+  .addArg(new ArgumentPattern("rd'", "2,3,4", "regcx"))
+  .addArg(new ArgumentPattern("uimm", "6,5,11,12,7,8,9,10", "unumx(2)"))
+  .setJump({ label: "none" }),
+
+new InstructionDescription("C", BitDepth.BIT_32 | BitDepth.BIT_64 | BitDepth.BIT_128, 16, "c.lw")
+  .addField(new Matcher("opcode", "0,1", "00"))
+  .addField(new Matcher("funct3", "13,14,15", "010"))
+  .addArg(new ArgumentPattern("rd'", "2,3,4", "regcx"))
+  .addArg(new ArgumentPattern("uimm", "6,10,11,12,5", "unumx(2)"))
+  .addArg(new ArgumentPattern("rs1'", "7,8,9", "regcx"))
+  .setArgFormat("_, _(_)")
+  .setJump({ label: "none" }),
+
+new InstructionDescription("C", BitDepth.BIT_32 | BitDepth.BIT_64 | BitDepth.BIT_128, 16, "c.sw")
+  .addField(new Matcher("opcode", "0,1", "00"))
+  .addField(new Matcher("funct3", "13,14,15", "011"))
+  .addArg(new ArgumentPattern("rs2'", "2,3,4", "regcx"))
+  .addArg(new ArgumentPattern("uimm", "6,10,11,12,5", "unumx(2)"))
+  .addArg(new ArgumentPattern("rs1'", "7,8,9", "regcx"))
+  .setArgFormat("_, _(_)")
+  .setJump({ label: "none" }),
+
+new InstructionDescription("C", BitDepth.BIT_32 | BitDepth.BIT_64, 16, "c.fld")
+  .addField(new Matcher("opcode", "0,1", "00"))
+  .addField(new Matcher("funct3", "13,14,15", "100"))
+  .addArg(new ArgumentPattern("rd'", "2,3,4", "regcf"))
+  .addArg(new ArgumentPattern("uimm", "10,11,12,5,6", "unumx(3)"))
+  .addArg(new ArgumentPattern("rs1'", "7,8,9", "regcx"))
+  .setArgFormat("_, _(_)")
+  .setJump({ label: "none" }),
+
+new InstructionDescription("C", BitDepth.BIT_32 | BitDepth.BIT_64, 16, "c.fsd")
+  .addField(new Matcher("opcode", "0,1", "00"))
+  .addField(new Matcher("funct3", "13,14,15", "101"))
+  .addArg(new ArgumentPattern("rs2'", "2,3,4", "regcf"))
+  .addArg(new ArgumentPattern("uimm", "10,11,12,5,6", "unumx(3)"))
+  .addArg(new ArgumentPattern("rs1'", "7,8,9", "regcx"))
+  .setArgFormat("_, _(_)")
+  .setJump({ label: "none" }),
+
+new InstructionDescription("C", BitDepth.BIT_128, 16, "c.lq")
+  .addField(new Matcher("opcode", "0,1", "00"))
+  .addField(new Matcher("funct3", "13,14,15", "100"))
+  .addArg(new ArgumentPattern("rd'", "2,3,4", "regcx"))
+  .addArg(new ArgumentPattern("uimm", "11,12,5,6,10", "unumx(4)"))
+  .addArg(new ArgumentPattern("rs1'", "7,8,9", "regcx"))
+  .setArgFormat("_, _(_)")
+  .setJump({ label: "none" }),
+
+new InstructionDescription("C", BitDepth.BIT_128, 16, "c.sq")
+  .addField(new Matcher("opcode", "0,1", "00"))
+  .addField(new Matcher("funct3", "13,14,15", "101"))
+  .addArg(new ArgumentPattern("rs2'", "2,3,4", "regcx"))
+  .addArg(new ArgumentPattern("uimm", "11,12,5,6,10", "unumx(4)"))
+  .addArg(new ArgumentPattern("rs1'", "7,8,9", "regcx"))
+  .setArgFormat("_, _(_)")
+  .setJump({ label: "none" }),
+
+new InstructionDescription("C", BitDepth.BIT_32, 16, "c.flw")
+  .addField(new Matcher("opcode", "0,1", "00"))
+  .addField(new Matcher("funct3", "13,14,15", "110"))
+  .addArg(new ArgumentPattern("rd'", "2,3,4", "regcf"))
+  .addArg(new ArgumentPattern("uimm", "6,10,11,12,5", "unumx(2)"))
+  .addArg(new ArgumentPattern("rs1'", "7,8,9", "regcx"))
+  .setArgFormat("_, _(_)")
+  .setJump({ label: "none" }),
+
+new InstructionDescription("C", BitDepth.BIT_32, 16, "c.fsw")
+  .addField(new Matcher("opcode", "0,1", "00"))
+  .addField(new Matcher("funct3", "13,14,15", "111"))
+  .addArg(new ArgumentPattern("rs2'", "2,3,4", "regcf"))
+  .addArg(new ArgumentPattern("uimm", "6,10,11,12,5", "unumx(2)"))
+  .addArg(new ArgumentPattern("rs1'", "7,8,9", "regcx"))
+  .setArgFormat("_, _(_)")
+  .setJump({ label: "none" }),
+
+new InstructionDescription("C", BitDepth.BIT_64 | BitDepth.BIT_128, 16, "c.ld")
+  .addField(new Matcher("opcode", "0,1", "00"))
+  .addField(new Matcher("funct3", "13,14,15", "110"))
+  .addArg(new ArgumentPattern("rd'", "2,3,4", "regcx"))
+  .addArg(new ArgumentPattern("uimm", "10,11,12,5,6", "unumx(3)"))
+  .addArg(new ArgumentPattern("rs1'", "7,8,9", "regcx"))
+  .setArgFormat("_, _(_)")
+  .setJump({ label: "none" }),
+
+new InstructionDescription("C", BitDepth.BIT_64 | BitDepth.BIT_128, 16, "c.sd")
+  .addField(new Matcher("opcode", "0,1", "00"))
+  .addField(new Matcher("funct3", "13,14,15", "111"))
+  .addArg(new ArgumentPattern("rs2'", "2,3,4", "regcx"))
+  .addArg(new ArgumentPattern("uimm", "10,11,12,5,6", "unumx(3)"))
+  .addArg(new ArgumentPattern("rs1'", "7,8,9", "regcx"))
+  .setArgFormat("_, _(_)")
+  .setJump({ label: "none" }),
+
 new InstructionDescription("D", BitDepth.BIT_32 | BitDepth.BIT_64, 32, "flw")
   .addField(new Matcher("opcode", "0,1,2,3,4,5,6", "1110000"))
   .addField(new Matcher("funct3", "12,13,14", "110"))
