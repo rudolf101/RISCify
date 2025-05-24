@@ -72,8 +72,9 @@ ${body}
 ];
 `;
 
-    fs.writeFileSync(path.resolve(__dirname, "../kernel/Description.generated.ts"), content);
-    console.log("✅ Generated instructions.generated.ts");
+    const generatedFilename = "Description.generated.ts";
+    fs.writeFileSync(path.resolve(__dirname, `../kernel/${generatedFilename}`), content);
+    console.log(`✅ Generated ${generatedFilename}`);
 }
 
 main().catch((err) => {
