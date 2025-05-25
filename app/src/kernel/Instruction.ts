@@ -35,7 +35,7 @@ type ActualJumpOut = {
 type ActualJumpBetween = {
     label: "between",
     distance: number, // указывает на ближайшую инструкцию вниз
-    offset: string // количество байт от начала инструкции
+    offset: bigint // количество байт от начала инструкции
 };
 
 // Основное отличие от Jump в модуле InstructionDescription:
