@@ -124,7 +124,7 @@ Sets:
     fields: [ c_illegal ]
   - mnemonic: "c.addi4spn"
     fields: [ c_opcode_q0, c_funct3_addi4spn ]
-    restricts: [ c_no_zero, c_addi4spn_nozero ]
+    restricts: [ c_no_zero, c_addi4spn_no_zero ]
     args: [ c_rdc, c_addi4spn_uimm ]
   - mnemonic: "c.lw"
     fields: [ c_opcode_q0, c_funct3_lw ]
