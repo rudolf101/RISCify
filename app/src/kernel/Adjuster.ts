@@ -36,7 +36,7 @@ export function adjuster(instructions: SimilarInstructions[]): SimilarInstructio
                             instruction.actualJump = {
                                 label: "between",
                                 distance: curInstructionIndex - i,
-                                offset: curDistanceInBytes
+                                offset: curDistanceInBytes.toString()
                             };
                             break;
                         } else {
@@ -62,7 +62,7 @@ export function adjuster(instructions: SimilarInstructions[]): SimilarInstructio
                             instruction.actualJump = {
                                 label: "between",
                                 distance: curInstructionIndex - i,
-                                offset: curInstructionLengthInBytes + curDistanceInBytes
+                                offset: (curInstructionLengthInBytes + curDistanceInBytes).toString()
                             };
                             break;
                         } else {
