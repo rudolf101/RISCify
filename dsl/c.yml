@@ -38,7 +38,7 @@ Fields:
   # Quadrants
   c_opcode_q0:       { name: "opcode", span: "0:1", value: "00" }
   c_opcode_q1:       { name: "opcode", span: "0:1", value: "10" }
-  c_opcode_q2:       { name: "opcode", span: "0:1", value: "02" }
+  c_opcode_q2:       { name: "opcode", span: "0:1", value: "01" }
   # Q0
   c_funct3_addi4spn: { name: "funct3", span: "13:15"  , value: "000" }
   c_funct3_fld:      { name: "funct3", span: "13:15"  , value: "100" }
@@ -46,7 +46,7 @@ Fields:
   c_funct3_lw:       { name: "funct3", span: "13:15"  , value: "010" }
   c_funct3_flw:      { name: "funct3", span: "13:15"  , value: "110" }
   c_funct3_ld:       { name: "funct3", span: "13:15"  , value: "110" }
-  #c_funct3_reserved: { name: "funct3", span: "13:15"  , value: "001" }
+  #c_funct3_reserved:{ name: "funct3", span: "13:15"  , value: "001" }
   c_funct3_fsd:      { name: "funct3", span: "13:15"  , value: "101" }
   c_funct3_sq:       { name: "funct3", span: "13:15"  , value: "101" }
   c_funct3_sw:       { name: "funct3", span: "13:15"  , value: "011" }
@@ -86,12 +86,12 @@ Fields:
   c_r_upper_two:     { name: "r"     , span: "7:11", value: "01000" }
   c_r_lower_zero:    { name: "r"     , span: "2:6" , value: "00000" }
   # Arith
-  c_funct6_sub:      { name: "funct6", span: "10,15", value: "110001" }
-  c_funct6_xor:      { name: "funct6", span: "10,15", value: "110001" }
-  c_funct6_or:       { name: "funct6", span: "10,15", value: "110001" }
-  c_funct6_and:      { name: "funct6", span: "10,15", value: "110001" }
-  c_funct6_subw:     { name: "funct6", span: "10,15", value: "111001" }
-  c_funct6_addw:     { name: "funct6", span: "10,15", value: "111001" }
+  c_funct6_sub:      { name: "funct6", span: "10:15", value: "110001" }
+  c_funct6_xor:      { name: "funct6", span: "10:15", value: "110001" }
+  c_funct6_or:       { name: "funct6", span: "10:15", value: "110001" }
+  c_funct6_and:      { name: "funct6", span: "10:15", value: "110001" }
+  c_funct6_subw:     { name: "funct6", span: "10:15", value: "111001" }
+  c_funct6_addw:     { name: "funct6", span: "10:15", value: "111001" }
   c_funct2_sub:      { name: "funct2", span: "5,6"  , value: "00" }
   c_funct2_xor:      { name: "funct2", span: "5,6"  , value: "10" }
   c_funct2_or:       { name: "funct2", span: "5,6"  , value: "01" }
@@ -156,16 +156,16 @@ Sets:
     fields: [ c_opcode_q1, c_funct3_misc_alu, c_funct2_andi ]
     args: [ c_rs1c_rdc, c_imm_1 ]
   - mnemonic: "c.sub"
-    fields: [ c_opcode_q1, c_funct3_misc_alu, c_funct6_sub, c_funct2_sub ]
+    fields: [ c_opcode_q1, c_funct6_sub, c_funct2_sub ]
     args: [ c_rs1c_rdc, c_rs2c ]
   - mnemonic: "c.xor"
-    fields: [ c_opcode_q1, c_funct3_misc_alu, c_funct6_xor, c_funct2_xor ]
+    fields: [ c_opcode_q1, c_funct6_xor, c_funct2_xor ]
     args: [ c_rs1c_rdc, c_rs2c ]
   - mnemonic: "c.or"
-    fields: [ c_opcode_q1, c_funct3_misc_alu, c_funct6_or, c_funct2_or ]
+    fields: [ c_opcode_q1, c_funct6_or, c_funct2_or ]
     args: [ c_rs1c_rdc, c_rs2c ]
   - mnemonic: "c.and"
-    fields: [ c_opcode_q1, c_funct3_misc_alu, c_funct6_and, c_funct2_and ]
+    fields: [ c_opcode_q1, c_funct6_and, c_funct2_and ]
     args: [ c_rs1c_rdc, c_rs2c ]
   - mnemonic: "c.j"
     fields: [ c_opcode_q1, c_funct3_j ]
@@ -318,10 +318,10 @@ Sets:
     restricts: [ c_imm_1_no_zero ]
     args: [ c_rs1c_rdc, c_uimm_1 ]
   - mnemonic: "c.subw"
-    fields: [ c_opcode_q1, c_funct3_misc_alu, c_funct6_subw, c_funct2_subw ]
+    fields: [ c_opcode_q1, c_funct6_subw, c_funct2_subw ]
     args: [ c_rs1c_rdc, c_rs2c ]
   - mnemonic: "c.addw"
-    fields: [ c_opcode_q1, c_funct3_misc_alu, c_funct6_addw, c_funct2_addw ]
+    fields: [ c_opcode_q1, c_funct6_addw, c_funct2_addw ]
     args: [ c_rs1c_rdc, c_rs2c ]
   - mnemonic: "c.slli"
     fields: [ c_opcode_q2, c_funct3_slli ]
