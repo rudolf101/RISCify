@@ -20,6 +20,12 @@ jobs:
         run: |
           npm i
 
+      - name: Checking that the generated files are regenerated
+        working-directory: ./app
+        run: |
+          npx tsx src/generator/run.ts
+          git diff --exit-code -- '*generated.ts' || (echo "Run 'npx tsx app/src/generator/run.ts' and commit it" && exit 1)
+
       - name: Run tests
         working-directory: ./app
         run: |
