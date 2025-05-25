@@ -9,9 +9,11 @@ Args:
   c_frs1c_frdc:    { name: "rs1'/rd'", span: "7:9"                   , display: "regcf"     }
   c_full_rd:       { name: "rd"      , span: "7:11"                  , display: "regx"      }
   c_full_rs1:      { name: "rs1"     , span: "7:11"                  , display: "regx"      }
+  c_full_rs2:      { name: "rs2"     , span: "2:6"                   , display: "regx"      }
   c_full_rs1_rd:   { name: "rs1/rd"  , span: "7:11"                  , display: "regx"      }
   c_full_frd:      { name: "rd"      , span: "7:11"                  , display: "regf"      }
   c_full_frs1:     { name: "rs1"     , span: "7:11"                  , display: "regf"      }
+  c_full_frs2:     { name: "rs2"     , span: "2:6"                   , display: "regf"      }
   c_full_frs1_frd: { name: "rs1/rd"  , span: "7:11"                  , display: "regf"      }
   c_addi4spn_uimm: { name: "uimm"    , span: "6,5,11,12,7:10"        , display: "unumx(2)"  }
   c_w_uimm:        { name: "uimm"    , span: "6,10,11,12,5"          , display: "unumx(2)"  }
@@ -24,12 +26,12 @@ Args:
   c_j_jal_imm:     { name: "imm"     , span: "3-5,11,2,7,6,9,10,8,12", display: "numx(1)"   }
   c_lui_imm:       { name: "imm"     , span: "2:6,12"                , display: "num"       }
   c_branch_imm:    { name: "imm"     , span: "3,4,10,11,2,5,6,12"    , display: "numx(1)"   }
-  c_lw_sp_uinmm:   { name: "uimm"    , span: "4,5,6,12,2,3"          , display: "unumx(2)"  }
-  c_ld_sp_uinmm:   { name: "uimm"    , span: "5,6,12,2,3,4"          , display: "unumx(3)"  }
-  c_lq_sp_uinmm:   { name: "uimm"    , span: "6,12,2,3,4,5"          , display: "unumx(4)"  }
-  c_sw_sp_uinmm:   { name: "uimm"    , span: "9,10,11,12,7,8"        , display: "unumx(2)"  }
-  c_sd_sp_uinmm:   { name: "uimm"    , span: "10,11,12,7,8,9"        , display: "unumx(3)"  }
-  c_sq_sp_uinmm:   { name: "uimm"    , span: "11,12,7,8,9,10"        , display: "unumx(4)"  }
+  c_lw_sp_uimm:    { name: "uimm"    , span: "4,5,6,12,2,3"          , display: "unumx(2)"  }
+  c_ld_sp_uimm:    { name: "uimm"    , span: "5,6,12,2,3,4"          , display: "unumx(3)"  }
+  c_lq_sp_uimm:    { name: "uimm"    , span: "6,12,2,3,4,5"          , display: "unumx(4)"  }
+  c_sw_sp_uimm:    { name: "uimm"    , span: "9,10,11,12,7,8"        , display: "unumx(2)"  }
+  c_sd_sp_uimm:    { name: "uimm"    , span: "10,11,12,7,8,9"        , display: "unumx(3)"  }
+  c_sq_sp_uimm:    { name: "uimm"    , span: "11,12,7,8,9,10"        , display: "unumx(4)"  }
 
 Fields:
   c_illegal:         { name: "illegal", span: "0:15", value: "0000000000000000" }
@@ -174,6 +176,33 @@ Sets:
   - mnemonic: "c.bnez"
     fields: [ c_opcode_q1, c_funct3_bnez ]
     args: [ c_rs1c, c_branch_imm ]
+  - mnemonic: "c.lwsp"
+    fields: [ c_opcode_q2, c_funct3_lwsp ]
+    restricts: [ c_r_upper_no_zero ]
+    args: [ c_full_rd, c_lw_sp_uimm ]
+    format: "_, _(x2)"
+  - mnemonic: "c.swsp"
+    fields: [ c_opcode_q2, c_funct3_swsp ]
+    args: [ c_full_rs2, c_sw_sp_uimm ]
+    format: "_, _(x2)"
+  - mnemonic: "c.jr"
+    fields: [ c_opcode_q2, c_funct4_jr, c_r_lower_zero ]
+    restricts: [ c_r_upper_no_zero ]
+    args: [ c_full_rs1 ]
+  - mnemonic: "c.mv"
+    fields: [ c_opcode_q2, c_funct4_mv ]
+    restricts: [ c_r_upper_no_zero, c_r_lower_no_zero ]
+    args: [ c_full_rd, c_full_rs2 ]
+  - mnemonic: "c.ebreak"
+    fields: [ c_opcode_q2, c_funct4_ebreak, c_r_upper_zero, c_r_lower_zero ]
+  - mnemonic: "c.jalr"
+    fields: [ c_opcode_q2, c_funct4_jalr, c_r_lower_zero ]
+    restricts: [ c_r_upper_no_zero ]
+    args: [ c_full_rs1 ]
+  - mnemonic: "c.add"
+    fields: [ c_opcode_q2, c_funct4_add ]
+    restricts: [ c_r_upper_no_zero, c_r_lower_no_zero ]
+    args: [ c_full_rs1_rd, c_full_rs2 ]
 
 - name: "C"
   size: "16"
@@ -187,6 +216,14 @@ Sets:
     fields: [ c_opcode_q0, c_funct3_fsd ]
     args: [ c_frs2c, c_d_uimm, c_rs1c ]
     format: "_, _(_)"
+  - mnemonic: "c.fldsp"
+    fields: [ c_opcode_q2, c_funct3_fldsp ]
+    args: [ c_full_frd, c_ld_sp_uimm ]
+    format: "_, _(x2)"
+  - mnemonic: "c.fsdsp"
+    fields: [ c_opcode_q2, c_funct3_fsdsp ]
+    args: [ c_full_frs2, c_sd_sp_uimm ]
+    format: "_, _(x2)"
 
 - name: "C"
   size: "16"
@@ -206,6 +243,19 @@ Sets:
   - mnemonic: "c.srai"
     fields: [ c_opcode_q1, c_funct3_misc_alu, c_funct2_srai, c_imm_1_zero ]
     args: [ c_rs1c_rdc, c_shamt64 ]
+  - mnemonic: "c.slli"
+    fields: [ c_opcode_q2, c_funct3_slli, c_imm_1_zero ]
+    restricts: [ c_r_upper_no_zero ]
+    args: [ c_full_rs1_rd, c_shamt64 ]
+  - mnemonic: "c.lqsp"
+    fields: [ c_opcode_q2, c_funct3_lqsp ]
+    restricts: [ c_r_upper_no_zero ]
+    args: [ c_full_rd, c_lq_sp_uimm ]
+    format: "_, _(x2)"
+  - mnemonic: "c.sqsp"
+    fields: [ c_opcode_q2, c_funct3_sqsp ]
+    args: [ c_full_rs2, c_sq_sp_uimm ]
+    format: "_, _(x2)"
 
 - name: "C"
   size: "16"
@@ -230,6 +280,18 @@ Sets:
     fields: [ c_opcode_q1, c_funct3_misc_alu, c_funct2_srai ]
     restricts: [ c_imm_1_no_zero, c_shamt5_no_one ]
     args: [ c_rs1c_rdc, c_uimm_1 ]
+  - mnemonic: "c.slli"
+    fields: [ c_opcode_q2, c_funct3_slli ]
+    restricts: [ c_r_upper_no_zero, c_imm_1_no_zero, c_shamt5_no_one ]
+    args: [ c_full_rs1_rd, c_uimm_1 ]
+  - mnemonic: "c.flwsp"
+    fields: [ c_opcode_q2, c_funct3_flwsp ]
+    args: [ c_full_frd, c_lw_sp_uimm ]
+    format: "_, _(x2)"
+  - mnemonic: "c.fswsp"
+    fields: [ c_opcode_q2, c_funct3_fswsp ]
+    args: [ c_full_frs2, c_sw_sp_uimm ]
+    format: "_, _(x2)"
 
 - name: "C"
   size: "16"
@@ -245,7 +307,7 @@ Sets:
     format: "_, _(_)"
   - mnemonic: "c.addiw"
     fields: [ c_opcode_q1, c_funct3_addiw ]
-    restricts: [ r_upper_no_zero ]
+    restricts: [ c_r_upper_no_zero ]
     args: [ c_full_rs1_rd, c_imm_1 ]
   - mnemonic: "c.srli"
     fields: [ c_opcode_q1, c_funct3_misc_alu, c_funct2_srli ]
@@ -261,3 +323,16 @@ Sets:
   - mnemonic: "c.addw"
     fields: [ c_opcode_q1, c_funct3_misc_alu, c_funct6_addw, c_funct2_addw ]
     args: [ c_rs1c_rdc, c_rs2c ]
+  - mnemonic: "c.slli"
+    fields: [ c_opcode_q2, c_funct3_slli ]
+    restricts: [ c_r_upper_no_zero, c_imm_1_no_zero ]
+    args: [ c_full_rs1_rd, c_uimm_1 ]
+  - mnemonic: "c.ldsp"
+    fields: [ c_opcode_q2, c_funct3_ldsp ]
+    restricts: [ c_r_upper_no_zero ]
+    args: [ c_full_rd, c_ld_sp_uimm ]
+    format: "_, _(x2)"
+  - mnemonic: "c.sdsp"
+    fields: [ c_opcode_q2, c_funct3_sdsp ]
+    args: [ c_full_rs2, c_sd_sp_uimm ]
+    format: "_, _(x2)"
