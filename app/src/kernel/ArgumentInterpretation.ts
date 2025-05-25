@@ -2,7 +2,7 @@ import { Bits } from "./Bits";
 
 export abstract class ArgumentInterpretation {
     public abstract textual(bits: Bits): string;
-    public abstract numerical(bits: Bits): number;
+    public abstract numerical(bits: Bits): bigint;
 }
 
 class InvalidInterpretation extends ArgumentInterpretation {
@@ -10,8 +10,8 @@ class InvalidInterpretation extends ArgumentInterpretation {
         return "<invalid arg>";
     }
 
-    public numerical(bits: Bits): number {
-        return 0;
+    public numerical(bits: Bits): bigint {
+        return 0n;
     }
 }
 
@@ -27,8 +27,8 @@ class UnumInterpretation extends ArgumentInterpretation {
         return this.numerical(bits).toString();
     }
 
-    public numerical(bits: Bits): number {
-        return bits.unsigned * this._multiplier;
+    public numerical(bits: Bits): bigint {
+        return bits.unsigned * BigInt(this._multiplier);
     }
 }
 
@@ -44,8 +44,8 @@ class NumInterpretation extends ArgumentInterpretation {
         return this.numerical(bits).toString();
     }
 
-    public numerical(bits: Bits): number {
-        return bits.numerical * this._multiplier;
+    public numerical(bits: Bits): bigint {
+        return bits.numerical * BigInt(this._multiplier);
     }
 }
 
@@ -63,8 +63,8 @@ class RegInterpretation extends ArgumentInterpretation {
         return this._prefix + this.numerical(bits).toString();
     }
 
-    public numerical(bits: Bits): number {
-        return bits.unsigned + this._offset;
+    public numerical(bits: Bits): bigint {
+        return bits.unsigned + BigInt(this._offset);
     }
 }
 
@@ -73,21 +73,21 @@ class FenceInterpretation extends ArgumentInterpretation {
         return [  '0',   'w',   'r',   'rw',
                   'o',  'ow',  'or',  'orw',
                   'i',  'iw',  'ir',  'irw',
-                 'io', 'iow', 'ior', 'iorw' ][this.numerical(bits)]; 
+                 'io', 'iow', 'ior', 'iorw' ][Number(this.numerical(bits))]; 
     }
 
-    public numerical(bits: Bits): number {
-        return bits.unsigned % 16;
+    public numerical(bits: Bits): bigint {
+        return bits.unsigned % 16n;
     }
 }
 
 class RmInterpretation extends ArgumentInterpretation {
     public textual(bits: Bits): string {
-        return ['rne', 'rtz', 'rdn', 'rup', 'rmm', '-', '-', 'dyn'][this.numerical(bits)]; 
+        return ['rne', 'rtz', 'rdn', 'rup', 'rmm', '-', '-', 'dyn'][Number(this.numerical(bits))]; 
     }
 
-    public numerical(bits: Bits): number {
-        return bits.unsigned % 8;
+    public numerical(bits: Bits): bigint {
+        return bits.unsigned % 8n;
     }
 }
 
@@ -103,7 +103,7 @@ class ParInterpretation extends ArgumentInterpretation {
         return "(" + this._sub.textual(bits) + ")";
     }
 
-    public numerical(bits: Bits): number {
+    public numerical(bits: Bits): bigint {
         return this._sub.numerical(bits);
     }
 }
