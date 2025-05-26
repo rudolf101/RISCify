@@ -15,6 +15,23 @@ class InvalidInterpretation extends ArgumentInterpretation {
     }
 }
 
+class ConstInterpretation extends ArgumentInterpretation {
+    private _value: number
+
+    constructor(value: number) {
+        super();
+        this._value = value;
+    }
+
+    public textual(bits: Bits): string {
+        return this.numerical(bits).toString();
+    }
+
+    public numerical(_bits: Bits): number {
+        return this._value;
+    }
+}
+
 class UnumInterpretation extends ArgumentInterpretation {
     private _multiplier: number
 
@@ -208,7 +225,14 @@ export function argumentInterpretationFactory(description: string): ArgumentInte
         case "fence": return new FenceInterpretation();
         case "rm": return new RmInterpretation();
     }
-    if (description.startsWith("unumx(") && description.endsWith(")")) {
+    if (description.startsWith("const(") && description.endsWith(")")) {
+        let kStr: string = description.substring(6, description.length - 1);
+        let k: number = +kStr;
+        if (!isNaN(k)) {
+            return new ConstInterpretation(k);
+        }
+    }
+    else if (description.startsWith("unumx(") && description.endsWith(")")) {
         let kStr: string = description.substring(6, description.length - 1);
         let k: number = +kStr;
         if (!isNaN(k)) {
