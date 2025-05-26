@@ -130,7 +130,7 @@ Sets:
   - mnemonic: "fle.q"
     fields: [ q_opcode_op, q_fmt, q_funct5_cmp, q_funct3_le ]
     args: [ q_rd_x, q_rs1, q_rs2 ]
-  - mnemonic: "class.q"
+  - mnemonic: "fclass.q"
     fields: [ q_opcode_op, q_fmt, q_funct5_class, q_funct3_class, q_rs2_0 ]
     args: [ q_rd_x, q_rs1 ]
   - mnemonic: "fcvt.w.q"

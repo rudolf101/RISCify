@@ -135,7 +135,7 @@ Sets:
   - mnemonic: "fle.h"
     fields: [ h_opcode_op, h_fmt, h_funct5_cmp, h_funct3_le ]
     args: [ h_rd_x, h_rs1, h_rs2 ]
-  - mnemonic: "class.h"
+  - mnemonic: "fclass.h"
     fields: [ h_opcode_op, h_fmt, h_funct5_class, h_funct3_class, h_rs2_0 ]
     args: [ h_rd_x, h_rs1 ]
   - mnemonic: "fcvt.w.h"

@@ -1181,7 +1181,7 @@ new InstructionDescription("D", BitDepth.BIT_32 | BitDepth.BIT_64, 32, "fle.d")
   .addArg(new ArgumentPattern("rs2", "20,21,22,23,24", "regf"))
   .setJump({ label: "none" }),
 
-new InstructionDescription("D", BitDepth.BIT_32 | BitDepth.BIT_64, 32, "class.d")
+new InstructionDescription("D", BitDepth.BIT_32 | BitDepth.BIT_64, 32, "fclass.d")
   .addField(new Matcher("opcode", "0,1,2,3,4,5,6", "1100101"))
   .addField(new Matcher("fmt", "25,26", "10"))
   .addField(new Matcher("funct5", "27,28,29,30,31", "00111"))
@@ -1509,7 +1509,7 @@ new InstructionDescription("F", BitDepth.BIT_32 | BitDepth.BIT_64, 32, "fle.s")
   .addArg(new ArgumentPattern("rs2", "20,21,22,23,24", "regf"))
   .setJump({ label: "none" }),
 
-new InstructionDescription("F", BitDepth.BIT_32 | BitDepth.BIT_64, 32, "class.s")
+new InstructionDescription("F", BitDepth.BIT_32 | BitDepth.BIT_64, 32, "fclass.s")
   .addField(new Matcher("opcode", "0,1,2,3,4,5,6", "1100101"))
   .addField(new Matcher("fmt", "25,26", "00"))
   .addField(new Matcher("funct5", "27,28,29,30,31", "00111"))
@@ -1934,7 +1934,7 @@ new InstructionDescription("Q", BitDepth.BIT_32 | BitDepth.BIT_64, 32, "fle.q")
   .addArg(new ArgumentPattern("rs2", "20,21,22,23,24", "regf"))
   .setJump({ label: "none" }),
 
-new InstructionDescription("Q", BitDepth.BIT_32 | BitDepth.BIT_64, 32, "class.q")
+new InstructionDescription("Q", BitDepth.BIT_32 | BitDepth.BIT_64, 32, "fclass.q")
   .addField(new Matcher("opcode", "0,1,2,3,4,5,6", "1100101"))
   .addField(new Matcher("fmt", "25,26", "11"))
   .addField(new Matcher("funct5", "27,28,29,30,31", "00111"))
@@ -2857,7 +2857,7 @@ new InstructionDescription("Zfh", BitDepth.BIT_32 | BitDepth.BIT_64, 32, "fle.h"
   .addArg(new ArgumentPattern("rs2", "20,21,22,23,24", "regf"))
   .setJump({ label: "none" }),
 
-new InstructionDescription("Zfh", BitDepth.BIT_32 | BitDepth.BIT_64, 32, "class.h")
+new InstructionDescription("Zfh", BitDepth.BIT_32 | BitDepth.BIT_64, 32, "fclass.h")
   .addField(new Matcher("opcode", "0,1,2,3,4,5,6", "1100101"))
   .addField(new Matcher("fmt", "25,26", "01"))
   .addField(new Matcher("funct5", "27,28,29,30,31", "00111"))

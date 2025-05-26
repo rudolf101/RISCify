@@ -124,7 +124,7 @@ Sets:
   - mnemonic: "fle.s"
     fields: [ f_opcode_op, f_fmt, f_funct5_cmp, f_funct3_le ]
     args: [ f_rd_x, f_rs1, f_rs2 ]
-  - mnemonic: "class.s"
+  - mnemonic: "fclass.s"
     fields: [ f_opcode_op, f_fmt, f_funct5_class, f_funct3_class, f_rs2_0 ]
     args: [ f_rd_x, f_rs1 ]
   - mnemonic: "fcvt.s.w"

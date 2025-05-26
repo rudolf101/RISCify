@@ -123,7 +123,7 @@ Sets:
   - mnemonic: "fle.d"
     fields: [ d_opcode_op, d_fmt, d_funct5_cmp, d_funct3_le ]
     args: [ d_rd_x, d_rs1, d_rs2 ]
-  - mnemonic: "class.d"
+  - mnemonic: "fclass.d"
     fields: [ d_opcode_op, d_fmt, d_funct5_class, d_funct3_class, d_rs2_0 ]
     args: [ d_rd_x, d_rs1 ]
   - mnemonic: "fcvt.w.d"
