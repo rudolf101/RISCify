@@ -47,8 +47,8 @@ Fields:
   h_funct5_class:  { name: "funct5", span: "27:31", value: "00111" }
   h_funct5_cvtif:  { name: "funct5", span: "27:31", value: "00011" }
   h_funct5_cvtfi:  { name: "funct5", span: "27:31", value: "01011" }
-  h_funct5_mvfi:   { name: "funct5", span: "27:31", value: "00111" }
-  h_funct5_mvif:   { name: "funct5", span: "27:31", value: "01111" }
+  h_funct5_mvif:   { name: "funct5", span: "27:31", value: "00111" }
+  h_funct5_mvfi:   { name: "funct5", span: "27:31", value: "01111" }
   h_rs2_0:         { name: "rs2",    span: "20:24", value: "00000" }
   h_rs2_1:         { name: "rs2",    span: "20:24", value: "10000" }
   h_rs2_2:         { name: "rs2",    span: "20:24", value: "01000" }
@@ -140,22 +140,22 @@ Sets:
     args: [ h_rd_x, h_rs1 ]
   - mnemonic: "fcvt.w.h"
     fields: [ h_opcode_op, h_fmt, h_funct5_cvtif, h_rs2_0 ]
-    args: [ h_rd, h_rs1_x, h_rm ]
+    args: [ h_rd_x, h_rs1, h_rm ]
   - mnemonic: "fcvt.wu.h"
     fields: [ h_opcode_op, h_fmt, h_funct5_cvtif, h_rs2_1 ]
-    args: [ h_rd, h_rs1_x, h_rm ]
+    args: [ h_rd_x, h_rs1, h_rm ]
   - mnemonic: "fmv.x.h"
-    fields: [ h_opcode_op, h_fmt, h_funct3_mv, h_funct5_mvfi, h_rs2_0 ]
-    args: [ h_rd, h_rs1 ]
+    fields: [ h_opcode_op, h_fmt, h_funct3_mv, h_funct5_mvif, h_rs2_0 ]
+    args: [ h_rd_x, h_rs1 ]
   - mnemonic: "fcvt.h.w"
     fields: [ h_opcode_op, h_fmt, h_funct5_cvtfi, h_rs2_0 ]
-    args: [ h_rd_x, h_rs1, h_rm ]
+    args: [ h_rd, h_rs1_x, h_rm ]
   - mnemonic: "fcvt.h.wu"
     fields: [ h_opcode_op, h_fmt, h_funct5_cvtfi, h_rs2_1 ]
-    args: [ h_rd_x, h_rs1, h_rm ]
+    args: [ h_rd, h_rs1_x, h_rm ]
   - mnemonic: "fmv.h.x"
-    fields: [ h_opcode_op, h_fmt, h_funct3_mv, h_funct5_mvif, h_rs2_0 ]
-    args: [ h_rd, h_rs1 ]
+    fields: [ h_opcode_op, h_fmt, h_funct3_mv, h_funct5_mvfi, h_rs2_0 ]
+    args: [ h_rd, h_rs1_x ]
 
 - name: "Zfh"
   size: "32"
@@ -163,13 +163,13 @@ Sets:
   instructions:
   - mnemonic: "fcvt.l.h"
     fields: [ h_opcode_op, h_fmt, h_funct5_cvtif, h_rs2_2 ]
-    args: [ h_rd, h_rs1_x, h_rm ]
+    args: [ h_rd_x, h_rs1, h_rm ]
   - mnemonic: "fcvt.lu.h"
     fields: [ h_opcode_op, h_fmt, h_funct5_cvtif, h_rs2_3 ]
-    args: [ h_rd, h_rs1_x, h_rm ]
+    args: [ h_rd_x, h_rs1, h_rm ]
   - mnemonic: "fcvt.h.l"
     fields: [ h_opcode_op, h_fmt, h_funct5_cvtfi, h_rs2_2 ]
-    args: [ h_rd_x, h_rs1, h_rm ]
+    args: [ h_rd, h_rs1_x, h_rm ]
   - mnemonic: "fcvt.h.lu"
     fields: [ h_opcode_op, h_fmt, h_funct5_cvtfi, h_rs2_3 ]
-    args: [ h_rd_x, h_rs1, h_rm ]
+    args: [ h_rd, h_rs1_x, h_rm ]

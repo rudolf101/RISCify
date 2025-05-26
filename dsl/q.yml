@@ -46,8 +46,8 @@ Fields:
   q_funct5_class:  { name: "funct5", span: "27:31", value: "00111" }
   q_funct5_cvtif:  { name: "funct5", span: "27:31", value: "00011" }
   q_funct5_cvtfi:  { name: "funct5", span: "27:31", value: "01011" }
-  q_funct5_mvfi:   { name: "funct5", span: "27:31", value: "00111" }
-  q_funct5_mvif:   { name: "funct5", span: "27:31", value: "01111" }
+  q_funct5_mvif:   { name: "funct5", span: "27:31", value: "00111" } # unused for now
+  q_funct5_mvfi:   { name: "funct5", span: "27:31", value: "01111" } # unused for now
   q_rs2_0:         { name: "rs2",    span: "20:24", value: "00000" }
   q_rs2_1:         { name: "rs2",    span: "20:24", value: "10000" }
   q_rs2_2:         { name: "rs2",    span: "20:24", value: "01000" }
@@ -61,9 +61,11 @@ Sets:
   - mnemonic: "flw"
     fields: [ q_opcode_lw, q_funct3_lw ]
     args: [ q_rd, q_i_imm, q_rs1_x ]
+    format: "_, _(_)"
   - mnemonic: "fsw"
     fields: [ q_opcode_sw, q_funct3_sw ]
     args: [ q_rs2, q_i_imm, q_rs1_x ]
+    format: "_, _(_)"
   - mnemonic: "fmadd.q"
     fields: [ q_opcode_madd, q_fmt ]
     args: [ q_rd, q_rs1, q_rs2, q_rs3, q_rm ]
@@ -133,16 +135,16 @@ Sets:
     args: [ q_rd_x, q_rs1 ]
   - mnemonic: "fcvt.w.q"
     fields: [ q_opcode_op, q_fmt, q_funct5_cvtif, q_rs2_0 ]
-    args: [ q_rd, q_rs1_x, q_rm ]
+    args: [ q_rd_x, q_rs1, q_rm ]
   - mnemonic: "fcvt.wu.q"
     fields: [ q_opcode_op, q_fmt, q_funct5_cvtif, q_rs2_1 ]
-    args: [ q_rd, q_rs1_x, q_rm ]
+    args: [ q_rd_x, q_rs1, q_rm ]
   - mnemonic: "fcvt.q.w"
     fields: [ q_opcode_op, q_fmt, q_funct5_cvtfi, q_rs2_0 ]
-    args: [ q_rd_x, q_rs1, q_rm ]
+    args: [ q_rd, q_rs1_x, q_rm ]
   - mnemonic: "fcvt.q.wu"
     fields: [ q_opcode_op, q_fmt, q_funct5_cvtfi, q_rs2_1 ]
-    args: [ q_rd_x, q_rs1, q_rm ]
+    args: [ q_rd, q_rs1_x, q_rm ]
 
 - name: "Q"
   size: "32"
@@ -150,13 +152,13 @@ Sets:
   instructions:
   - mnemonic: "fcvt.l.q"
     fields: [ q_opcode_op, q_fmt, q_funct5_cvtif, q_rs2_2 ]
-    args: [ q_rd, q_rs1_x, q_rm ]
+    args: [ q_rd_x, q_rs1, q_rm ]
   - mnemonic: "fcvt.lu.q"
     fields: [ q_opcode_op, q_fmt, q_funct5_cvtif, q_rs2_3 ]
-    args: [ q_rd, q_rs1_x, q_rm ]
+    args: [ q_rd_x, q_rs1, q_rm ]
   - mnemonic: "fcvt.q.l"
     fields: [ q_opcode_op, q_fmt, q_funct5_cvtfi, q_rs2_2 ]
-    args: [ q_rd_x, q_rs1, q_rm ]
+    args: [ q_rd, q_rs1_x, q_rm ]
   - mnemonic: "fcvt.q.lu"
     fields: [ q_opcode_op, q_fmt, q_funct5_cvtfi, q_rs2_3 ]
-    args: [ q_rd_x, q_rs1, q_rm ]
+    args: [ q_rd, q_rs1_x, q_rm ]

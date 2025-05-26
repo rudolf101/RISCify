@@ -45,8 +45,8 @@ Fields:
   d_funct5_class:  { name: "funct5", span: "27:31", value: "00111" }
   d_funct5_cvtif:  { name: "funct5", span: "27:31", value: "00011" }
   d_funct5_cvtfi:  { name: "funct5", span: "27:31", value: "01011" }
-  d_funct5_mvfi:   { name: "funct5", span: "27:31", value: "00111" }
-  d_funct5_mvif:   { name: "funct5", span: "27:31", value: "01111" }
+  d_funct5_mvif:   { name: "funct5", span: "27:31", value: "00111" }
+  d_funct5_mvfi:   { name: "funct5", span: "27:31", value: "01111" }
   d_rs2_0:         { name: "rs2",    span: "20:24", value: "00000" }
   d_rs2_1:         { name: "rs2",    span: "20:24", value: "10000" }
   d_rs2_2:         { name: "rs2",    span: "20:24", value: "01000" }
@@ -60,9 +60,11 @@ Sets:
   - mnemonic: "flw"
     fields: [ d_opcode_lw, d_funct3_lw ]
     args: [ d_rd, d_i_imm, d_rs1_x ]
+    format: "_, _(_)"
   - mnemonic: "fsw"
     fields: [ d_opcode_sw, d_funct3_sw ]
     args: [ d_rs2, d_i_imm, d_rs1_x ]
+    format: "_, _(_)"
   - mnemonic: "fmadd.d"
     fields: [ d_opcode_madd, d_fmt ]
     args: [ d_rd, d_rs1, d_rs2, d_rs3, d_rm ]
@@ -126,16 +128,16 @@ Sets:
     args: [ d_rd_x, d_rs1 ]
   - mnemonic: "fcvt.w.d"
     fields: [ d_opcode_op, d_fmt, d_funct5_cvtif, d_rs2_0 ]
-    args: [ d_rd, d_rs1_x, d_rm ]
+    args: [ d_rd_x, d_rs1, d_rm ]
   - mnemonic: "fcvt.wu.d"
     fields: [ d_opcode_op, d_fmt, d_funct5_cvtif, d_rs2_1 ]
-    args: [ d_rd, d_rs1_x, d_rm ]
+    args: [ d_rd_x, d_rs1, d_rm ]
   - mnemonic: "fcvt.d.w"
     fields: [ d_opcode_op, d_fmt, d_funct5_cvtfi, d_rs2_0 ]
-    args: [ d_rd_x, d_rs1, d_rm ]
+    args: [ d_rd, d_rs1_x, d_rm ]
   - mnemonic: "fcvt.d.wu"
     fields: [ d_opcode_op, d_fmt, d_funct5_cvtfi, d_rs2_1 ]
-    args: [ d_rd_x, d_rs1, d_rm ]
+    args: [ d_rd, d_rs1_x, d_rm ]
 
 - name: "D"
   size: "32"
@@ -143,19 +145,19 @@ Sets:
   instructions:
   - mnemonic: "fcvt.l.d"
     fields: [ d_opcode_op, d_fmt, d_funct5_cvtif, d_rs2_2 ]
-    args: [ d_rd, d_rs1_x, d_rm ]
+    args: [ d_rd_x, d_rs1, d_rm ]
   - mnemonic: "fcvt.lu.d"
     fields: [ d_opcode_op, d_fmt, d_funct5_cvtif, d_rs2_3 ]
-    args: [ d_rd, d_rs1_x, d_rm ]
+    args: [ d_rd_x, d_rs1, d_rm ]
   - mnemonic: "fmv.x.d"
-    fields: [ d_opcode_op, d_fmt, d_funct3_mv, d_funct5_mvfi, d_rs2_0 ]
+    fields: [ d_opcode_op, d_fmt, d_funct3_mv, d_funct5_mvif, d_rs2_0 ]
     args: [ d_rd_x, d_rs1 ]
   - mnemonic: "fcvt.d.l"
     fields: [ d_opcode_op, d_fmt, d_funct5_cvtfi, d_rs2_2 ]
-    args: [ d_rd_x, d_rs1, d_rm ]
+    args: [ d_rd, d_rs1_x, d_rm ]
   - mnemonic: "fcvt.d.lu"
     fields: [ d_opcode_op, d_fmt, d_funct5_cvtfi, d_rs2_3 ]
-    args: [ d_rd_x, d_rs1, d_rm ]
+    args: [ d_rd, d_rs1_x, d_rm ]
   - mnemonic: "fmv.d.x"
-    fields: [ d_opcode_op, d_fmt, d_funct3_mv, d_funct5_mvif, d_rs2_0 ]
+    fields: [ d_opcode_op, d_fmt, d_funct3_mv, d_funct5_mvfi, d_rs2_0 ]
     args: [ d_rd, d_rs1_x ]
