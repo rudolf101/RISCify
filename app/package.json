@@ -24,7 +24,7 @@
     "predeploy": "yarn build",
     "deploy": "gh-pages -d build",
     "test": "react-scripts test",
-    "lint": "eslint src --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx --max-warnings=0"
   },
   "eslintConfig": {
     "extends": [
@@ -52,7 +52,6 @@
     "jest": "^29.7.0",
     "ts-jest": "^29.2.6",
     "ts-node": "^10.9.2"
-  },
-  "lint": "eslint src --ext .js,.jsx,.ts,.tsx --max-warnings=0"
+  }
 }
 
