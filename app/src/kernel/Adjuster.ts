@@ -31,7 +31,7 @@ export function adjuster(instructions: SimilarInstructions[]): SimilarInstructio
                 let curDistanceInBytes = instruction.args[instruction.description.jump.argIndex].numerical;
                 while (true) {
                     if (curDistanceInBytes > 0) {
-                        const curInstructionLengthInBytes = instructions[curInstructionIndex].chunk.bits.length / 8;
+                        const curInstructionLengthInBytes = BigInt(instructions[curInstructionIndex].chunk.bits.length / 8);
                         if (curDistanceInBytes < curInstructionLengthInBytes) {
                             instruction.actualJump = {
                                 label: "between",
@@ -57,7 +57,7 @@ export function adjuster(instructions: SimilarInstructions[]): SimilarInstructio
                             };
                             break;
                         }
-                        const curInstructionLengthInBytes = instructions[curInstructionIndex].chunk.bits.length / 8;
+                        const curInstructionLengthInBytes = BigInt(instructions[curInstructionIndex].chunk.bits.length / 8);
                         if (-curDistanceInBytes < curInstructionLengthInBytes) {
                             instruction.actualJump = {
                                 label: "between",

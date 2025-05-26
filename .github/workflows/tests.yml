@@ -35,3 +35,8 @@ jobs:
         working-directory: ./app
         run: |
           CI=true npm run lint
+
+      - name: Try build
+        working-directory: ./app
+        run: |
+          CI=true npm run build

@@ -20,29 +20,29 @@ export class Bits {
         return this._data.split("").reverse().join("");
     }
 
-    public get numerical(): number {
-        const unsignedValue: number = this.unsigned;
-        const n: number = this._data.length;
-    
+    public get numerical(): bigint {
+        const unsignedValue: bigint = this.unsigned;
+        const n: bigint = BigInt(this._data.length);
+
         // Если старший бит равен 1, число отрицательное
-        if (unsignedValue & (1 << (n - 1))) {
-            return unsignedValue - (1 << n);
+        if (unsignedValue & (1n << (n - 1n))) {
+            return unsignedValue - (1n << n);
         }
-    
+
         return unsignedValue;
     }
 
-    public get unsigned(): number {
+    public get unsigned(): bigint {
         // Представить, что биты идут в little-endian
         // перевести в число на отрезке [0; 2^n-1]
         var data: string = this._data;
-        var num: number = 0;
-        var radix: number = 1;
+        var num: bigint = 0n;
+        var radix: bigint = 1n;
         for (var i: number = 0; i < data.length; i++) {
             if (data[i] === '1') {
                 num |= radix;
             }
-            radix <<= 1;
+            radix <<= 1n;
         }
         return num;
     }
