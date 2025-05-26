@@ -7,7 +7,7 @@ export class Matcher {
     private _sample: Bits;
 
     constructor(name: string | undefined, spanStr: string, sampleStr: string) {
-        if (name == undefined) {
+        if (name === undefined) {
             this._name = "";
         }
         else {
