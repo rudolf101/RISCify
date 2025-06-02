@@ -1,6 +1,6 @@
 import { Instruction } from './Instruction';
 import { Bits } from './Bits';
-import { InstructionDescription } from './InstructionDescription';
+import { BitDepth, InstructionDescription } from './InstructionDescription';
 
 jest.mock('./Argument', () => {
     return {
@@ -18,7 +18,7 @@ jest.mock('./Argument', () => {
 function createInstruction(argTexts: string[], argFormat?: string): Instruction {
     const bits = {} as Bits;
 
-    const description = new InstructionDescription("I", 32, 32, "TEST");
+    const description = new InstructionDescription("I", BitDepth.BIT_32, 32, "TEST");
 
     description.argFormat = argFormat;
 
