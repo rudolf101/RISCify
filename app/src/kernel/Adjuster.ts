@@ -1,7 +1,6 @@
 import {SimilarInstructions} from "./Disassembler";
 
 /*
-TODO
 Внимание: `instructions` передаётся по ссылке, и может изменяться.
 
 Эта функция делает финальную обработку вывода дизассемблера.
