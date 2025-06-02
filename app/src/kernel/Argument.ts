@@ -6,7 +6,7 @@ export class Argument {
     private _name: string;
     private _span: Span; // Чтобы можно было подсвечивать биты в UI
     private _bits: Bits; // Битовое представление 
-    private _numerical: number; // Числовое представление
+    private _numerical: bigint; // Числовое представление
     private _textual: string; // Текстовое представление
 
     constructor(name: string, fullBits: Bits, pattern: ArgumentPattern) {
@@ -30,7 +30,7 @@ export class Argument {
         return this._bits;
     }
 
-    public get numerical(): number {
+    public get numerical(): bigint {
         return this._numerical;
     }
 

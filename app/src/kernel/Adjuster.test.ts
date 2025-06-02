@@ -44,7 +44,7 @@ describe("adjuster", () => {
         ) as DisassembleOutputValid
         expect(result.valid).toEqual("valid")
         expect(simplifiedRepresentation(result.result))
-            .toEqual([["nop", "", {"label": "none"}], ["j", "-2", {"label": "between", "distance": -1, "offset": 2}]]);
+            .toEqual([["nop", "", {"label": "none"}], ["j", "-2", {"label": "between", "distance": -1, "offset": 2n}]]);
     })
 
     test("smoke with between jump (next)", () => {
@@ -56,7 +56,7 @@ describe("adjuster", () => {
         ) as DisassembleOutputValid
         expect(result.valid).toEqual("valid")
         expect(simplifiedRepresentation(result.result))
-            .toEqual([["j", "6", {"label": "between", "distance": 1, "offset": 2}], ["nop", "", {"label": "none"}]]);
+            .toEqual([["j", "6", {"label": "between", "distance": 1, "offset": 2n}], ["nop", "", {"label": "none"}]]);
     })
 
     test("smoke with out jump", () => {

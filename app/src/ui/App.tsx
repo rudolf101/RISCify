@@ -75,14 +75,14 @@ const argumentType = (arg: Argument) => {
   return "entity";
 };
 
-const hexWithSign = (n: number) => {
-  const num = Math.abs(n).toString(16);
-  const sign = n >= 0 ? "" : "-";
+const hexWithSign = (n: bigint) => {
+  const num = (n < 0n ? -n : n).toString(16);
+  const sign = n >= 0n ? "" : "-";
   const bytes = Math.ceil(num.length / 2) * 2;
   return sign + `0x${num.padStart(bytes, "0")}`;
 };
-const convertJump = (offset: number, jumpOffset: number, jumpStyle: Jump) =>
-  hexWithSign(jumpStyle === "relative" ? jumpOffset : offset + jumpOffset);
+const convertJump = (offset: number, jumpOffset: bigint, jumpStyle: Jump) =>
+  hexWithSign(jumpStyle === "relative" ? jumpOffset : BigInt(offset) + jumpOffset);
 
 type LocalJump = {
   from: number;
@@ -115,7 +115,7 @@ const packJumps = (jumps: LocalJump[]): LevelledJump[] => {
     const _to = Math.max(from, to);
     const usedLevels = levels
       .slice(_from, _to + 1)
-      .reduce((a, b) => a.map((e, i) => e || b[i]));
+      .reduce((a, b) => a.map((e, i) => e || b[i]), new Array(Math.abs(_from - _to)).fill(false));
     for (const [i, level] of usedLevels.entries()) {
       if (!level) {
         levels.slice(_from, _to + 1).forEach((a) => {
