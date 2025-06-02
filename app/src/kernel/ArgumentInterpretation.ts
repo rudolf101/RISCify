@@ -16,9 +16,9 @@ class InvalidInterpretation extends ArgumentInterpretation {
 }
 
 class ConstInterpretation extends ArgumentInterpretation {
-    private _value: number
+    private _value: bigint
 
-    constructor(value: number) {
+    constructor(value: bigint) {
         super();
         this._value = value;
     }
@@ -28,16 +28,16 @@ class ConstInterpretation extends ArgumentInterpretation {
     }
 
     public numerical(_bits: Bits): bigint {
-        return BigInt(this._value);
+        return this._value;
     }
 }
 
 class UnumInterpretation extends ArgumentInterpretation {
-    private _multiplier: number
+    private _multiplier: bigint
 
-    constructor(shift: number) {
+    constructor(shift: bigint) {
         super();
-        this._multiplier = 1 << shift;
+        this._multiplier = 1n << shift;
     }
 
     public textual(bits: Bits): string {
@@ -50,11 +50,11 @@ class UnumInterpretation extends ArgumentInterpretation {
 }
 
 class NumInterpretation extends ArgumentInterpretation {
-    private _multiplier: number
+    private _multiplier: bigint
 
-    constructor(shift: number) {
+    constructor(shift: bigint) {
         super();
-        this._multiplier = 1 << shift;
+        this._multiplier = 1n << shift;
     }
 
     public textual(bits: Bits): string {
@@ -68,9 +68,9 @@ class NumInterpretation extends ArgumentInterpretation {
 
 class RegInterpretation extends ArgumentInterpretation {
     private _floating: boolean
-    private _offset: number
+    private _offset: bigint
 
-    constructor(floating: boolean, offset: number) {
+    constructor(floating: boolean, offset: bigint) {
         super();
         this._floating = floating;
         this._offset = offset;
@@ -236,13 +236,13 @@ export function argumentInterpretationFactory(description: string): ArgumentInte
       more interpretations may be added later
     */
     switch (description) {
-        case "unum": return new UnumInterpretation(0);
-        case "num": return new NumInterpretation(0);
-        case "double": return new NumInterpretation(1);
-        case "regx": return new RegInterpretation(false, 0);
-        case "regf": return new RegInterpretation(true, 0);
-        case "regcx": return new RegInterpretation(false, 8);
-        case "regcf": return new RegInterpretation(true, 8);
+        case "unum": return new UnumInterpretation(0n);
+        case "num": return new NumInterpretation(0n);
+        case "double": return new NumInterpretation(1n);
+        case "regx": return new RegInterpretation(false, 0n);
+        case "regf": return new RegInterpretation(true, 0n);
+        case "regcx": return new RegInterpretation(false, 8n);
+        case "regcf": return new RegInterpretation(true, 8n);
         case "fence": return new FenceInterpretation();
         case "rm": return new RmInterpretation();
     }
@@ -250,21 +250,21 @@ export function argumentInterpretationFactory(description: string): ArgumentInte
         let kStr: string = description.substring(6, description.length - 1);
         let k: number = +kStr;
         if (!isNaN(k)) {
-            return new ConstInterpretation(k);
+            return new ConstInterpretation(BigInt(k));
         }
     }
     else if (description.startsWith("unumx(") && description.endsWith(")")) {
         let kStr: string = description.substring(6, description.length - 1);
         let k: number = +kStr;
         if (!isNaN(k)) {
-            return new UnumInterpretation(k); // беззнаковое целое число от 0 до 2^n-1, умноженное на 2^k
+            return new UnumInterpretation(BigInt(k)); // беззнаковое целое число от 0 до 2^n-1, умноженное на 2^k
         }
     }
     else if (description.startsWith("numx(") && description.endsWith(")")) {
         let kStr: string = description.substring(5, description.length - 1);
         let k: number = +kStr;
         if (!isNaN(k)) {
-            return new NumInterpretation(k); // беззнаковое целое число от 0 до 2^n-1, умноженное на 2^k
+            return new NumInterpretation(BigInt(k)); // беззнаковое целое число от 0 до 2^n-1, умноженное на 2^k
         }
     }
     else if (description.startsWith("par(") && description.endsWith(")")) {
