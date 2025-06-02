@@ -67,17 +67,32 @@ class NumInterpretation extends ArgumentInterpretation {
 }
 
 class RegInterpretation extends ArgumentInterpretation {
-    private _prefix: string
+    private _floating: boolean
     private _offset: number
 
-    constructor(prefix: string, offset: number) {
+    constructor(floating: boolean, offset: number) {
         super();
-        this._prefix = prefix;
+        this._floating = floating;
         this._offset = offset;
     }
 
     public textual(bits: Bits): string {
-        return this._prefix + this.numerical(bits).toString();
+        if (this._floating) {
+            return [
+                "ft0", "ft1", "ft2", "ft3", "ft4", "ft5", "ft6", "ft7",
+                "fs0", "fs1", "fa0", "fa1", "fa2", "fa3", "fa4", "fa5",
+                "fa6", "fa7", "fs2", "fs3", "fs4", "fs5", "fs6", "fs7",
+                "fs8", "fs9", "fs10", "fs11", "ft8", "ft9", "ft10", "ft11"
+            ][Number(this.numerical(bits))];
+        }
+        else {
+            return [
+                "zero", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
+                "s0", "s1", "a0", "a1", "a2", "a3", "a4", "a5",
+                "a6", "a7", "s2", "s3", "s4", "s5", "s6", "s7",
+                "s8", "s9", "s10", "s11", "t3", "t4", "t5", "t6"
+            ][Number(this.numerical(bits))];
+        }
     }
 
     public numerical(bits: Bits): bigint {
@@ -90,7 +105,7 @@ class FenceInterpretation extends ArgumentInterpretation {
         return [  '0',   'w',   'r',   'rw',
                   'o',  'ow',  'or',  'orw',
                   'i',  'iw',  'ir',  'irw',
-                 'io', 'iow', 'ior', 'iorw' ][Number(this.numerical(bits))]; 
+                 'io', 'iow', 'ior', 'iorw' ][Number(this.numerical(bits))];
     }
 
     public numerical(bits: Bits): bigint {
@@ -100,7 +115,7 @@ class FenceInterpretation extends ArgumentInterpretation {
 
 class RmInterpretation extends ArgumentInterpretation {
     public textual(bits: Bits): string {
-        return ['rne', 'rtz', 'rdn', 'rup', 'rmm', '-', '-', 'dyn'][Number(this.numerical(bits))]; 
+        return ['rne', 'rtz', 'rdn', 'rup', 'rmm', '-', '-', 'dyn'][Number(this.numerical(bits))];
     }
 
     public numerical(bits: Bits): bigint {
@@ -129,12 +144,15 @@ class ParInterpretation extends ArgumentInterpretation {
 export function argumentInterpretationFactory(description: string): ArgumentInterpretation {
     /*
     Displays accept n bits in LITTLE ENDIAN:
+      const(k):
+        k, regardless of the bits
+
       regx:
         'x' followed by a number in [0; 2^n-1]
         eg:
           [0,1,1,0,0] -> 'x6'
           [0,1,1,0,1] -> 'x22'
-     
+
       regf:
         'f' followed by a number in [0; 2^n-1]
         eg:
@@ -146,40 +164,40 @@ export function argumentInterpretationFactory(description: string): ArgumentInte
         eg:
           [0,1,1] -> 'x14'
           [0,1,0] -> 'x10'
-     
+
       regcf:
         'f' followed by a number in [0; 2^n-1] plus 8
         eg:
           [0,1,1] -> 'f14'
           [0,1,0] -> 'f10'
-     
+
       num:
         number in [-2^(n-1); 2^(n-1)-1]
         eg:
           [0,1,1,0,1,0,0,0,0,0,0,0] -> '22'
           [0,1,1,0,1] -> '-10'
-     
+
       unum:
         number in [0; 2^(n)-1]
         eg:
           [0,1,1,0,1,0,0,0,0,0,0,0] -> '22'
           [0,1,1,0,1] -> '22'
-     
+
       numx(k):
         number in [-2^(n-1); 2^(n-1)-1], multiplied by 2^k
         eg:
           numx(2) -> [0,1,1,0,1,0,0,0,0,0,0,0] -> '88'
           numx(3) -> [0,1,1,0,1] -> '-80'
-     
+
       unumx(k):
         number in [0; 2^(n)-1], multiplied by 2^k
         eg:
           unumx(2) -> [0,1,1,0,1,0,0,0,0,0,0,0] -> '88'
           unumx(3) -> [0,1,1,0,1] -> '176'
-     
+
       double:
         legacy alias of numx(1)
-     
+
       fence:
         numeral interpretation works as unum
         textual:
@@ -199,7 +217,7 @@ export function argumentInterpretationFactory(description: string): ArgumentInte
           [1,0,1,1] -> 'iow'
           [0,1,1,1] -> 'ior'
           [1,1,1,1] -> 'iorw'
-     
+
       rm:
         numeral interpretation works as unum
         textual:
@@ -212,16 +230,19 @@ export function argumentInterpretationFactory(description: string): ArgumentInte
           [0,1,1] -> '-'
           [1,1,1] -> 'dyn'
 
+      par(interpretation):
+        another interpretaion wrapped in '(' and ')'
+
       more interpretations may be added later
     */
     switch (description) {
         case "unum": return new UnumInterpretation(0);
         case "num": return new NumInterpretation(0);
         case "double": return new NumInterpretation(1);
-        case "regx": return new RegInterpretation("x", 0);
-        case "regf": return new RegInterpretation("f", 0);
-        case "regcx": return new RegInterpretation("x", 8);
-        case "regcf": return new RegInterpretation("f", 8);
+        case "regx": return new RegInterpretation(false, 0);
+        case "regf": return new RegInterpretation(true, 0);
+        case "regcx": return new RegInterpretation(false, 8);
+        case "regcf": return new RegInterpretation(true, 8);
         case "fence": return new FenceInterpretation();
         case "rm": return new RmInterpretation();
     }
