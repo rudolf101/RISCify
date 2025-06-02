@@ -27,8 +27,8 @@ class ConstInterpretation extends ArgumentInterpretation {
         return this.numerical(bits).toString();
     }
 
-    public numerical(_bits: Bits): number {
-        return this._value;
+    public numerical(_bits: Bits): bigint {
+        return BigInt(this._value);
     }
 }
 
