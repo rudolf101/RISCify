@@ -1090,7 +1090,7 @@ new InstructionDescription("C", BitDepth.BIT_32 | BitDepth.BIT_64 | BitDepth.BIT
   .addField(new Matcher("opcode", "0,1", "10"))
   .addField(new Matcher("funct3", "13,14,15", "101"))
   .addArg(new ArgumentPattern("imm", "3,4,5,11,2,7,6,9,10,8,12", "numx(1)"))
-  .setJump({ label: "none" }),
+  .setJump({ label: "within", argIndex: 0 }),
 
 new InstructionDescription("C", BitDepth.BIT_32 | BitDepth.BIT_64 | BitDepth.BIT_128, 16, "c.beqz")
   .addField(new Matcher("opcode", "0,1", "10"))
@@ -1282,7 +1282,7 @@ new InstructionDescription("C", BitDepth.BIT_32, 16, "c.jal")
   .addField(new Matcher("opcode", "0,1", "10"))
   .addField(new Matcher("funct3", "13,14,15", "100"))
   .addArg(new ArgumentPattern("imm", "3,4,5,11,2,7,6,9,10,8,12", "numx(1)"))
-  .setJump({ label: "none" }),
+  .setJump({ label: "within", argIndex: 0 }),
 
 new InstructionDescription("C", BitDepth.BIT_32, 16, "c.srli")
   .addField(new Matcher("opcode", "0,1", "10"))
