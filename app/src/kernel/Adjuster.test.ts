@@ -67,7 +67,7 @@ e7 00 05 00`,
         ) as DisassembleOutputValid
         expect(result.valid).toEqual("valid")
         expect(simplifiedRepresentation(result.result))
-            .toEqual([["jalr", "x1, x10, 327680", {"label": "out"}]]);
+            .toEqual([["jalr", "ra, a0, 327680", {"label": "out"}]]);
     })
 
     test("smoke with back jump", () => {
@@ -113,17 +113,17 @@ b3 e2 62 00
         ) as DisassembleOutputValid
         expect(result.valid).toEqual("valid")
         expect(simplifiedRepresentation(result.result)).toEqual([
-            ["lui", "x6, 262144", {"label": "none"}],
-            ["mv", "x5, x0", {"label": "none"}],
-            ["beq", "x6, x0, 32", {"label": "concrete", "distance": 8}],
-            ["or", "x7, x5, x6", {"label": "none"}],
-            ["srli", "x5, x5, 1", {"label": "none"}],
-            ["blt", "x10, x7, 12", {"label": "concrete", "distance": 3}],
-            ["sub", "x10, x10, x7", {"label": "none"}],
-            ["or", "x5, x5, x6", {"label": "none"}],
-            ["srli", "x6, x6, 2", {"label": "none"}],
+            ["lui", "t1, 262144", {"label": "none"}],
+            ["mv", "t0, zero", {"label": "none"}],
+            ["beq", "t1, zero, 32", {"label": "concrete", "distance": 8}],
+            ["or", "t2, t0, t1", {"label": "none"}],
+            ["srli", "t0, t0, 1", {"label": "none"}],
+            ["blt", "a0, t2, 12", {"label": "concrete", "distance": 3}],
+            ["sub", "a0, a0, t2", {"label": "none"}],
+            ["or", "t0, t0, t1", {"label": "none"}],
+            ["srli", "t1, t1, 2", {"label": "none"}],
             ["j", "-28", {"label": "concrete", "distance": -7}],
-            ["mv", "x10, x5", {"label": "none"}]
+            ["mv", "a0, t0", {"label": "none"}]
         ]);
     })
 });

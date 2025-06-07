@@ -170,6 +170,7 @@ Sets:
   - mnemonic: "c.j"
     fields: [ c_opcode_q1, c_funct3_j ]
     args: [ c_j_jal_imm ]
+    jump: 0
   - mnemonic: "c.beqz"
     fields: [ c_opcode_q1, c_funct3_beqz ]
     args: [ c_rs1c, c_branch_imm ]
@@ -272,6 +273,7 @@ Sets:
   - mnemonic: "c.jal"
     fields: [ c_opcode_q1, c_funct3_jal ]
     args: [ c_j_jal_imm ]
+    jump: 0
   - mnemonic: "c.srli"
     fields: [ c_opcode_q1, c_funct3_misc_alu, c_funct2_srli ]
     restricts: [ c_imm_1_no_zero, c_shamt5_no_one ]
