@@ -17,7 +17,7 @@ export interface DSLField {
     value: string;
 }
 
-export type Depth = "32" | "64" | "32|64";
+export type Depth = "32" | "64" | "128" | "32|64" | "32|128" | "64|128" | "32|64|128";
 
 export interface DSLSet {
     name: string;
