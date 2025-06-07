@@ -181,11 +181,11 @@ Sets:
     fields: [ c_opcode_q2, c_funct3_lwsp ]
     restricts: [ c_r_upper_no_zero ]
     args: [ c_full_rd, c_lw_sp_uimm ]
-    format: "_, _(x2)"
+    format: "_, _(sp)"
   - mnemonic: "c.swsp"
     fields: [ c_opcode_q2, c_funct3_swsp ]
     args: [ c_full_rs2, c_sw_sp_uimm ]
-    format: "_, _(x2)"
+    format: "_, _(sp)"
   - mnemonic: "c.jr"
     fields: [ c_opcode_q2, c_funct4_jr, c_r_lower_zero ]
     restricts: [ c_r_upper_no_zero ]
@@ -222,11 +222,11 @@ Sets:
   - mnemonic: "c.fldsp"
     fields: [ c_opcode_q2, c_funct3_fldsp ]
     args: [ c_full_frd, c_ld_sp_uimm ]
-    format: "_, _(x2)"
+    format: "_, _(sp)"
   - mnemonic: "c.fsdsp"
     fields: [ c_opcode_q2, c_funct3_fsdsp ]
     args: [ c_full_frs2, c_sd_sp_uimm ]
-    format: "_, _(x2)"
+    format: "_, _(sp)"
 
 - name: "C"
   size: "16"
@@ -254,11 +254,11 @@ Sets:
     fields: [ c_opcode_q2, c_funct3_lqsp ]
     restricts: [ c_r_upper_no_zero ]
     args: [ c_full_rd, c_lq_sp_uimm ]
-    format: "_, _(x2)"
+    format: "_, _(sp)"
   - mnemonic: "c.sqsp"
     fields: [ c_opcode_q2, c_funct3_sqsp ]
     args: [ c_full_rs2, c_sq_sp_uimm ]
-    format: "_, _(x2)"
+    format: "_, _(sp)"
 
 - name: "C"
   size: "16"
@@ -291,11 +291,11 @@ Sets:
   - mnemonic: "c.flwsp"
     fields: [ c_opcode_q2, c_funct3_flwsp ]
     args: [ c_full_frd, c_lw_sp_uimm ]
-    format: "_, _(x2)"
+    format: "_, _(sp)"
   - mnemonic: "c.fswsp"
     fields: [ c_opcode_q2, c_funct3_fswsp ]
     args: [ c_full_frs2, c_sw_sp_uimm ]
-    format: "_, _(x2)"
+    format: "_, _(sp)"
 
 - name: "C"
   size: "16"
@@ -335,8 +335,8 @@ Sets:
     fields: [ c_opcode_q2, c_funct3_ldsp ]
     restricts: [ c_r_upper_no_zero ]
     args: [ c_full_rd, c_ld_sp_uimm ]
-    format: "_, _(x2)"
+    format: "_, _(sp)"
   - mnemonic: "c.sdsp"
     fields: [ c_opcode_q2, c_funct3_sdsp ]
     args: [ c_full_rs2, c_sd_sp_uimm ]
-    format: "_, _(x2)"
+    format: "_, _(sp)"
