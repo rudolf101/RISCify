@@ -1112,7 +1112,7 @@ new InstructionDescription("C", BitDepth.BIT_32 | BitDepth.BIT_64 | BitDepth.BIT
   .addRestrict(new Matcher("", "7,8,9,10,11", "00000"))
   .addArg(new ArgumentPattern("rd", "7,8,9,10,11", "regx"))
   .addArg(new ArgumentPattern("uimm", "4,5,6,12,2,3", "unumx(2)"))
-  .setArgFormat("_, _(x2)")
+  .setArgFormat("_, _(sp)")
   .setJump({ label: "none" }),
 
 new InstructionDescription("C", BitDepth.BIT_32 | BitDepth.BIT_64 | BitDepth.BIT_128, 16, "c.swsp")
@@ -1120,7 +1120,7 @@ new InstructionDescription("C", BitDepth.BIT_32 | BitDepth.BIT_64 | BitDepth.BIT
   .addField(new Matcher("funct3", "13,14,15", "011"))
   .addArg(new ArgumentPattern("rs2", "2,3,4,5,6", "regx"))
   .addArg(new ArgumentPattern("uimm", "9,10,11,12,7,8", "unumx(2)"))
-  .setArgFormat("_, _(x2)")
+  .setArgFormat("_, _(sp)")
   .setJump({ label: "none" }),
 
 new InstructionDescription("C", BitDepth.BIT_32 | BitDepth.BIT_64 | BitDepth.BIT_128, 16, "c.jr")
@@ -1187,7 +1187,7 @@ new InstructionDescription("C", BitDepth.BIT_32 | BitDepth.BIT_64, 16, "c.fldsp"
   .addField(new Matcher("funct3", "13,14,15", "100"))
   .addArg(new ArgumentPattern("rd", "7,8,9,10,11", "regf"))
   .addArg(new ArgumentPattern("uimm", "5,6,12,2,3,4", "unumx(3)"))
-  .setArgFormat("_, _(x2)")
+  .setArgFormat("_, _(sp)")
   .setJump({ label: "none" }),
 
 new InstructionDescription("C", BitDepth.BIT_32 | BitDepth.BIT_64, 16, "c.fsdsp")
@@ -1195,7 +1195,7 @@ new InstructionDescription("C", BitDepth.BIT_32 | BitDepth.BIT_64, 16, "c.fsdsp"
   .addField(new Matcher("funct3", "13,14,15", "101"))
   .addArg(new ArgumentPattern("rs2", "2,3,4,5,6", "regf"))
   .addArg(new ArgumentPattern("uimm", "10,11,12,7,8,9", "unumx(3)"))
-  .setArgFormat("_, _(x2)")
+  .setArgFormat("_, _(sp)")
   .setJump({ label: "none" }),
 
 new InstructionDescription("C", BitDepth.BIT_128, 16, "c.lq")
@@ -1249,7 +1249,7 @@ new InstructionDescription("C", BitDepth.BIT_128, 16, "c.lqsp")
   .addRestrict(new Matcher("", "7,8,9,10,11", "00000"))
   .addArg(new ArgumentPattern("rd", "7,8,9,10,11", "regx"))
   .addArg(new ArgumentPattern("uimm", "6,12,2,3,4,5", "unumx(4)"))
-  .setArgFormat("_, _(x2)")
+  .setArgFormat("_, _(sp)")
   .setJump({ label: "none" }),
 
 new InstructionDescription("C", BitDepth.BIT_128, 16, "c.sqsp")
@@ -1257,7 +1257,7 @@ new InstructionDescription("C", BitDepth.BIT_128, 16, "c.sqsp")
   .addField(new Matcher("funct3", "13,14,15", "101"))
   .addArg(new ArgumentPattern("rs2", "2,3,4,5,6", "regx"))
   .addArg(new ArgumentPattern("uimm", "11,12,7,8,9,10", "unumx(4)"))
-  .setArgFormat("_, _(x2)")
+  .setArgFormat("_, _(sp)")
   .setJump({ label: "none" }),
 
 new InstructionDescription("C", BitDepth.BIT_32, 16, "c.flw")
@@ -1319,7 +1319,7 @@ new InstructionDescription("C", BitDepth.BIT_32, 16, "c.flwsp")
   .addField(new Matcher("funct3", "13,14,15", "110"))
   .addArg(new ArgumentPattern("rd", "7,8,9,10,11", "regf"))
   .addArg(new ArgumentPattern("uimm", "4,5,6,12,2,3", "unumx(2)"))
-  .setArgFormat("_, _(x2)")
+  .setArgFormat("_, _(sp)")
   .setJump({ label: "none" }),
 
 new InstructionDescription("C", BitDepth.BIT_32, 16, "c.fswsp")
@@ -1327,7 +1327,7 @@ new InstructionDescription("C", BitDepth.BIT_32, 16, "c.fswsp")
   .addField(new Matcher("funct3", "13,14,15", "111"))
   .addArg(new ArgumentPattern("rs2", "2,3,4,5,6", "regf"))
   .addArg(new ArgumentPattern("uimm", "9,10,11,12,7,8", "unumx(2)"))
-  .setArgFormat("_, _(x2)")
+  .setArgFormat("_, _(sp)")
   .setJump({ label: "none" }),
 
 new InstructionDescription("C", BitDepth.BIT_64 | BitDepth.BIT_128, 16, "c.ld")
@@ -1405,7 +1405,7 @@ new InstructionDescription("C", BitDepth.BIT_64 | BitDepth.BIT_128, 16, "c.ldsp"
   .addRestrict(new Matcher("", "7,8,9,10,11", "00000"))
   .addArg(new ArgumentPattern("rd", "7,8,9,10,11", "regx"))
   .addArg(new ArgumentPattern("uimm", "5,6,12,2,3,4", "unumx(3)"))
-  .setArgFormat("_, _(x2)")
+  .setArgFormat("_, _(sp)")
   .setJump({ label: "none" }),
 
 new InstructionDescription("C", BitDepth.BIT_64 | BitDepth.BIT_128, 16, "c.sdsp")
@@ -1413,7 +1413,7 @@ new InstructionDescription("C", BitDepth.BIT_64 | BitDepth.BIT_128, 16, "c.sdsp"
   .addField(new Matcher("funct3", "13,14,15", "111"))
   .addArg(new ArgumentPattern("rs2", "2,3,4,5,6", "regx"))
   .addArg(new ArgumentPattern("uimm", "10,11,12,7,8,9", "unumx(3)"))
-  .setArgFormat("_, _(x2)")
+  .setArgFormat("_, _(sp)")
   .setJump({ label: "none" }),
 
 new InstructionDescription("D", BitDepth.BIT_32 | BitDepth.BIT_64, 32, "flw")
