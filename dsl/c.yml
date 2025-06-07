@@ -190,6 +190,7 @@ Sets:
     fields: [ c_opcode_q2, c_funct4_jr, c_r_lower_zero ]
     restricts: [ c_r_upper_no_zero ]
     args: [ c_full_rs1 ]
+    jump: out
   - mnemonic: "c.mv"
     fields: [ c_opcode_q2, c_funct4_mv ]
     restricts: [ c_r_upper_no_zero, c_r_lower_no_zero ]
@@ -200,6 +201,7 @@ Sets:
     fields: [ c_opcode_q2, c_funct4_jalr, c_r_lower_zero ]
     restricts: [ c_r_upper_no_zero ]
     args: [ c_full_rs1 ]
+    jump: out
   - mnemonic: "c.add"
     fields: [ c_opcode_q2, c_funct4_add ]
     restricts: [ c_r_upper_no_zero, c_r_lower_no_zero ]

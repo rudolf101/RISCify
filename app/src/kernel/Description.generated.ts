@@ -1129,7 +1129,7 @@ new InstructionDescription("C", BitDepth.BIT_32 | BitDepth.BIT_64 | BitDepth.BIT
   .addField(new Matcher("r", "2,3,4,5,6", "00000"))
   .addRestrict(new Matcher("", "7,8,9,10,11", "00000"))
   .addArg(new ArgumentPattern("rs1", "7,8,9,10,11", "regx"))
-  .setJump({ label: "none" }),
+  .setJump({ label: "out" }),
 
 new InstructionDescription("C", BitDepth.BIT_32 | BitDepth.BIT_64 | BitDepth.BIT_128, 16, "c.mv")
   .addField(new Matcher("opcode", "0,1", "01"))
@@ -1153,7 +1153,7 @@ new InstructionDescription("C", BitDepth.BIT_32 | BitDepth.BIT_64 | BitDepth.BIT
   .addField(new Matcher("r", "2,3,4,5,6", "00000"))
   .addRestrict(new Matcher("", "7,8,9,10,11", "00000"))
   .addArg(new ArgumentPattern("rs1", "7,8,9,10,11", "regx"))
-  .setJump({ label: "none" }),
+  .setJump({ label: "out" }),
 
 new InstructionDescription("C", BitDepth.BIT_32 | BitDepth.BIT_64 | BitDepth.BIT_128, 16, "c.add")
   .addField(new Matcher("opcode", "0,1", "01"))
