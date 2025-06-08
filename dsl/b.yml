@@ -1,0 +1,212 @@
+# B instructions
+#   ---------------------------------------------------------------
+#   31         25|24     20|19     15|14 12|11      7|6           0
+#   ---------------------------------------------------------------
+#   0 0 0 0 1 0 0|   rs2   |   rs1   |0 0 0|   rd    |0 1 1 1 0 1 1 : add.uw (64)
+#   0 1 0 0 0 0 0|   rs2   |   rs1   |1 1 1|   rd    |0 1 1 0 0 1 1 : andn
+#   0 1 0 0 1 0 0|   rs2   |   rs1   |0 0 1|   rd    |0 1 1 0 0 1 1 : bclr
+#   0 1 0 0 1 0 0|  shamt  |   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : bclri  (32)
+#   0 1 0 0 1 0|   shamt   |   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : bclri  (64)
+#   0 1 0 0 1 0 0|   rs2   |   rs1   |1 0 1|   rd    |0 1 1 0 0 1 1 : bext
+#   0 1 0 0 1 0 0|  shamt  |   rs1   |1 0 1|   rd    |0 0 1 0 0 1 1 : bexti  (32)
+#   0 1 0 0 1 0|   shamt   |   rs1   |1 0 1|   rd    |0 0 1 0 0 1 1 : bexti  (64)
+#   0 1 1 0 1 0 0|   rs2   |   rs1   |0 0 1|   rd    |0 1 1 0 0 1 1 : binv
+#   0 1 1 0 1 0 0|  shamt  |   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : binvi  (32)
+#   0 1 1 0 1 0|   shamt   |   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : binvi  (64)
+#   0 0 1 0 1 0 0|   rs2   |   rs1   |0 0 1|   rd    |0 1 1 0 0 1 1 : bset
+#   0 0 1 0 1 0 0|  shamt  |   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : bseti  (32)
+#   0 0 1 0 1 0|   shamt   |   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : bseti  (64)
+#   0 0 0 0 1 0 1|   rs2   |   rs1   |0 0 1|   rd    |0 1 1 0 0 1 1 : clmul
+#   0 0 0 0 1 0 1|   rs2   |   rs1   |0 1 1|   rd    |0 1 1 0 0 1 1 : clmulh
+#   0 0 0 0 1 0 1|   rs2   |   rs1   |0 1 0|   rd    |0 1 1 0 0 1 1 : clmulr
+#   0 1 1 0 0 0 0 0 0 0 0 0|   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : clz
+#   0 1 1 0 0 0 0 0 0 0 0 0|   rs1   |0 0 1|   rd    |0 0 1 1 0 1 1 : clzw   (64)
+#   0 1 1 0 0 0 0 0 0 0 1 0|   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : cpop
+#   0 1 1 0 0 0 0 0 0 0 1 0|   rs1   |0 0 1|   rd    |0 0 1 1 0 1 1 : cpopw  (64)
+#   0 1 1 0 0 0 0 0 0 0 0 1|   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : ctz
+#   0 1 1 0 0 0 0 0 0 0 0 1|   rs1   |0 0 1|   rd    |0 0 1 1 0 1 1 : ctzw   (64)
+#   0 0 0 0 1 0 1|   rs2   |   rs1   |1 1 0|   rd    |0 1 1 0 0 1 1 : max
+#   0 0 0 0 1 0 1|   rs2   |   rs1   |1 1 1|   rd    |0 1 1 0 0 1 1 : maxu
+#   0 0 0 0 1 0 1|   rs2   |   rs1   |1 0 0|   rd    |0 1 1 0 0 1 1 : min
+#   0 0 0 0 1 0 1|   rs2   |   rs1   |1 0 1|   rd    |0 1 1 0 0 1 1 : minu
+#   0 0 1 0 1 0 0 0 0 1 1 1|   rs1   |1 0 1|   rd    |0 0 1 0 0 1 1 : orc.b
+#   0 1 0 0 0 0 0|   rs2   |   rs1   |1 1 0|   rd    |0 1 1 0 0 1 1 : orn
+#   0 0 0 0 1 0 0|   rs2   |   rs1   |1 0 0|   rd    |0 1 1 0 0 1 1 : pack
+#   0 0 0 0 1 0 0|   rs2   |   rs1   |1 1 1|   rd    |0 1 1 0 0 1 1 : packh
+#   0 0 0 0 1 0 0|   rs2   |   rs1   |1 0 0|   rd    |0 1 1 1 0 1 1 : packw (64)
+#   0 1 1 0 1 0 0 1 1 0 0 0|   rs1   |1 0 1|   rd    |0 0 1 0 0 1 1 : rev8 (32)
+#   0 1 1 0 1 0 1 1 1 0 0 0|   rs1   |1 0 1|   rd    |0 0 1 0 0 1 1 : rev8 (64)
+#   0 1 1 0 1 0 0 0 0 1 1 1|   rs1   |1 0 1|   rd    |0 0 1 0 0 1 1 : brev8
+#   0 1 1 0 0 0 0|   rs2   |   rs1   |0 0 1|   rd    |0 1 1 0 0 1 1 : rol
+#   0 1 1 0 0 0 0|   rs2   |   rs1   |0 0 1|   rd    |0 1 1 1 0 1 1 : rolw (64)
+#   0 1 1 0 0 0 0|   rs2   |   rs1   |1 0 1|   rd    |0 1 1 0 0 1 1 : ror
+#   0 1 1 0 0 0 0|   rs2   |   rs1   |1 0 1|   rd    |0 1 1 1 0 1 1 : rorw (64)
+#   0 1 1 0 0 0 0|  shamt  |   rs1   |1 0 1|   rd    |0 0 1 0 0 1 1 : rori (32)
+#   0 1 1 0 0 0|   shamt   |   rs1   |1 0 1|   rd    |0 0 1 0 0 1 1 : rori (64)
+#   0 1 1 0 0 0 0|  shamt  |   rs1   |1 0 1|   rd    |0 0 1 1 0 1 1 : roriw (64)
+#   0 1 1 0 0 0 0 0 0 1 0 0|   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : sext.b
+#   0 1 1 0 0 0 0 0 0 1 0 1|   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : sext.h
+#   0 0 1 0 0 0 0|   rs2   |   rs1   |0 1 0|   rd    |0 1 1 0 0 1 1 : sh1add
+#   0 0 1 0 0 0 0|   rs2   |   rs1   |0 1 0|   rd    |0 1 1 1 0 1 1 : sh1add.uw (64)
+#   0 0 1 0 0 0 0|   rs2   |   rs1   |1 0 0|   rd    |0 1 1 0 0 1 1 : sh2add
+#   0 0 1 0 0 0 0|   rs2   |   rs1   |1 0 0|   rd    |0 1 1 1 0 1 1 : sh2add.uw (64)
+#   0 0 1 0 0 0 0|   rs2   |   rs1   |1 1 0|   rd    |0 1 1 0 0 1 1 : sh3add
+#   0 0 1 0 0 0 0|   rs2   |   rs1   |1 1 0|   rd    |0 1 1 1 0 1 1 : sh3add.uw (64)
+#   0 0 0 0 1 0|   shamt   |   rs1   |0 0 1|   rd    |0 0 1 1 0 1 1 : slli.uw (64)
+#   0 0 0 0 1 0 0 0 1 1 1 1|   rs1   |1 0 1|   rd    |0 0 1 0 0 1 1 : unzip (32)
+#   0 1 0 0 0 0 0|   rs2   |   rs1   |1 0 0|   rd    |0 1 1 0 0 1 1 : xnor
+#   0 0 1 0 1 0 0|   rs2   |   rs1   |1 0 0|   rd    |0 1 1 0 0 1 1 : xperm8
+#   0 0 1 0 1 0 0|   rs2   |   rs1   |0 1 0|   rd    |0 1 1 0 0 1 1 : xperm4
+#   0 0 0 0 1 0 0 0 0 0 0 0|   rs1   |1 0 0|   rd    |0 1 1 0 0 1 1 : zext.h (32)
+#   0 0 0 0 1 0 0 0 0 0 0 0|   rs1   |1 0 0|   rd    |0 1 1 1 0 1 1 : zext.h (64)
+#   0 0 0 0 1 0 0 0 1 1 1 1|   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : zip (32)
+#
+# PSEUDO:
+#   zext.w rd, rs1 -> add.uw rd, rs1, zero
+#
+# SYNTAX:
+#   instr rd, rs1
+#   instr rd, rs1, rs2
+#   instr rd, rs1, shamt
+
+Args:
+  b_rd:      { name: "rd" , span: "7:11" , display: "regx" }
+  b_rs1:     { name: "rs1", span: "15:19", display: "regx" }
+  b_rs2:     { name: "rs2", span: "20:24", display: "regx" }
+  b_shamt:   { name: "imm", span: "20:24", display: "unum" }
+  b_shamt64: { name: "imm", span: "20:25", display: "unum" }
+
+Fields:
+  # Считайте, что у каждой инструкции есть только одно большое поле, а не несколько
+  b_add_uw:    { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_andn:      { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_bclr:      { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_bclri_32:  { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_bclri_64:  { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_bext:      { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_bexti_32:  { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_bexti_64:  { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_binv:      { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_binvi_32:  { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_binvi_64:  { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_bset:      { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_bseti_32:  { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_bseti_64:  { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_clmul:     { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_clmulh:    { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_clmulr:    { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_clz:       { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_clzw:      { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_cpop:      { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_cpopw:     { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_ctz:       { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_ctzw:      { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_max:       { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_maxu:      { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_min:       { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_minu:      { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_orc.b:     { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_orn:       { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_pack:      { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_packh:     { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_packw:     { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_rev8_32:   { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_rev8_64:   { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_brev8:     { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_rol:       { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_rolw64:    { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_ror:       { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_rorw:      { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_rori_32:   { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_rori_64:   { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_roriw:     { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_sext.b:    { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_sext.h:    { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_sh1add:    { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_sh1add.uw: { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_sh2add:    { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_sh2add.uw: { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_sh3add:    { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_sh3add.uw: { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_slli.uw:   { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_unzip:     { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_xnor:      { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_xperm8:    { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_xperm4:    { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_zext.h_32: { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_zext.h_64: { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_zip:       { name: "full", span: "", value: "" }  # TODO: provide span and value
+
+Sets:
+- name: "B"
+  size: "32"
+  depth: "32"
+  instructions:  # 32-bit versions
+  - mnemonic: bclri   # TODO: describe fields and args
+  - mnemonic: bexti   # TODO: describe fields and args
+  - mnemonic: binvi   # TODO: describe fields and args
+  - mnemonic: bseti   # TODO: describe fields and args
+  - mnemonic: rev8    # TODO: describe fields and args
+  - mnemonic: rori    # TODO: describe fields and args
+  - mnemonic: unzip   # TODO: describe fields and args
+  - mnemonic: zext.h  # TODO: describe fields and args
+  - mnemonic: zip     # TODO: describe fields and args
+
+- name: "B"
+  size: "32"
+  depth: "64"
+  instructions:  # 64-bit versions
+  - mnemonic: add.uw     # TODO: describe fields and args
+  - mnemonic: bclri      # TODO: describe fields and args
+  - mnemonic: bexti      # TODO: describe fields and args
+  - mnemonic: binvi      # TODO: describe fields and args
+  - mnemonic: bseti      # TODO: describe fields and args
+  - mnemonic: clzw       # TODO: describe fields and args
+  - mnemonic: cpopw      # TODO: describe fields and args
+  - mnemonic: ctzw       # TODO: describe fields and args
+  - mnemonic: packw      # TODO: describe fields and args
+  - mnemonic: rev8       # TODO: describe fields and args
+  - mnemonic: rolw       # TODO: describe fields and args
+  - mnemonic: rorw       # TODO: describe fields and args
+  - mnemonic: rori       # TODO: describe fields and args
+  - mnemonic: roriw      # TODO: describe fields and args
+  - mnemonic: sh1add.uw  # TODO: describe fields and args
+  - mnemonic: sh2add.uw  # TODO: describe fields and args
+  - mnemonic: sh3add.uw  # TODO: describe fields and args
+  - mnemonic: slli.uw    # TODO: describe fields and args
+  - mnemonic: zext.h     # TODO: describe fields and args
+
+- name: "B"
+  size: "32"
+  depth: "32|64"
+  instructions:
+  - mnemonic: andn    # TODO: describe fields and args
+  - mnemonic: bclr    # TODO: describe fields and args
+  - mnemonic: bext    # TODO: describe fields and args
+  - mnemonic: binv    # TODO: describe fields and args
+  - mnemonic: bset    # TODO: describe fields and args
+  - mnemonic: clmul   # TODO: describe fields and args
+  - mnemonic: clmulh  # TODO: describe fields and args
+  - mnemonic: clmulr  # TODO: describe fields and args
+  - mnemonic: clz     # TODO: describe fields and args
+  - mnemonic: cpop    # TODO: describe fields and args
+  - mnemonic: ctz     # TODO: describe fields and args
+  - mnemonic: max     # TODO: describe fields and args
+  - mnemonic: maxu    # TODO: describe fields and args
+  - mnemonic: min     # TODO: describe fields and args
+  - mnemonic: minu    # TODO: describe fields and args
+  - mnemonic: orc.b   # TODO: describe fields and args
+  - mnemonic: orn     # TODO: describe fields and args
+  - mnemonic: pack    # TODO: describe fields and args
+  - mnemonic: packh   # TODO: describe fields and args
+  - mnemonic: brev8   # TODO: describe fields and args
+  - mnemonic: rol     # TODO: describe fields and args
+  - mnemonic: ror     # TODO: describe fields and args
+  - mnemonic: sext.b  # TODO: describe fields and args
+  - mnemonic: sext.h  # TODO: describe fields and args
+  - mnemonic: sh1add  # TODO: describe fields and args
+  - mnemonic: sh2add  # TODO: describe fields and args
+  - mnemonic: sh3add  # TODO: describe fields and args
+  - mnemonic: xnor    # TODO: describe fields and args
+  - mnemonic: xperm8  # TODO: describe fields and args
+  - mnemonic: xperm4  # TODO: describe fields and args
