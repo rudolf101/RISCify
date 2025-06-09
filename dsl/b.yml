@@ -78,23 +78,23 @@ Args:
 
 Fields:
   # Считайте, что у каждой инструкции есть только одно большое поле, а не несколько
-  b_add_uw:    { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_andn:      { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_bclr:      { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_bclri_32:  { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_bclri_64:  { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_bext:      { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_bexti_32:  { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_bexti_64:  { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_binv:      { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_binvi_32:  { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_binvi_64:  { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_bset:      { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_bseti_32:  { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_bseti_64:  { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_clmul:     { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_clmulh:    { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_clmulr:    { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_add_uw:    { name: "full", span: "0:6,12:14,25:31", value: "11011100000010000" }
+  b_andn:      { name: "full", span: "0:6,12:14,25:31", value: "11001101110000010" }
+  b_bclr:      { name: "full", span: "0:6,12:14,25:31", value: "11001101000010010" }
+  b_bclri_32:  { name: "full", span: "0:6,12:14,25:31", value: "11001001000010010" }
+  b_bclri_64:  { name: "full", span: "0:6,12:14,26:31", value: "1100100100010010" }
+  b_bext:      { name: "full", span: "0:6,12:14,25:31", value: "11001101010010010" }
+  b_bexti_32:  { name: "full", span: "0:6,12:14,25:31", value: "11001001010010010" }
+  b_bexti_64:  { name: "full", span: "0:6,12:14,26:31", value: "1100100101010010" }
+  b_binv:      { name: "full", span: "0:6,12:14,25:31", value: "11001101000010110" }
+  b_binvi_32:  { name: "full", span: "0:6,12:14,25:31", value: "11001001000010110" }
+  b_binvi_64:  { name: "full", span: "0:6,12:14,26:31", value: "1100100100010110" }
+  b_bset:      { name: "full", span: "0:6,12:14,25:31", value: "11001101000010100" }
+  b_bseti_32:  { name: "full", span: "0:6,12:14,25:31", value: "11001001000010110" }
+  b_bseti_64:  { name: "full", span: "0:6,12:14,26:31", value: "1100100100010100" }
+  b_clmul:     { name: "full", span: "0:6,12:14,25:31", value: "11001101001010000" }
+  b_clmulh:    { name: "full", span: "0:6,12:14,25:31", value: "11001101101010000" }
+  b_clmulr:    { name: "full", span: "0:6,12:14,25:31", value: "11001100101010000" }
   b_clz:       { name: "full", span: "", value: "" }  # TODO: provide span and value
   b_clzw:      { name: "full", span: "", value: "" }  # TODO: provide span and value
   b_cpop:      { name: "full", span: "", value: "" }  # TODO: provide span and value
@@ -142,10 +142,18 @@ Sets:
   size: "32"
   depth: "32"
   instructions:  # 32-bit versions
-  - mnemonic: bclri   # TODO: describe fields and args
-  - mnemonic: bexti   # TODO: describe fields and args
-  - mnemonic: binvi   # TODO: describe fields and args
-  - mnemonic: bseti   # TODO: describe fields and args
+  - mnemonic: bclri
+    fields: [ b_bclri_32 ]
+    args: [ b_rd, b_rs1, b_shamt ]
+  - mnemonic: bexti
+    fields: [ b_bexti_32 ]
+    args: [ b_rd, b_rs1, b_shamt ]
+  - mnemonic: binvi
+    fields: [ b_binvi_32 ]
+    args: [ b_rd, b_rs1, b_shamt ]
+  - mnemonic: bseti
+    fields: [ b_bseti_32 ]
+    args: [ b_rd, b_rs1, b_shamt ]
   - mnemonic: rev8    # TODO: describe fields and args
   - mnemonic: rori    # TODO: describe fields and args
   - mnemonic: unzip   # TODO: describe fields and args
@@ -156,11 +164,21 @@ Sets:
   size: "32"
   depth: "64"
   instructions:  # 64-bit versions
-  - mnemonic: add.uw     # TODO: describe fields and args
-  - mnemonic: bclri      # TODO: describe fields and args
-  - mnemonic: bexti      # TODO: describe fields and args
-  - mnemonic: binvi      # TODO: describe fields and args
-  - mnemonic: bseti      # TODO: describe fields and args
+  - mnemonic: add.uw
+    fields: [ b_add_uw ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: bclri
+    fields: [ b_bclri_64 ]
+    args: [ b_rd, b_rs1, b_shamt64 ]
+  - mnemonic: bexti
+    fields: [ b_bexti_64 ]
+    args: [ b_rd, b_rs1, b_shamt64 ]
+  - mnemonic: binvi
+    fields: [ b_binvi_64 ]
+    args: [ b_rd, b_rs1, b_shamt64 ]
+  - mnemonic: bseti
+    fields: [ b_bseti_64 ]
+    args: [ b_rd, b_rs1, b_shamt64 ]
   - mnemonic: clzw       # TODO: describe fields and args
   - mnemonic: cpopw      # TODO: describe fields and args
   - mnemonic: ctzw       # TODO: describe fields and args
@@ -180,14 +198,30 @@ Sets:
   size: "32"
   depth: "32|64"
   instructions:
-  - mnemonic: andn    # TODO: describe fields and args
-  - mnemonic: bclr    # TODO: describe fields and args
-  - mnemonic: bext    # TODO: describe fields and args
-  - mnemonic: binv    # TODO: describe fields and args
-  - mnemonic: bset    # TODO: describe fields and args
-  - mnemonic: clmul   # TODO: describe fields and args
-  - mnemonic: clmulh  # TODO: describe fields and args
-  - mnemonic: clmulr  # TODO: describe fields and args
+  - mnemonic: andn
+    fields: [ b_andn ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: bclr
+    fields: [ b_bclr ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: bext
+    fields: [ b_bext ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: binv
+    fields: [ b_binv ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: bset
+    fields: [ b_bset]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: clmul
+    fields: [ b_clmul ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: clmulh
+    fields: [ b_clmulh ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: clmulr
+    fields: [ b_clmulr ]
+    args: [ b_rd, b_rs1, b_rs2 ]
   - mnemonic: clz     # TODO: describe fields and args
   - mnemonic: cpop    # TODO: describe fields and args
   - mnemonic: ctz     # TODO: describe fields and args
