@@ -114,7 +114,7 @@ Fields:
   b_rev8_64:   { name: "full", span: "0:6,12:14,20-31", value: "1100100101000111010110" }
   b_brev8:     { name: "full", span: "0:6,12:14,20-31", value: "1100100101111000010110" }
   b_rol:       { name: "full", span: "0:6,12:14,25-31", value: "11001101000000110" }
-  b_rolw64:    { name: "full", span: "0:6,12:14,25-31", value: "11011101000000110" }
+  b_rolw:      { name: "full", span: "0:6,12:14,25-31", value: "11011101000000110" }
   b_ror:       { name: "full", span: "0:6,12:14,25-31", value: "11001101010000110" }
   b_rorw:      { name: "full", span: "0:6,12:14,25-31", value: "11011101010000110" }
   b_rori_32:   { name: "full", span: "0:6,12:14,25-31", value: "11001001010000110" }
@@ -193,7 +193,7 @@ Sets:
     fields: [ b_rev8_64 ]
     args: [ b_rd, b_rs1 ]
   - mnemonic: rolw
-    fields: [ b_rolw64 ]
+    fields: [ b_rolw ]
     args: [ b_rd, b_rs1, b_rs2 ]
   - mnemonic: rorw
     fields: [ b_rorw ]
