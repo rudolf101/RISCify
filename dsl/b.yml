@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=./schema.json
 # B instructions
 #   ---------------------------------------------------------------
 #   31         25|24     20|19     15|14 12|11      7|6           0
@@ -107,21 +108,21 @@ Fields:
   b_minu:      { name: "full", span: "0:6,12:14,25:31", value: "11001101011010000" }
   b_orc_b:     { name: "full", span: "0:6,12:14,20:31", value: "1100100101111000010100" }
   b_orn:       { name: "full", span: "0:6,12:14,25:31", value: "11001100110000010" }
-  b_pack:      { name: "full", span: "0:6,12:14,25-31", value: "11001100010010000" }
-  b_packh:     { name: "full", span: "0:6,12:14,25-31", value: "11001101110010000" }
-  b_packw:     { name: "full", span: "0:6,12:14,25-31", value: "11011100010010000" }
-  b_rev8_32:   { name: "full", span: "0:6,12:14,20-31", value: "1100100101000110010110" }
-  b_rev8_64:   { name: "full", span: "0:6,12:14,20-31", value: "1100100101000111010110" }
-  b_brev8:     { name: "full", span: "0:6,12:14,20-31", value: "1100100101111000010110" }
-  b_rol:       { name: "full", span: "0:6,12:14,25-31", value: "11001101000000110" }
-  b_rolw:      { name: "full", span: "0:6,12:14,25-31", value: "11011101000000110" }
-  b_ror:       { name: "full", span: "0:6,12:14,25-31", value: "11001101010000110" }
-  b_rorw:      { name: "full", span: "0:6,12:14,25-31", value: "11011101010000110" }
-  b_rori_32:   { name: "full", span: "0:6,12:14,25-31", value: "11001001010000110" }
-  b_rori_64:   { name: "full", span: "0:6,12:14,26-31", value: "1100100101000110" }
-  b_roriw:     { name: "full", span: "0:6,12:14,25-31", value: "1101101010000110" }
-  b_sext_b:    { name: "full", span: "0:6,12:14,20-31", value: "1100100100001000000110" }
-  b_sext_h:    { name: "full", span: "0:6,12:14,20-31", value: "1100100100101000000110" }
+  b_pack:      { name: "full", span: "0:6,12:14,25:31", value: "11001100010010000" }
+  b_packh:     { name: "full", span: "0:6,12:14,25:31", value: "11001101110010000" }
+  b_packw:     { name: "full", span: "0:6,12:14,25:31", value: "11011100010010000" }
+  b_rev8_32:   { name: "full", span: "0:6,12:14,20:31", value: "1100100101000110010110" }
+  b_rev8_64:   { name: "full", span: "0:6,12:14,20:31", value: "1100100101000111010110" }
+  b_brev8:     { name: "full", span: "0:6,12:14,20:31", value: "1100100101111000010110" }
+  b_rol:       { name: "full", span: "0:6,12:14,25:31", value: "11001101000000110" }
+  b_rolw:      { name: "full", span: "0:6,12:14,25:31", value: "11011101000000110" }
+  b_ror:       { name: "full", span: "0:6,12:14,25:31", value: "11001101010000110" }
+  b_rorw:      { name: "full", span: "0:6,12:14,25:31", value: "11011101010000110" }
+  b_rori_32:   { name: "full", span: "0:6,12:14,25:31", value: "11001001010000110" }
+  b_rori_64:   { name: "full", span: "0:6,12:14,26:31", value: "1100100101000110" }
+  b_roriw:     { name: "full", span: "0:6,12:14,25:31", value: "1101101010000110" }
+  b_sext_b:    { name: "full", span: "0:6,12:14,20:31", value: "1100100100001000000110" }
+  b_sext_h:    { name: "full", span: "0:6,12:14,20:31", value: "1100100100101000000110" }
   b_sh1add:    { name: "full", span: "", value: "" }  # TODO: provide span and value
   b_sh1add.uw: { name: "full", span: "", value: "" }  # TODO: provide span and value
   b_sh2add:    { name: "full", span: "", value: "" }  # TODO: provide span and value
@@ -139,7 +140,7 @@ Fields:
 
 Sets:
 - name: "B"
-  size: "32"
+  size: 32
   depth: "32"
   instructions:  # 32-bit versions
   - mnemonic: bclri
@@ -165,7 +166,7 @@ Sets:
   - mnemonic: zip     # TODO: describe fields and args
 
 - name: "B"
-  size: "32"
+  size: 32
   depth: "64"
   instructions:  # 64-bit versions
   - mnemonic: add.uw
@@ -217,7 +218,7 @@ Sets:
   - mnemonic: zext.h     # TODO: describe fields and args
 
 - name: "B"
-  size: "32"
+  size: 32
   depth: "32|64"
   instructions:
   - mnemonic: andn

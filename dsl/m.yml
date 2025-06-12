@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=./schema.json
 Args:
   m_rd:  { name: "rd" , span: "7:11" , display: "regx" }
   m_rs1: { name: "rs1", span: "15:19", display: "regx" }
@@ -18,7 +19,7 @@ Fields:
 
 Sets:
 - name: "M"
-  size: "32"
+  size: 32
   depth: "32|64"
   instructions:
   - mnemonic: "mul"
@@ -47,7 +48,7 @@ Sets:
     args: [ m_rd, m_rs1, m_rs2 ]
 
 - name: "M"
-  size: "32"
+  size: 32
   depth: "64"
   instructions:
   - mnemonic: "mulw"

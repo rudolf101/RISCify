@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=./schema.json
 Args:
   q_rd_x:  { name: "rd" , span: "7:11"      , display: "regx" }
   q_rs1_x: { name: "rs1", span: "15:19"     , display: "regx" }
@@ -55,7 +56,7 @@ Fields:
 
 Sets:
 - name: "Q"
-  size: "32"
+  size: 32
   depth: "32|64"
   instructions:
   - mnemonic: "flw"
@@ -147,7 +148,7 @@ Sets:
     args: [ q_rd, q_rs1_x, q_rm ]
 
 - name: "Q"
-  size: "32"
+  size: 32
   depth: "64"
   instructions:
   - mnemonic: "fcvt.l.q"
