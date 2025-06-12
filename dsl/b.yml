@@ -107,21 +107,21 @@ Fields:
   b_minu:      { name: "full", span: "", value: "" }  # TODO: provide span and value
   b_orc.b:     { name: "full", span: "", value: "" }  # TODO: provide span and value
   b_orn:       { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_pack:      { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_packh:     { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_packw:     { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_rev8_32:   { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_rev8_64:   { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_brev8:     { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_rol:       { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_rolw64:    { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_ror:       { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_rorw:      { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_rori_32:   { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_rori_64:   { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_roriw:     { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_sext.b:    { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_sext.h:    { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_pack:      { name: "full", span: "0:6,12:14,25-31", value: "11001100010010000" }
+  b_packh:     { name: "full", span: "0:6,12:14,25-31", value: "11001101110010000" }
+  b_packw:     { name: "full", span: "0:6,12:14,25-31", value: "11011100010010000" }
+  b_rev8_32:   { name: "full", span: "0:6,12:14,20-31", value: "1100100101000110010110" }
+  b_rev8_64:   { name: "full", span: "0:6,12:14,20-31", value: "1100100101000111010110" }
+  b_brev8:     { name: "full", span: "0:6,12:14,20-31", value: "1100100101111000010110" }
+  b_rol:       { name: "full", span: "0:6,12:14,25-31", value: "11001101000000110" }
+  b_rolw64:    { name: "full", span: "0:6,12:14,25-31", value: "11011101000000110" }
+  b_ror:       { name: "full", span: "0:6,12:14,25-31", value: "11001101010000110" }
+  b_rorw:      { name: "full", span: "0:6,12:14,25-31", value: "11011101010000110" }
+  b_rori_32:   { name: "full", span: "0:6,12:14,25-31", value: "11001001010000110" }
+  b_rori_64:   { name: "full", span: "0:6,12:14,26-31", value: "1100100101000110" }
+  b_roriw:     { name: "full", span: "0:6,12:14,25-31", value: "1101101010000110" }
+  b_sext_b:    { name: "full", span: "0:6,12:14,20-31", value: "1100100100001000000110" }
+  b_sext_h:    { name: "full", span: "0:6,12:14,20-31", value: "1100100100101000000110" }
   b_sh1add:    { name: "full", span: "", value: "" }  # TODO: provide span and value
   b_sh1add.uw: { name: "full", span: "", value: "" }  # TODO: provide span and value
   b_sh2add:    { name: "full", span: "", value: "" }  # TODO: provide span and value
@@ -154,8 +154,12 @@ Sets:
   - mnemonic: bseti
     fields: [ b_bseti_32 ]
     args: [ b_rd, b_rs1, b_shamt ]
-  - mnemonic: rev8    # TODO: describe fields and args
-  - mnemonic: rori    # TODO: describe fields and args
+  - mnemonic: rev8
+    fields: [ b_rev8_32 ]
+    args: [ b_rd, b_rs1 ]
+  - mnemonic: rori
+    fields: [ b_rori_32 ]
+    args: [ b_rd, b_rs1, b_shamt ]
   - mnemonic: unzip   # TODO: describe fields and args
   - mnemonic: zext.h  # TODO: describe fields and args
   - mnemonic: zip     # TODO: describe fields and args
@@ -182,12 +186,24 @@ Sets:
   - mnemonic: clzw       # TODO: describe fields and args
   - mnemonic: cpopw      # TODO: describe fields and args
   - mnemonic: ctzw       # TODO: describe fields and args
-  - mnemonic: packw      # TODO: describe fields and args
-  - mnemonic: rev8       # TODO: describe fields and args
-  - mnemonic: rolw       # TODO: describe fields and args
-  - mnemonic: rorw       # TODO: describe fields and args
-  - mnemonic: rori       # TODO: describe fields and args
-  - mnemonic: roriw      # TODO: describe fields and args
+  - mnemonic: packw
+    fields: [ b_packw ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: rev8
+    fields: [ b_rev8_64 ]
+    args: [ b_rd, b_rs1 ]
+  - mnemonic: rolw
+    fields: [ b_rolw64 ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: rorw
+    fields: [ b_rorw ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: rori
+    fields: [ b_rori_64 ]
+    args: [ b_rd, b_rs1, b_shamt64 ]
+  - mnemonic: roriw
+    fields: [ b_roriw ]
+    args: [ b_rd, b_rs1, b_shamt ]
   - mnemonic: sh1add.uw  # TODO: describe fields and args
   - mnemonic: sh2add.uw  # TODO: describe fields and args
   - mnemonic: sh3add.uw  # TODO: describe fields and args
@@ -231,13 +247,27 @@ Sets:
   - mnemonic: minu    # TODO: describe fields and args
   - mnemonic: orc.b   # TODO: describe fields and args
   - mnemonic: orn     # TODO: describe fields and args
-  - mnemonic: pack    # TODO: describe fields and args
-  - mnemonic: packh   # TODO: describe fields and args
-  - mnemonic: brev8   # TODO: describe fields and args
-  - mnemonic: rol     # TODO: describe fields and args
-  - mnemonic: ror     # TODO: describe fields and args
-  - mnemonic: sext.b  # TODO: describe fields and args
-  - mnemonic: sext.h  # TODO: describe fields and args
+  - mnemonic: pack
+    fields: [ b_pack ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: packh
+    fields: [ b_packh ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: brev8
+    fields: [ b_brev8 ]
+    args: [ b_rd, b_rs1 ]
+  - mnemonic: rol
+    fields: [ b_rol ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: ror
+    fields: [ b_ror ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: sext.b
+    fields: [ b_sext_b ]
+    args: [ b_rd, b_rs1 ]
+  - mnemonic: sext.h
+    fields: [ b_sext_h ]
+    args: [ b_rd, b_rs1 ]
   - mnemonic: sh1add  # TODO: describe fields and args
   - mnemonic: sh2add  # TODO: describe fields and args
   - mnemonic: sh3add  # TODO: describe fields and args
