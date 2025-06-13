@@ -10,19 +10,19 @@ describe("parseSpan", () => {
     });
 
     test("range", () => {
-        expect(parseSpan("0-6")).toEqual([0, 1, 2, 3, 4, 5, 6]);
+        expect(parseSpan("0:6")).toEqual([0, 1, 2, 3, 4, 5, 6]);
     });
 
     test("mixed range and numbers", () => {
-        expect(parseSpan("0-2,4,6-7")).toEqual([0, 1, 2, 4, 6, 7]);
+        expect(parseSpan("0:2,4,6:7")).toEqual([0, 1, 2, 4, 6, 7]);
     });
 
     test("complex span", () => {
-        expect(parseSpan("0-7,12-14,8-11,15")).toEqual([0,1,2,3,4,5,6,7,12,13,14,8,9,10,11,15]);
+        expect(parseSpan("0:7,12:14,8:11,15")).toEqual([0,1,2,3,4,5,6,7,12,13,14,8,9,10,11,15]);
     });
 
     test("range with spaces", () => {
-        expect(parseSpan(" 1 - 3 , 5 ")).toEqual([1, 2, 3, 5]);
+        expect(parseSpan(" 1 : 3 , 5 ")).toEqual([1, 2, 3, 5]);
     });
 
     test("invalid number", () => {
@@ -30,7 +30,7 @@ describe("parseSpan", () => {
     });
 
     test("invalid range (reversed)", () => {
-        expect(() => parseSpan("5-2")).toThrow();
+        expect(() => parseSpan("5:2")).toThrow();
     });
 
     test("invalid empty", () => {
