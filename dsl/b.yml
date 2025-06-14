@@ -123,20 +123,20 @@ Fields:
   b_roriw:     { name: "full", span: "0:6,12:14,25:31", value: "1101101010000110" }
   b_sext_b:    { name: "full", span: "0:6,12:14,20:31", value: "1100100100001000000110" }
   b_sext_h:    { name: "full", span: "0:6,12:14,20:31", value: "1100100100101000000110" }
-  b_sh1add:    { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_sh1add.uw: { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_sh2add:    { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_sh2add.uw: { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_sh3add:    { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_sh3add.uw: { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_slli.uw:   { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_unzip:     { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_xnor:      { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_xperm8:    { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_xperm4:    { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_zext.h_32: { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_zext.h_64: { name: "full", span: "", value: "" }  # TODO: provide span and value
-  b_zip:       { name: "full", span: "", value: "" }  # TODO: provide span and value
+  b_sh1add:    { name: "full", span: "0:6,12:14,25:31", value: "11001100100000100" }
+  b_sh1add.uw: { name: "full", span: "0:6,12:14,25:31", value: "11011100100000100" }
+  b_sh2add:    { name: "full", span: "0:6,12:14,25:31", value: "11001100010000100" }
+  b_sh2add.uw: { name: "full", span: "0:6,12:14,25:31", value: "11011100010000100" }
+  b_sh3add:    { name: "full", span: "0:6,12:14,25:31", value: "11001100110000100" }
+  b_sh3add.uw: { name: "full", span: "0:6,12:14,25:31", value: "11011100110000100" }
+  b_slli.uw:   { name: "full", span: "0:6,12:14,26:31", value: "1101100100010000" }
+  b_unzip:     { name: "full", span: "0:6,12:14,20:31", value: "1100100101111100010000" }
+  b_xnor:      { name: "full", span: "0:6,12:14,25:31", value: "11001100010000010" }
+  b_xperm8:    { name: "full", span: "0:6,12:14,25:31", value: "11001100010010100" }
+  b_xperm4:    { name: "full", span: "0:6,12:14,25:31", value: "11001100100010100" }
+  b_zext.h_32: { name: "full", span: "0:6,12:14,20:31", value: "1100110001000000010000" }
+  b_zext.h_64: { name: "full", span: "0:6,12:14,20:31", value: "1101110001000000010000" }
+  b_zip:       { name: "full", span: "0:6,12:14,20:31", value: "1100100100111100010000" }
 
 Sets:
 - name: "B"
@@ -161,9 +161,15 @@ Sets:
   - mnemonic: rori
     fields: [ b_rori_32 ]
     args: [ b_rd, b_rs1, b_shamt ]
-  - mnemonic: unzip   # TODO: describe fields and args
-  - mnemonic: zext.h  # TODO: describe fields and args
-  - mnemonic: zip     # TODO: describe fields and args
+  - mnemonic: unzip
+    fields: [ b_unzip ]
+    args: [ b_rd, b_rs1 ]
+  - mnemonic: zext.h
+    fields: [ b_zext.h_32 ]
+    args: [ b_rd, b_rs1 ]
+  - mnemonic: zip
+    fields: [ b_zip ]
+    args: [ b_rd, b_rs1 ]
 
 - name: "B"
   size: 32
@@ -211,11 +217,21 @@ Sets:
   - mnemonic: roriw
     fields: [ b_roriw ]
     args: [ b_rd, b_rs1, b_shamt ]
-  - mnemonic: sh1add.uw  # TODO: describe fields and args
-  - mnemonic: sh2add.uw  # TODO: describe fields and args
-  - mnemonic: sh3add.uw  # TODO: describe fields and args
-  - mnemonic: slli.uw    # TODO: describe fields and args
-  - mnemonic: zext.h     # TODO: describe fields and args
+  - mnemonic: sh1add.uw
+    fields: [ b_sh1add.uw ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: sh2add.uw
+    fields: [ b_sh2add.uw ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: sh3add.uw
+    fields: [ b_sh3add.uw ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: slli.uw
+    fields: [ b_slli.uw ]
+    args: [ b_rd, b_rs1, b_shamt ]
+  - mnemonic: zext.h
+    fields: [ b_zext.h_64 ]
+    args: [ b_rd, b_rs1 ]
 
 - name: "B"
   size: 32
@@ -293,9 +309,21 @@ Sets:
   - mnemonic: sext.h
     fields: [ b_sext_h ]
     args: [ b_rd, b_rs1 ]
-  - mnemonic: sh1add  # TODO: describe fields and args
-  - mnemonic: sh2add  # TODO: describe fields and args
-  - mnemonic: sh3add  # TODO: describe fields and args
-  - mnemonic: xnor    # TODO: describe fields and args
-  - mnemonic: xperm8  # TODO: describe fields and args
-  - mnemonic: xperm4  # TODO: describe fields and args
+  - mnemonic: sh1add
+    fields: [ b_sh1add ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: sh2add
+    fields: [ b_sh2add ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: sh3add
+    fields: [ b_sh3add ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: xnor
+    fields: [ b_xnor ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: xperm8
+    fields: [ b_xperm8 ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: xperm4
+    fields: [ b_xperm4 ]
+    args: [ b_rd, b_rs1, b_rs2 ]
