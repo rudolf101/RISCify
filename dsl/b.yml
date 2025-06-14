@@ -195,7 +195,7 @@ Sets:
     args: [ b_rd, b_rs1 ]
   - mnemonic: cpopw
     fields: [ b_cpopw ]
-    args: [ b_rd, b_rs ]
+    args: [ b_rd, b_rs1 ]
   - mnemonic: ctzw
     fields: [ b_ctzw ]
     args: [ b_rd, b_rs1 ]
@@ -284,7 +284,7 @@ Sets:
     args: [ b_rd, b_rs1, b_rs2 ]
   - mnemonic: orc.b
     fields: [ b_orc_b ]
-    args: [ b_rd, b_rs ]
+    args: [ b_rd, b_rs1 ]
   - mnemonic: orn
     fields: [ b_orn ]
     args: [ b_rd, b_rs1, b_rs2 ]
