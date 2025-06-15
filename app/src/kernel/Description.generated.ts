@@ -1032,6 +1032,13 @@ new InstructionDescription("B", BitDepth.BIT_32, 32, "zip")
   .addArg(new ArgumentPattern("rs1", "15,16,17,18,19", "regx"))
   .setJump({ label: "none" }),
 
+new InstructionDescription("B", BitDepth.BIT_64, 32, "zext.w")
+  .addField(new Matcher("full", "0,1,2,3,4,5,6,12,13,14,25,26,27,28,29,30,31", "11011100000010000"))
+  .addField(new Matcher("rs2", "20,21,22,23,24", "00000"))
+  .addArg(new ArgumentPattern("rd", "7,8,9,10,11", "regx"))
+  .addArg(new ArgumentPattern("rs1", "15,16,17,18,19", "regx"))
+  .setJump({ label: "none" }),
+
 new InstructionDescription("B", BitDepth.BIT_64, 32, "add.uw")
   .addField(new Matcher("full", "0,1,2,3,4,5,6,12,13,14,25,26,27,28,29,30,31", "11011100000010000"))
   .addArg(new ArgumentPattern("rd", "7,8,9,10,11", "regx"))
