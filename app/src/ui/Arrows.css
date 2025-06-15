@@ -1,0 +1,4 @@
+.arrows {
+  grid-row: 1/-1;
+  color: var(--color-jump);
+}

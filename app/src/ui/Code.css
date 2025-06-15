@@ -1,0 +1,86 @@
+.code {
+  display: grid;
+  grid-template-columns: repeat(4, max-content);
+  column-gap: 1rem;
+}
+
+.offsets {
+  display: grid;
+  grid-row: 1/-1;
+  grid-template-rows: subgrid;
+  color: var(--color-comment);
+}
+
+.encoded {
+  display: grid;
+  grid-row: 1/-1;
+  grid-template-rows: subgrid;
+  color: var(--color-hex);
+  text-align: right;
+}
+
+.decoded {
+  position: relative;
+  display: grid;
+  grid-column: span 2;
+  grid-row: 1/-1;
+  grid-template-rows: subgrid;
+  grid-template-columns: subgrid;
+  gap: 0 1rem;
+}
+
+.decoded > .instruction {
+  display: grid;
+  grid-column: span 2;
+  grid-template-columns: subgrid;
+}
+
+.decoded > .instruction > .variants {
+  outline: 1px solid var(--color-entity);
+  margin-top: 1px;
+  display: grid;
+  grid-column: span 2;
+  grid-template-columns: subgrid;
+}
+
+.decoded > .instruction > .mnemonic,
+.decoded > .instruction > .variants > .mnemonic {
+  color: var(--color-instruction);
+  display: flex;
+}
+
+.decoded > .instruction > .variants > .mnemonic {
+  cursor: pointer;
+}
+
+.decoded > .instruction > .mnemonic > .ellipsis {
+  flex: 1;
+  cursor: pointer;
+}
+
+.decoded > .instruction > .mnemonic > .ellipsis::before {
+  content: "…";
+  color: var(--color-dots);
+  cursor: pointer;
+}
+
+.decoded > .instruction > .error {
+  color: var(--color-dots);
+}
+
+.decoded span.entity {
+  color: var(--color-entity);
+}
+
+.decoded span.const {
+  color: var(--color-constant);
+}
+
+.decoded span.jump {
+  color: var(--color-special);
+}
+
+.spanning span:not(.selected),
+.mnemonic.spanning {
+  color: var(--color-comment);
+}
