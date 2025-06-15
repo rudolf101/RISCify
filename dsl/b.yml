@@ -1,75 +1,4 @@
 # yaml-language-server: $schema=./schema.json
-# B instructions
-#   ---------------------------------------------------------------
-#   31         25|24     20|19     15|14 12|11      7|6           0
-#   ---------------------------------------------------------------
-#   0 0 0 0 1 0 0|   rs2   |   rs1   |0 0 0|   rd    |0 1 1 1 0 1 1 : add.uw (64)
-#   0 1 0 0 0 0 0|   rs2   |   rs1   |1 1 1|   rd    |0 1 1 0 0 1 1 : andn
-#   0 1 0 0 1 0 0|   rs2   |   rs1   |0 0 1|   rd    |0 1 1 0 0 1 1 : bclr
-#   0 1 0 0 1 0 0|  shamt  |   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : bclri  (32)
-#   0 1 0 0 1 0|   shamt   |   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : bclri  (64)
-#   0 1 0 0 1 0 0|   rs2   |   rs1   |1 0 1|   rd    |0 1 1 0 0 1 1 : bext
-#   0 1 0 0 1 0 0|  shamt  |   rs1   |1 0 1|   rd    |0 0 1 0 0 1 1 : bexti  (32)
-#   0 1 0 0 1 0|   shamt   |   rs1   |1 0 1|   rd    |0 0 1 0 0 1 1 : bexti  (64)
-#   0 1 1 0 1 0 0|   rs2   |   rs1   |0 0 1|   rd    |0 1 1 0 0 1 1 : binv
-#   0 1 1 0 1 0 0|  shamt  |   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : binvi  (32)
-#   0 1 1 0 1 0|   shamt   |   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : binvi  (64)
-#   0 0 1 0 1 0 0|   rs2   |   rs1   |0 0 1|   rd    |0 1 1 0 0 1 1 : bset
-#   0 0 1 0 1 0 0|  shamt  |   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : bseti  (32)
-#   0 0 1 0 1 0|   shamt   |   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : bseti  (64)
-#   0 0 0 0 1 0 1|   rs2   |   rs1   |0 0 1|   rd    |0 1 1 0 0 1 1 : clmul
-#   0 0 0 0 1 0 1|   rs2   |   rs1   |0 1 1|   rd    |0 1 1 0 0 1 1 : clmulh
-#   0 0 0 0 1 0 1|   rs2   |   rs1   |0 1 0|   rd    |0 1 1 0 0 1 1 : clmulr
-#   0 1 1 0 0 0 0 0 0 0 0 0|   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : clz
-#   0 1 1 0 0 0 0 0 0 0 0 0|   rs1   |0 0 1|   rd    |0 0 1 1 0 1 1 : clzw   (64)
-#   0 1 1 0 0 0 0 0 0 0 1 0|   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : cpop
-#   0 1 1 0 0 0 0 0 0 0 1 0|   rs1   |0 0 1|   rd    |0 0 1 1 0 1 1 : cpopw  (64)
-#   0 1 1 0 0 0 0 0 0 0 0 1|   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : ctz
-#   0 1 1 0 0 0 0 0 0 0 0 1|   rs1   |0 0 1|   rd    |0 0 1 1 0 1 1 : ctzw   (64)
-#   0 0 0 0 1 0 1|   rs2   |   rs1   |1 1 0|   rd    |0 1 1 0 0 1 1 : max
-#   0 0 0 0 1 0 1|   rs2   |   rs1   |1 1 1|   rd    |0 1 1 0 0 1 1 : maxu
-#   0 0 0 0 1 0 1|   rs2   |   rs1   |1 0 0|   rd    |0 1 1 0 0 1 1 : min
-#   0 0 0 0 1 0 1|   rs2   |   rs1   |1 0 1|   rd    |0 1 1 0 0 1 1 : minu
-#   0 0 1 0 1 0 0 0 0 1 1 1|   rs1   |1 0 1|   rd    |0 0 1 0 0 1 1 : orc.b
-#   0 1 0 0 0 0 0|   rs2   |   rs1   |1 1 0|   rd    |0 1 1 0 0 1 1 : orn
-#   0 0 0 0 1 0 0|   rs2   |   rs1   |1 0 0|   rd    |0 1 1 0 0 1 1 : pack
-#   0 0 0 0 1 0 0|   rs2   |   rs1   |1 1 1|   rd    |0 1 1 0 0 1 1 : packh
-#   0 0 0 0 1 0 0|   rs2   |   rs1   |1 0 0|   rd    |0 1 1 1 0 1 1 : packw (64)
-#   0 1 1 0 1 0 0 1 1 0 0 0|   rs1   |1 0 1|   rd    |0 0 1 0 0 1 1 : rev8 (32)
-#   0 1 1 0 1 0 1 1 1 0 0 0|   rs1   |1 0 1|   rd    |0 0 1 0 0 1 1 : rev8 (64)
-#   0 1 1 0 1 0 0 0 0 1 1 1|   rs1   |1 0 1|   rd    |0 0 1 0 0 1 1 : brev8
-#   0 1 1 0 0 0 0|   rs2   |   rs1   |0 0 1|   rd    |0 1 1 0 0 1 1 : rol
-#   0 1 1 0 0 0 0|   rs2   |   rs1   |0 0 1|   rd    |0 1 1 1 0 1 1 : rolw (64)
-#   0 1 1 0 0 0 0|   rs2   |   rs1   |1 0 1|   rd    |0 1 1 0 0 1 1 : ror
-#   0 1 1 0 0 0 0|   rs2   |   rs1   |1 0 1|   rd    |0 1 1 1 0 1 1 : rorw (64)
-#   0 1 1 0 0 0 0|  shamt  |   rs1   |1 0 1|   rd    |0 0 1 0 0 1 1 : rori (32)
-#   0 1 1 0 0 0|   shamt   |   rs1   |1 0 1|   rd    |0 0 1 0 0 1 1 : rori (64)
-#   0 1 1 0 0 0 0|  shamt  |   rs1   |1 0 1|   rd    |0 0 1 1 0 1 1 : roriw (64)
-#   0 1 1 0 0 0 0 0 0 1 0 0|   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : sext.b
-#   0 1 1 0 0 0 0 0 0 1 0 1|   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : sext.h
-#   0 0 1 0 0 0 0|   rs2   |   rs1   |0 1 0|   rd    |0 1 1 0 0 1 1 : sh1add
-#   0 0 1 0 0 0 0|   rs2   |   rs1   |0 1 0|   rd    |0 1 1 1 0 1 1 : sh1add.uw (64)
-#   0 0 1 0 0 0 0|   rs2   |   rs1   |1 0 0|   rd    |0 1 1 0 0 1 1 : sh2add
-#   0 0 1 0 0 0 0|   rs2   |   rs1   |1 0 0|   rd    |0 1 1 1 0 1 1 : sh2add.uw (64)
-#   0 0 1 0 0 0 0|   rs2   |   rs1   |1 1 0|   rd    |0 1 1 0 0 1 1 : sh3add
-#   0 0 1 0 0 0 0|   rs2   |   rs1   |1 1 0|   rd    |0 1 1 1 0 1 1 : sh3add.uw (64)
-#   0 0 0 0 1 0|   shamt   |   rs1   |0 0 1|   rd    |0 0 1 1 0 1 1 : slli.uw (64)
-#   0 0 0 0 1 0 0 0 1 1 1 1|   rs1   |1 0 1|   rd    |0 0 1 0 0 1 1 : unzip (32)
-#   0 1 0 0 0 0 0|   rs2   |   rs1   |1 0 0|   rd    |0 1 1 0 0 1 1 : xnor
-#   0 0 1 0 1 0 0|   rs2   |   rs1   |1 0 0|   rd    |0 1 1 0 0 1 1 : xperm8
-#   0 0 1 0 1 0 0|   rs2   |   rs1   |0 1 0|   rd    |0 1 1 0 0 1 1 : xperm4
-#   0 0 0 0 1 0 0 0 0 0 0 0|   rs1   |1 0 0|   rd    |0 1 1 0 0 1 1 : zext.h (32)
-#   0 0 0 0 1 0 0 0 0 0 0 0|   rs1   |1 0 0|   rd    |0 1 1 1 0 1 1 : zext.h (64)
-#   0 0 0 0 1 0 0 0 1 1 1 1|   rs1   |0 0 1|   rd    |0 0 1 0 0 1 1 : zip (32)
-#
-# PSEUDO:
-#   zext.w rd, rs1 -> add.uw rd, rs1, zero
-#
-# SYNTAX:
-#   instr rd, rs1
-#   instr rd, rs1, rs2
-#   instr rd, rs1, shamt
-
 Args:
   b_rd:      { name: "rd" , span: "7:11" , display: "regx" }
   b_rs1:     { name: "rs1", span: "15:19", display: "regx" }
@@ -78,7 +7,6 @@ Args:
   b_shamt64: { name: "imm", span: "20:25", display: "unum" }
 
 Fields:
-  # Считайте, что у каждой инструкции есть только одно большое поле, а не несколько
   b_add_uw:    { name: "full", span: "0:6,12:14,25:31", value: "11011100000010000" }
   b_andn:      { name: "full", span: "0:6,12:14,25:31", value: "11001101110000010" }
   b_bclr:      { name: "full", span: "0:6,12:14,25:31", value: "11001101000010010" }
@@ -134,15 +62,16 @@ Fields:
   b_xnor:      { name: "full", span: "0:6,12:14,25:31", value: "11001100010000010" }
   b_xperm8:    { name: "full", span: "0:6,12:14,25:31", value: "11001100010010100" }
   b_xperm4:    { name: "full", span: "0:6,12:14,25:31", value: "11001100100010100" }
-  b_zext.h_32: { name: "full", span: "0:6,12:14,20:31", value: "1100110001000000010000" }
-  b_zext.h_64: { name: "full", span: "0:6,12:14,20:31", value: "1101110001000000010000" }
+  b_zext_h_32: { name: "full", span: "0:6,12:14,20:31", value: "1100110001000000010000" }
+  b_zext_h_64: { name: "full", span: "0:6,12:14,20:31", value: "1101110001000000010000" }
   b_zip:       { name: "full", span: "0:6,12:14,20:31", value: "1100100100111100010000" }
+  b_rs2_zero:  { name: "rs2",  span: "20:24",           value: "00000" }
 
 Sets:
 - name: "B"
   size: 32
   depth: "32"
-  instructions:  # 32-bit versions
+  instructions:
   - mnemonic: bclri
     fields: [ b_bclri_32 ]
     args: [ b_rd, b_rs1, b_shamt ]
@@ -165,7 +94,7 @@ Sets:
     fields: [ b_unzip ]
     args: [ b_rd, b_rs1 ]
   - mnemonic: zext.h
-    fields: [ b_zext.h_32 ]
+    fields: [ b_zext_h_32 ]
     args: [ b_rd, b_rs1 ]
   - mnemonic: zip
     fields: [ b_zip ]
@@ -174,7 +103,10 @@ Sets:
 - name: "B"
   size: 32
   depth: "64"
-  instructions:  # 64-bit versions
+  instructions:
+  - mnemonic: zext.w
+    fields: [ b_add_uw, b_rs2_zero ]
+    args: [ b_rd, b_rs1 ]
   - mnemonic: add.uw
     fields: [ b_add_uw ]
     args: [ b_rd, b_rs1, b_rs2 ]
@@ -230,7 +162,7 @@ Sets:
     fields: [ b_slli.uw ]
     args: [ b_rd, b_rs1, b_shamt ]
   - mnemonic: zext.h
-    fields: [ b_zext.h_64 ]
+    fields: [ b_zext_h_64 ]
     args: [ b_rd, b_rs1 ]
 
 - name: "B"
