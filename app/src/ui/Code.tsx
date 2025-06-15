@@ -8,6 +8,75 @@ import { Bits } from "../kernel/Bits";
 
 import "./Code.css";
 
+export enum Display {
+  HEX = "hex",
+  BIN = "bin",
+}
+
+export enum Jump {
+  RELATIVE = "relative",
+  ABSOLUTE = "absolute",
+}
+
+const argumentType = (arg: Argument) => {
+  if (arg.textual === arg.numerical.toString()) {
+    return "const";
+  }
+  return "entity";
+};
+
+const convertBits = (
+  bits: Bits,
+  display: Display,
+  order: InputOrder,
+  span?: Span
+): ReactNode[] => {
+  const text = bits.bigEndian;
+  let spaced: ReactNode[][];
+  let spanSet = span
+    ? new Set(span.map((i) => text.length - 1 - i))
+    : new Set();
+  if (display === "bin") {
+    spaced = Array.from(text.matchAll(/.{8}/g)).map((res, i) =>
+      Array.from(res[0]).map((e, j) => (
+        <span
+          key={i * 8 + j}
+          className={spanSet.has(i * 8 + j) ? "selected" : ""}
+        >
+          {e}
+        </span>
+      ))
+    );
+  } else {
+    const num = BigInt("0b" + text);
+    const hex = num.toString(16);
+    const paddedHex = hex.padStart(text.length / 4, "0");
+    spaced = Array.from(paddedHex.matchAll(/.{2}/g)).map((res, j) =>
+      Array.from(res[0]).map((e, i) => <span key={i * 8 + j}>{e}</span>)
+    );
+  }
+  if (order === InputOrder.BYTE_ORDER_BE) {
+    spaced.reverse();
+  }
+  return spaced.flatMap((e) => e.concat([" "])).slice(0, -1);
+};
+
+const convertJump = (
+  offset: number,
+  jumpOffset: bigint,
+  jumpStyle: Jump
+) =>
+  hexWithSign(
+    jumpStyle === "relative" ? jumpOffset : BigInt(offset) + jumpOffset
+  );
+
+const hexWithSign = (n: bigint) => {
+  const num = (n < 0n ? -n : n).toString(16);
+  const sign = n >= 0n ? "" : "-";
+  const bytes = Math.ceil(num.length / 2) * 2;
+  return sign + `0x${num.padStart(bytes, "0")}`;
+};
+
 export const Code = (props: {
   instructions: SimilarInstructions[];
   display: Display;
@@ -220,70 +289,3 @@ export const Code = (props: {
   );
 };
 
-export enum Jump {
-  RELATIVE = "relative",
-  ABSOLUTE = "absolute",
-}
-
-export const convertJump = (
-  offset: number,
-  jumpOffset: bigint,
-  jumpStyle: Jump
-) =>
-  hexWithSign(
-    jumpStyle === "relative" ? jumpOffset : BigInt(offset) + jumpOffset
-  );
-
-export const hexWithSign = (n: bigint) => {
-  const num = (n < 0n ? -n : n).toString(16);
-  const sign = n >= 0n ? "" : "-";
-  const bytes = Math.ceil(num.length / 2) * 2;
-  return sign + `0x${num.padStart(bytes, "0")}`;
-};
-export const convertBits = (
-  bits: Bits,
-  display: Display,
-  order: InputOrder,
-  span?: Span
-): ReactNode[] => {
-  const text = bits.bigEndian;
-  let spaced: ReactNode[][];
-  let spanSet = span
-    ? new Set(span.map((i) => text.length - 1 - i))
-    : new Set();
-  if (display === "bin") {
-    spaced = Array.from(text.matchAll(/.{8}/g)).map((res, i) =>
-      Array.from(res[0]).map((e, j) => (
-        <span
-          key={i * 8 + j}
-          className={spanSet.has(i * 8 + j) ? "selected" : ""}
-        >
-          {e}
-        </span>
-      ))
-    );
-  } else {
-    const num = BigInt("0b" + text);
-    const hex = num.toString(16);
-    const paddedHex = hex.padStart(text.length / 4, "0");
-    spaced = Array.from(paddedHex.matchAll(/.{2}/g)).map((res, j) =>
-      Array.from(res[0]).map((e, i) => <span key={i * 8 + j}>{e}</span>)
-    );
-  }
-  if (order === InputOrder.BYTE_ORDER_BE) {
-    spaced.reverse();
-  }
-  return spaced.flatMap((e) => e.concat([" "])).slice(0, -1);
-};
-
-export enum Display {
-  HEX = "hex",
-  BIN = "bin",
-}
-
-export const argumentType = (arg: Argument) => {
-  if (arg.textual === arg.numerical.toString()) {
-    return "const";
-  }
-  return "entity";
-};
