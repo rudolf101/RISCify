@@ -1,0 +1,17 @@
+.header,
+.message {
+  color: var(--color-instruction);
+}
+
+.error {
+  color: var(--color-dots);
+}
+
+.header {
+  font-size: 2rem;
+  margin-top: 8rem;
+}
+
+.message {
+  font-size: 1.5rem;
+}

@@ -6,6 +6,8 @@ import { Span } from "../kernel/Span";
 import { Arrows } from "./Arrows";
 import { Bits } from "../kernel/Bits";
 
+import "./Code.css";
+
 export const Code = (props: {
   instructions: SimilarInstructions[];
   display: Display;

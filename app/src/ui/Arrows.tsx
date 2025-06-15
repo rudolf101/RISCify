@@ -1,6 +1,7 @@
 import React, { useMemo } from "react";
 import { SimilarInstructions } from "../kernel/Disassembler";
 
+import "./Arrows.css";
 
 type LocalJump = {
   from: number;
@@ -33,7 +34,10 @@ export const packJumps = (jumps: LocalJump[]): LevelledJump[] => {
     const _to = Math.max(from, to);
     const usedLevels = levels
       .slice(_from, _to + 1)
-      .reduce((a, b) => a.map((e, i) => e || b[i]), new Array(Math.abs(_from - _to)).fill(false));
+      .reduce(
+        (a, b) => a.map((e, i) => e || b[i]),
+        new Array(Math.abs(_from - _to)).fill(false)
+      );
     for (const [i, level] of usedLevels.entries()) {
       if (!level) {
         levels.slice(_from, _to + 1).forEach((a) => {
@@ -51,7 +55,7 @@ export const packJumps = (jumps: LocalJump[]): LevelledJump[] => {
 export const Arrows = (props: {
   instructions: SimilarInstructions[];
   current?: number;
-  skip: { from: number; length: number; };
+  skip: { from: number; length: number };
 }) => {
   const fontSize = parseInt(window.getComputedStyle(document.body)["fontSize"]);
   const lineHeight = fontSize * 1.3;
@@ -83,7 +87,8 @@ export const Arrows = (props: {
     return skippedPackedJumps;
   }, [props.instructions, props.skip]);
 
-  const width = (packedJumps.reduce((a, b) => Math.max(a, b.level), 0) + 1) * fontSize;
+  const width =
+    (packedJumps.reduce((a, b) => Math.max(a, b.level), 0) + 1) * fontSize;
 
   const renderJump = (jump: LevelledJump) => {
     let x1 = width - 1;
@@ -96,21 +101,27 @@ export const Arrows = (props: {
           fill="none"
           strokeWidth={8}
           stroke="var(--color-bg)"
-          points={`${x1},${y1} ${x2},${y1} ${x2},${y2} ${x1},${y2}`} />
+          points={`${x1},${y1} ${x2},${y1} ${x2},${y2} ${x1},${y2}`}
+        />
         <polyline
           fill="none"
           strokeWidth={2}
-          stroke={props.current && props.current !== jump.from
-            ? "var(--color-comment)"
-            : jump.broken
+          stroke={
+            props.current && props.current !== jump.from
+              ? "var(--color-comment)"
+              : jump.broken
               ? "var(--color-dots)"
-              : "currentColor"}
-          markerEnd={`url(${props.current && props.current !== jump.from
+              : "currentColor"
+          }
+          markerEnd={`url(${
+            props.current && props.current !== jump.from
               ? "#head-grey"
               : jump.broken
-                ? "#head-red"
-                : "#head-green"})`}
-          points={`${x1},${y1} ${x2},${y1} ${x2},${y2} ${x1},${y2}`} />
+              ? "#head-red"
+              : "#head-green"
+          })`}
+          points={`${x1},${y1} ${x2},${y1} ${x2},${y2} ${x1},${y2}`}
+        />
       </React.Fragment>
     );
   };

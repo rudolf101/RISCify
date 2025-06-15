@@ -1,7 +1,9 @@
-import React, { useId } from "react";
+import { useId } from "react";
+
+import "./Switch.css";
 
 export const Switch = <T,>(props: {
-  cases: { text: string; value: T; }[];
+  cases: { text: string; value: T }[];
   value: T;
   onChange: (v: T) => void;
 }) => {
@@ -21,7 +23,8 @@ export const Switch = <T,>(props: {
             checked={props.value === _case.value}
             onChange={() => {
               props.onChange(_case.value);
-            }} />
+            }}
+          />
           {_case.text}
         </label>
       ))}
