@@ -1,0 +1,165 @@
+{
+  "$ref": "#/definitions/DSLFile",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "DSLArg": {
+      "additionalProperties": false,
+      "properties": {
+        "display": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "span": {
+          "pattern": "^(\\d+(\\s*:\\s*\\d+)?)(,\\d+(\\s*:\\s*\\d+)?)*$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "name",
+        "span",
+        "display"
+      ],
+      "type": "object"
+    },
+    "DSLField": {
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "span": {
+          "pattern": "^(\\d+(\\s*:\\s*\\d+)?)(,\\d+(\\s*:\\s*\\d+)?)*$",
+          "type": "string"
+        },
+        "value": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "span",
+        "value"
+      ],
+      "type": "object"
+    },
+    "DSLFile": {
+      "additionalProperties": false,
+      "properties": {
+        "Args": {
+          "additionalProperties": {
+            "$ref": "#/definitions/DSLArg"
+          },
+          "type": "object"
+        },
+        "Fields": {
+          "additionalProperties": {
+            "$ref": "#/definitions/DSLField"
+          },
+          "type": "object"
+        },
+        "Restricts": {
+          "additionalProperties": {
+            "$ref": "#/definitions/DSLField"
+          },
+          "type": "object"
+        },
+        "Sets": {
+          "items": {
+            "$ref": "#/definitions/DSLSet"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "Sets"
+      ],
+      "type": "object"
+    },
+    "DSLInstruction": {
+      "additionalProperties": false,
+      "properties": {
+        "args": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "fields": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        },
+        "format": {
+          "type": "string"
+        },
+        "jump": {
+          "anyOf": [
+            {
+              "const": "out",
+              "type": "string"
+            },
+            {
+              "type": "number"
+            }
+          ]
+        },
+        "mnemonic": {
+          "type": "string"
+        },
+        "restricts": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "mnemonic",
+        "fields"
+      ],
+      "type": "object"
+    },
+    "DSLSet": {
+      "additionalProperties": false,
+      "properties": {
+        "depth": {
+          "$ref": "#/definitions/Depth"
+        },
+        "instructions": {
+          "items": {
+            "$ref": "#/definitions/DSLInstruction"
+          },
+          "type": "array"
+        },
+        "name": {
+          "type": "string"
+        },
+        "size": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "name",
+        "size",
+        "depth",
+        "instructions"
+      ],
+      "type": "object"
+    },
+    "Depth": {
+      "enum": [
+        "32",
+        "64",
+        "128",
+        "32|64",
+        "32|128",
+        "64|128",
+        "32|64|128"
+      ],
+      "type": "string"
+    }
+  }
+}
+

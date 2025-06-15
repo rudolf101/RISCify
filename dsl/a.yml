@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=./schema.json
 Args:
   a_rd:  { name: "rd" , span: "7:11" , display: "regx" }
   a_rs1: { name: "rs1", span: "15:19", display: "par(regx)" }
@@ -26,7 +27,7 @@ Fields:
 
 Sets:
 - name: "A"
-  size: "32"
+  size: 32
   depth: "32|64"
   instructions:
   - { mnemonic:      "lr.w"     , fields: [ a_op, a_f3_w, a_f5_lr  , a_rl0, a_aq0, a_rs2_0 ], args: [ a_rd, a_rs1 ] }
@@ -75,7 +76,7 @@ Sets:
   - { mnemonic: "amomaxu.w.aqrl", fields: [ a_op, a_f3_w, a_f5_maxu, a_rl1, a_aq1 ], args: [ a_rd, a_rs2, a_rs1 ] }
 
 - name: "A"
-  size: "32"
+  size: 32
   depth: "64"
   instructions:
   - { mnemonic:      "lr.d"     , fields: [ a_op, a_f3_d, a_f5_lr  , a_rl0, a_aq0, a_rs2_0 ], args: [ a_rd, a_rs1 ] }

@@ -23,9 +23,9 @@ export function parseSpan(span: string): Span {
     const result: number[] = [];
 
     for (const part of span.split(',')) {
-        const trimmed = part.trim().replace(/:/g, '-');
-        if (trimmed.includes('-')) {
-            const [startStr, endStr] = trimmed.split('-');
+        const trimmed = part.trim()
+        if (trimmed.includes(':')) {
+            const [startStr, endStr] = trimmed.split(':');
             const start = parseInt(startStr, 10);
             const end = parseInt(endStr, 10);
 

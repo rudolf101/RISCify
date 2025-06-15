@@ -7,12 +7,18 @@ export interface DSLFile {
 
 export interface DSLArg {
     name: string;
+    /**
+     * @pattern ^(\d+(\s*:\s*\d+)?)(,\d+(\s*:\s*\d+)?)*$
+     */
     span: string;
     display: string;
 }
 
 export interface DSLField {
-    name: string;
+    name?: string;
+    /**
+     * @pattern ^(\d+(\s*:\s*\d+)?)(,\d+(\s*:\s*\d+)?)*$
+     */
     span: string;
     value: string;
 }

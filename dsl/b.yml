@@ -1,0 +1,261 @@
+# yaml-language-server: $schema=./schema.json
+Args:
+  b_rd:      { name: "rd" , span: "7:11" , display: "regx" }
+  b_rs1:     { name: "rs1", span: "15:19", display: "regx" }
+  b_rs2:     { name: "rs2", span: "20:24", display: "regx" }
+  b_shamt:   { name: "imm", span: "20:24", display: "unum" }
+  b_shamt64: { name: "imm", span: "20:25", display: "unum" }
+
+Fields:
+  b_add_uw:    { name: "full", span: "0:6,12:14,25:31", value: "11011100000010000" }
+  b_andn:      { name: "full", span: "0:6,12:14,25:31", value: "11001101110000010" }
+  b_bclr:      { name: "full", span: "0:6,12:14,25:31", value: "11001101000010010" }
+  b_bclri_32:  { name: "full", span: "0:6,12:14,25:31", value: "11001001000010010" }
+  b_bclri_64:  { name: "full", span: "0:6,12:14,26:31", value: "1100100100010010" }
+  b_bext:      { name: "full", span: "0:6,12:14,25:31", value: "11001101010010010" }
+  b_bexti_32:  { name: "full", span: "0:6,12:14,25:31", value: "11001001010010010" }
+  b_bexti_64:  { name: "full", span: "0:6,12:14,26:31", value: "1100100101010010" }
+  b_binv:      { name: "full", span: "0:6,12:14,25:31", value: "11001101000010110" }
+  b_binvi_32:  { name: "full", span: "0:6,12:14,25:31", value: "11001001000010110" }
+  b_binvi_64:  { name: "full", span: "0:6,12:14,26:31", value: "1100100100010110" }
+  b_bset:      { name: "full", span: "0:6,12:14,25:31", value: "11001101000010100" }
+  b_bseti_32:  { name: "full", span: "0:6,12:14,25:31", value: "11001001000010110" }
+  b_bseti_64:  { name: "full", span: "0:6,12:14,26:31", value: "1100100100010100" }
+  b_clmul:     { name: "full", span: "0:6,12:14,25:31", value: "11001101001010000" }
+  b_clmulh:    { name: "full", span: "0:6,12:14,25:31", value: "11001101101010000" }
+  b_clmulr:    { name: "full", span: "0:6,12:14,25:31", value: "11001100101010000" }
+  b_clz:       { name: "full", span: "0:6,12:14,20:31", value: "1100100100000000000110" }
+  b_clzw:      { name: "full", span: "0:6,12:14,20:31", value: "1101100100000000000110" }
+  b_cpop:      { name: "full", span: "0:6,12:14,20:31", value: "1100100100010000000110" }
+  b_cpopw:     { name: "full", span: "0:6,12:14,20:31", value: "1101100100010000000110" }
+  b_ctz:       { name: "full", span: "0:6,12:14,20:31", value: "1100100100100000000110" }
+  b_ctzw:      { name: "full", span: "0:6,12:14,20:31", value: "1101100100100000000110" }
+  b_max:       { name: "full", span: "0:6,12:14,25:31", value: "11001100111010000" }
+  b_maxu:      { name: "full", span: "0:6,12:14,25:31", value: "11001101111010000" }
+  b_min:       { name: "full", span: "0:6,12:14,25:31", value: "11001100011010000" }
+  b_minu:      { name: "full", span: "0:6,12:14,25:31", value: "11001101011010000" }
+  b_orc_b:     { name: "full", span: "0:6,12:14,20:31", value: "1100100101111000010100" }
+  b_orn:       { name: "full", span: "0:6,12:14,25:31", value: "11001100110000010" }
+  b_pack:      { name: "full", span: "0:6,12:14,25:31", value: "11001100010010000" }
+  b_packh:     { name: "full", span: "0:6,12:14,25:31", value: "11001101110010000" }
+  b_packw:     { name: "full", span: "0:6,12:14,25:31", value: "11011100010010000" }
+  b_rev8_32:   { name: "full", span: "0:6,12:14,20:31", value: "1100100101000110010110" }
+  b_rev8_64:   { name: "full", span: "0:6,12:14,20:31", value: "1100100101000111010110" }
+  b_brev8:     { name: "full", span: "0:6,12:14,20:31", value: "1100100101111000010110" }
+  b_rol:       { name: "full", span: "0:6,12:14,25:31", value: "11001101000000110" }
+  b_rolw:      { name: "full", span: "0:6,12:14,25:31", value: "11011101000000110" }
+  b_ror:       { name: "full", span: "0:6,12:14,25:31", value: "11001101010000110" }
+  b_rorw:      { name: "full", span: "0:6,12:14,25:31", value: "11011101010000110" }
+  b_rori_32:   { name: "full", span: "0:6,12:14,25:31", value: "11001001010000110" }
+  b_rori_64:   { name: "full", span: "0:6,12:14,26:31", value: "1100100101000110" }
+  b_roriw:     { name: "full", span: "0:6,12:14,25:31", value: "1101101010000110" }
+  b_sext_b:    { name: "full", span: "0:6,12:14,20:31", value: "1100100100001000000110" }
+  b_sext_h:    { name: "full", span: "0:6,12:14,20:31", value: "1100100100101000000110" }
+  b_sh1add:    { name: "full", span: "0:6,12:14,25:31", value: "11001100100000100" }
+  b_sh1add.uw: { name: "full", span: "0:6,12:14,25:31", value: "11011100100000100" }
+  b_sh2add:    { name: "full", span: "0:6,12:14,25:31", value: "11001100010000100" }
+  b_sh2add.uw: { name: "full", span: "0:6,12:14,25:31", value: "11011100010000100" }
+  b_sh3add:    { name: "full", span: "0:6,12:14,25:31", value: "11001100110000100" }
+  b_sh3add.uw: { name: "full", span: "0:6,12:14,25:31", value: "11011100110000100" }
+  b_slli.uw:   { name: "full", span: "0:6,12:14,26:31", value: "1101100100010000" }
+  b_unzip:     { name: "full", span: "0:6,12:14,20:31", value: "1100100101111100010000" }
+  b_xnor:      { name: "full", span: "0:6,12:14,25:31", value: "11001100010000010" }
+  b_xperm8:    { name: "full", span: "0:6,12:14,25:31", value: "11001100010010100" }
+  b_xperm4:    { name: "full", span: "0:6,12:14,25:31", value: "11001100100010100" }
+  b_zext_h_32: { name: "full", span: "0:6,12:14,20:31", value: "1100110001000000010000" }
+  b_zext_h_64: { name: "full", span: "0:6,12:14,20:31", value: "1101110001000000010000" }
+  b_zip:       { name: "full", span: "0:6,12:14,20:31", value: "1100100100111100010000" }
+  b_rs2_zero:  { name: "rs2",  span: "20:24",           value: "00000" }
+
+Sets:
+- name: "B"
+  size: 32
+  depth: "32"
+  instructions:
+  - mnemonic: bclri
+    fields: [ b_bclri_32 ]
+    args: [ b_rd, b_rs1, b_shamt ]
+  - mnemonic: bexti
+    fields: [ b_bexti_32 ]
+    args: [ b_rd, b_rs1, b_shamt ]
+  - mnemonic: binvi
+    fields: [ b_binvi_32 ]
+    args: [ b_rd, b_rs1, b_shamt ]
+  - mnemonic: bseti
+    fields: [ b_bseti_32 ]
+    args: [ b_rd, b_rs1, b_shamt ]
+  - mnemonic: rev8
+    fields: [ b_rev8_32 ]
+    args: [ b_rd, b_rs1 ]
+  - mnemonic: rori
+    fields: [ b_rori_32 ]
+    args: [ b_rd, b_rs1, b_shamt ]
+  - mnemonic: unzip
+    fields: [ b_unzip ]
+    args: [ b_rd, b_rs1 ]
+  - mnemonic: zext.h
+    fields: [ b_zext_h_32 ]
+    args: [ b_rd, b_rs1 ]
+  - mnemonic: zip
+    fields: [ b_zip ]
+    args: [ b_rd, b_rs1 ]
+
+- name: "B"
+  size: 32
+  depth: "64"
+  instructions:
+  - mnemonic: zext.w
+    fields: [ b_add_uw, b_rs2_zero ]
+    args: [ b_rd, b_rs1 ]
+  - mnemonic: add.uw
+    fields: [ b_add_uw ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: bclri
+    fields: [ b_bclri_64 ]
+    args: [ b_rd, b_rs1, b_shamt64 ]
+  - mnemonic: bexti
+    fields: [ b_bexti_64 ]
+    args: [ b_rd, b_rs1, b_shamt64 ]
+  - mnemonic: binvi
+    fields: [ b_binvi_64 ]
+    args: [ b_rd, b_rs1, b_shamt64 ]
+  - mnemonic: bseti
+    fields: [ b_bseti_64 ]
+    args: [ b_rd, b_rs1, b_shamt64 ]
+  - mnemonic: clzw
+    fields: [ b_clzw ]
+    args: [ b_rd, b_rs1 ]
+  - mnemonic: cpopw
+    fields: [ b_cpopw ]
+    args: [ b_rd, b_rs1 ]
+  - mnemonic: ctzw
+    fields: [ b_ctzw ]
+    args: [ b_rd, b_rs1 ]
+  - mnemonic: packw
+    fields: [ b_packw ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: rev8
+    fields: [ b_rev8_64 ]
+    args: [ b_rd, b_rs1 ]
+  - mnemonic: rolw
+    fields: [ b_rolw ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: rorw
+    fields: [ b_rorw ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: rori
+    fields: [ b_rori_64 ]
+    args: [ b_rd, b_rs1, b_shamt64 ]
+  - mnemonic: roriw
+    fields: [ b_roriw ]
+    args: [ b_rd, b_rs1, b_shamt ]
+  - mnemonic: sh1add.uw
+    fields: [ b_sh1add.uw ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: sh2add.uw
+    fields: [ b_sh2add.uw ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: sh3add.uw
+    fields: [ b_sh3add.uw ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: slli.uw
+    fields: [ b_slli.uw ]
+    args: [ b_rd, b_rs1, b_shamt ]
+  - mnemonic: zext.h
+    fields: [ b_zext_h_64 ]
+    args: [ b_rd, b_rs1 ]
+
+- name: "B"
+  size: 32
+  depth: "32|64"
+  instructions:
+  - mnemonic: andn
+    fields: [ b_andn ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: bclr
+    fields: [ b_bclr ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: bext
+    fields: [ b_bext ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: binv
+    fields: [ b_binv ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: bset
+    fields: [ b_bset]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: clmul
+    fields: [ b_clmul ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: clmulh
+    fields: [ b_clmulh ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: clmulr
+    fields: [ b_clmulr ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: clz
+    fields: [ b_clz ]
+    args: [ b_rd, b_rs1 ]
+  - mnemonic: cpop
+    fields: [ b_cpop ]
+    args: [ b_rd, b_rs1 ]
+  - mnemonic: ctz
+    fields: [ b_ctz ]
+    args: [ b_rd, b_rs1 ]
+  - mnemonic: max
+    fields: [ b_max ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: maxu
+    fields: [ b_maxu ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: min
+    fields: [ b_min ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: minu
+    fields: [ b_minu ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: orc.b
+    fields: [ b_orc_b ]
+    args: [ b_rd, b_rs1 ]
+  - mnemonic: orn
+    fields: [ b_orn ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: pack
+    fields: [ b_pack ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: packh
+    fields: [ b_packh ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: brev8
+    fields: [ b_brev8 ]
+    args: [ b_rd, b_rs1 ]
+  - mnemonic: rol
+    fields: [ b_rol ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: ror
+    fields: [ b_ror ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: sext.b
+    fields: [ b_sext_b ]
+    args: [ b_rd, b_rs1 ]
+  - mnemonic: sext.h
+    fields: [ b_sext_h ]
+    args: [ b_rd, b_rs1 ]
+  - mnemonic: sh1add
+    fields: [ b_sh1add ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: sh2add
+    fields: [ b_sh2add ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: sh3add
+    fields: [ b_sh3add ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: xnor
+    fields: [ b_xnor ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: xperm8
+    fields: [ b_xperm8 ]
+    args: [ b_rd, b_rs1, b_rs2 ]
+  - mnemonic: xperm4
+    fields: [ b_xperm4 ]
+    args: [ b_rd, b_rs1, b_rs2 ]

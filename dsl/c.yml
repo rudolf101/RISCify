@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=./schema.json
 Args:
   c_rdc:           { name: "rd'"     , span: "2:4"                   , display: "regcx"     }
   c_rs1c:          { name: "rs1'"    , span: "7:9"                   , display: "regcx"     }
@@ -23,7 +24,7 @@ Args:
   c_uimm_1:        { name: "uimm"    , span: "2:6,12"                , display: "unum"      }
   c_shamt64:       { name: "uimm"    , span: "2:6,12"                , display: "const(64)" }
   c_addi16sp_imm:  { name: "imm"     , span: "6,2,5,3,4,12"          , display: "numx(4)"   }
-  c_j_jal_imm:     { name: "imm"     , span: "3-5,11,2,7,6,9,10,8,12", display: "numx(1)"   }
+  c_j_jal_imm:     { name: "imm"     , span: "3:5,11,2,7,6,9,10,8,12", display: "numx(1)"   }
   c_lui_imm:       { name: "imm"     , span: "2:6,12"                , display: "num"       }
   c_branch_imm:    { name: "imm"     , span: "3,4,10,11,2,5,6,12"    , display: "numx(1)"   }
   c_lw_sp_uimm:    { name: "uimm"    , span: "4,5,6,12,2,3"          , display: "unumx(2)"  }
@@ -117,7 +118,7 @@ Restricts:
 Sets:
 
 - name: "C"
-  size: "16"
+  size: 16
   depth: "32|64|128"
   instructions:
   - mnemonic: "illegal"
@@ -208,7 +209,7 @@ Sets:
     args: [ c_full_rs1_rd, c_full_rs2 ]
 
 - name: "C"
-  size: "16"
+  size: 16
   depth: "32|64"
   instructions:
   - mnemonic: "c.fld"
@@ -229,7 +230,7 @@ Sets:
     format: "_, _(sp)"
 
 - name: "C"
-  size: "16"
+  size: 16
   depth: "128"
   instructions:
   - mnemonic: "c.lq"
@@ -261,7 +262,7 @@ Sets:
     format: "_, _(sp)"
 
 - name: "C"
-  size: "16"
+  size: 16
   depth: "32"
   instructions:
   - mnemonic: "c.flw"
@@ -298,7 +299,7 @@ Sets:
     format: "_, _(sp)"
 
 - name: "C"
-  size: "16"
+  size: 16
   depth: "64|128"
   instructions:
   - mnemonic: "c.ld"
