@@ -10,14 +10,34 @@ import { Switch } from "./Switch";
 
 import "./App.css";
 
+const byteOrderCases = [
+  { text: "BE", value: InputOrder.BYTE_ORDER_BE },
+  { text: "LE", value: InputOrder.BYTE_ORDER_LE },
+];
+
+const displayCases = [
+  { text: "0xFF", value: Display.HEX },
+  { text: "0b01", value: Display.BIN },
+];
+
+const JumpCases = [
+  { text: "REL", value: Jump.RELATIVE },
+  { text: "ABS", value: Jump.ABSOLUTE },
+];
+
+const BitDepthCases = [
+  { text: "RV32", value: BitDepth.BIT_32 },
+  { text: "RV64", value: BitDepth.BIT_64 },
+];
+
 const App = () => {
   const [sourceCode, setSourceCode] = useState("");
   const [byteOrder, setByteOrder] = useState(InputOrder.BYTE_ORDER_BE);
   const [bytesSkip, setBytesSkip] = useState(0);
   const [bitDepth, setBitDepth] = useState(BitDepth.BIT_32);
-  const [display, setDisplay] = useState<Display>("hex");
+  const [display, setDisplay] = useState(Display.HEX);
   const [edit, setEdit] = useState(false);
-  const [jump, setJump] = useState<Jump>("relative");
+  const [jump, setJump] = useState(Jump.RELATIVE);
   const [disassemblerResult, setDisassemblerResult] =
     useState<DisassembleOutput>({
       valid: "valid",
@@ -71,10 +91,7 @@ const App = () => {
         <div className="tools">
           <div className="tool">
             <Switch
-              cases={[
-                { text: "RV32", value: BitDepth.BIT_32 },
-                { text: "RV64", value: BitDepth.BIT_64 },
-              ]}
+              cases={BitDepthCases}
               value={bitDepth}
               onChange={setBitDepth}
             />
@@ -99,16 +116,7 @@ const App = () => {
           <div className="tool">
             <span>BYTE ORDER</span>
             <Switch
-              cases={[
-                {
-                  text: "BE",
-                  value: InputOrder.BYTE_ORDER_BE,
-                },
-                {
-                  text: "LE",
-                  value: InputOrder.BYTE_ORDER_LE,
-                },
-              ]}
+              cases={byteOrderCases}
               value={byteOrder}
               onChange={setByteOrder}
             />
@@ -116,36 +124,14 @@ const App = () => {
           <div className="tool">
             <span>DISPLAY</span>
             <Switch
-              cases={[
-                {
-                  text: "0xFF",
-                  value: "hex" as const,
-                },
-                {
-                  text: "0b01",
-                  value: "bin" as const,
-                },
-              ]}
+              cases={displayCases}
               value={display}
               onChange={setDisplay}
             />
           </div>
           <div className="tool">
             <span>JUMP STYLE</span>
-            <Switch
-              cases={[
-                {
-                  text: "REL",
-                  value: "relative" as const,
-                },
-                {
-                  text: "ABS",
-                  value: "absolute" as const,
-                },
-              ]}
-              value={jump}
-              onChange={setJump}
-            />
+            <Switch cases={JumpCases} value={jump} onChange={setJump} />
           </div>
           <div className="tool">
             <button

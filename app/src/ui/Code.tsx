@@ -20,29 +20,39 @@ export const Code = (props: {
   const [instructionVariantShowed, setInstructionVariantShowed] = useState(-1);
   const [overrides, setOverrides] = useState<Map<number, number>>(new Map());
 
-  const isCurrent = (i: number, j: number) => current && current.i === i && current.j === j ? "selected" : "";
-  const isGlobalSpanning = () => props.display === "bin" && current ? "spanning" : "";
-  const isSelected = (i: number) => props.display === "bin" && current && current.i === i ? "selected" : "";
-  const currentSpan = (i: number) => current && current.i === i ? current.span : undefined;
-  const setCurrentCallback = (i: number, j: number, { span }: Argument) => () => setCurrent({
-    i,
-    j,
-    span,
-  });
+  const isCurrent = (i: number, j: number) =>
+    current && current.i === i && current.j === j ? "selected" : "";
+  const isGlobalSpanning = () =>
+    props.display === "bin" && current ? "spanning" : "";
+  const isSelected = (i: number) =>
+    props.display === "bin" && current && current.i === i ? "selected" : "";
+  const currentSpan = (i: number) =>
+    current && current.i === i ? current.span : undefined;
+  const setCurrentCallback =
+    (i: number, j: number, { span }: Argument) =>
+    () =>
+      setCurrent({
+        i,
+        j,
+        span,
+      });
   const resetCurrent = () => setCurrent(null);
-  const openInstructionVariants = (i: number) => () => setInstructionVariantShowed(i);
+  const openInstructionVariants = (i: number) => () =>
+    setInstructionVariantShowed(i);
   const closeInstructionVariants = () => setInstructionVariantShowed(-1);
   const setAndCloseInstructionVariant = (i: number, j: number) => () => {
     setInstructionVariantShowed(-1);
     setOverrides(new Map(overrides).set(i, j));
   };
-  const skip = instructionVariantShowed >= 0
-    ? {
-      from: instructionVariantShowed,
-      length: (props.instructions.at(instructionVariantShowed)?.instructions
-        .length ?? 1) - 1,
-    }
-    : { from: 0, length: 0 };
+  const skip =
+    instructionVariantShowed >= 0
+      ? {
+          from: instructionVariantShowed,
+          length:
+            (props.instructions.at(instructionVariantShowed)?.instructions
+              .length ?? 1) - 1,
+        }
+      : { from: 0, length: 0 };
 
   useEffect(() => {
     setInstructionVariantShowed(-1);
@@ -57,7 +67,8 @@ export const Code = (props: {
       <Arrows
         instructions={props.instructions}
         current={current?.i}
-        skip={skip} />
+        skip={skip}
+      />
       <div className="offsets">
         {props.instructions.map((inst) => (
           <span key={inst.chunk.address}>
@@ -91,7 +102,8 @@ export const Code = (props: {
               </React.Fragment>
             );
           }
-          const jumpIdx = someInst.jump.label === "within" ? someInst.jump.argIndex : -1;
+          const jumpIdx =
+            someInst.jump.label === "within" ? someInst.jump.argIndex : -1;
 
           let variants = null;
           if (instructionVariantShowed === i) {
@@ -101,9 +113,10 @@ export const Code = (props: {
                   if (j === (overrides.get(i) ?? 0)) {
                     return null;
                   }
-                  const jumpIdx = someInst.jump.label === "within"
-                    ? someInst.jump.argIndex
-                    : -1;
+                  const jumpIdx =
+                    someInst.jump.label === "within"
+                      ? someInst.jump.argIndex
+                      : -1;
                   const argSeparators = someInst.argFormat?.split("_") ?? [];
                   return (
                     <React.Fragment key={j}>
@@ -117,14 +130,16 @@ export const Code = (props: {
                         {someInst.args.flatMap((arg, j) => [
                           <span
                             key={j * 2}
-                            className={j === jumpIdx ? "jump" : argumentType(arg)}
+                            className={
+                              j === jumpIdx ? "jump" : argumentType(arg)
+                            }
                           >
                             {j === jumpIdx
                               ? convertJump(
-                                inst.chunk.address,
-                                arg.numerical,
-                                props.jump
-                              )
+                                  inst.chunk.address,
+                                  arg.numerical,
+                                  props.jump
+                                )
                               : arg.textual}
                           </span>,
                           <span key={j * 2 + 1}>
@@ -148,9 +163,11 @@ export const Code = (props: {
                 {inst.instructions.length > 1 ? (
                   <span
                     className="ellipsis"
-                    onClick={instructionVariantShowed === i
-                      ? closeInstructionVariants
-                      : openInstructionVariants(i)}
+                    onClick={
+                      instructionVariantShowed === i
+                        ? closeInstructionVariants
+                        : openInstructionVariants(i)
+                    }
                   ></span>
                 ) : null}
               </div>
@@ -158,16 +175,18 @@ export const Code = (props: {
                 {someInst.args.flatMap((arg, j) => [
                   <span
                     key={j * 2}
-                    className={`${j === jumpIdx ? "jump" : argumentType(arg)} ${isCurrent(i, j)}`}
+                    className={`${
+                      j === jumpIdx ? "jump" : argumentType(arg)
+                    } ${isCurrent(i, j)}`}
                     onMouseEnter={setCurrentCallback(i, j, arg)}
                     onMouseLeave={resetCurrent}
                   >
                     {j === jumpIdx
                       ? convertJump(
-                        inst.chunk.address,
-                        arg.numerical,
-                        props.jump
-                      )
+                          inst.chunk.address,
+                          arg.numerical,
+                          props.jump
+                        )
                       : arg.textual}
                   </span>,
                   <span
@@ -197,9 +216,22 @@ export const Code = (props: {
       </div>
     </div>
   );
-};export type Jump = "relative" | "absolute";
+};
 
-export const convertJump = (offset: number, jumpOffset: bigint, jumpStyle: Jump) => hexWithSign(jumpStyle === "relative" ? jumpOffset : BigInt(offset) + jumpOffset);
+export enum Jump {
+  RELATIVE = "relative",
+  ABSOLUTE = "absolute",
+}
+
+export const convertJump = (
+  offset: number,
+  jumpOffset: bigint,
+  jumpStyle: Jump
+) =>
+  hexWithSign(
+    jumpStyle === "relative" ? jumpOffset : BigInt(offset) + jumpOffset
+  );
+
 export const hexWithSign = (n: bigint) => {
   const num = (n < 0n ? -n : n).toString(16);
   const sign = n >= 0n ? "" : "-";
@@ -218,20 +250,22 @@ export const convertBits = (
     ? new Set(span.map((i) => text.length - 1 - i))
     : new Set();
   if (display === "bin") {
-    spaced = Array.from(text.matchAll(/.{8}/g)).map((res, i) => Array.from(res[0]).map((e, j) => (
-      <span
-        key={i * 8 + j}
-        className={spanSet.has(i * 8 + j) ? "selected" : ""}
-      >
-        {e}
-      </span>
-    ))
+    spaced = Array.from(text.matchAll(/.{8}/g)).map((res, i) =>
+      Array.from(res[0]).map((e, j) => (
+        <span
+          key={i * 8 + j}
+          className={spanSet.has(i * 8 + j) ? "selected" : ""}
+        >
+          {e}
+        </span>
+      ))
     );
   } else {
     const num = BigInt("0b" + text);
     const hex = num.toString(16);
     const paddedHex = hex.padStart(text.length / 4, "0");
-    spaced = Array.from(paddedHex.matchAll(/.{2}/g)).map((res, j) => Array.from(res[0]).map((e, i) => <span key={i * 8 + j}>{e}</span>)
+    spaced = Array.from(paddedHex.matchAll(/.{2}/g)).map((res, j) =>
+      Array.from(res[0]).map((e, i) => <span key={i * 8 + j}>{e}</span>)
     );
   }
   if (order === InputOrder.BYTE_ORDER_BE) {
@@ -239,11 +273,15 @@ export const convertBits = (
   }
   return spaced.flatMap((e) => e.concat([" "])).slice(0, -1);
 };
-export type Display = "hex" | "bin";
+
+export enum Display {
+  HEX = "hex",
+  BIN = "bin",
+}
+
 export const argumentType = (arg: Argument) => {
   if (arg.textual === arg.numerical.toString()) {
     return "const";
   }
   return "entity";
 };
-
