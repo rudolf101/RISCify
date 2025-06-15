@@ -34,7 +34,7 @@ export function parseSets(
             for (const aname of instr.args ?? []) {
                 const arg = args.get(aname);
                 if (!arg) throw new Error(`Unknown arg: ${aname}`);
-                desc.addArg(new ArgumentPattern(arg.name, arg.span.replace(/:/g, "-"), arg.display));
+                desc.addArg(new ArgumentPattern(arg.name, arg.span, arg.display));
             }
 
             if (instr.format !== undefined) {
