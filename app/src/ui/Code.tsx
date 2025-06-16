@@ -191,13 +191,13 @@ export const Code = (props: {
                   const argSeparators = someInst.argFormat?.split("_") ?? [];
                   return (
                     <React.Fragment key={j}>
-                      <div
+                      <span
                         className="mnemonic"
                         onClick={setAndCloseInstructionVariant(i, j)}
                       >
-                        {someInst.mnemonic}
-                      </div>
-                      <div className={isGlobalSpanning()}>
+                        {someInst.mnemonic + " "}
+                      </span>
+                      <span className={isGlobalSpanning()}>
                         {someInst.args.flatMap((arg, j) => [
                           <span
                             key={j * 2}
@@ -217,7 +217,7 @@ export const Code = (props: {
                             {argSeparators.at(j + 1) ?? " "}
                           </span>,
                         ])}
-                      </div>
+                      </span>
                     </React.Fragment>
                   );
                 })}
@@ -229,8 +229,8 @@ export const Code = (props: {
 
           return (
             <div key={i} className="instruction">
-              <div className={`mnemonic ${isGlobalSpanning()}`}>
-                {someInst.mnemonic ?? "???"}
+              <span className={`mnemonic ${isGlobalSpanning()}`}>
+                {(someInst.mnemonic ?? "???") + " "}
                 {inst.instructions.length > 1 ? (
                   <span
                     className="ellipsis"
@@ -241,8 +241,8 @@ export const Code = (props: {
                     }
                   ></span>
                 ) : null}
-              </div>
-              <div className={isGlobalSpanning()}>
+              </span>
+              <span className={isGlobalSpanning()}>
                 {someInst.args.flatMap((arg, j) => [
                   <span
                     key={j * 2}
@@ -279,7 +279,7 @@ export const Code = (props: {
                       (j === someInst.args.length - 1 ? "" : ", ")}
                   </span>,
                 ])}
-              </div>
+              </span>
               {variants}
             </div>
           );
@@ -288,4 +288,3 @@ export const Code = (props: {
     </div>
   );
 };
-
