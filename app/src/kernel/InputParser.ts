@@ -59,11 +59,12 @@ export function inputParser(input: string, settings: InputSettings): Input {
 
     const result: ValidInput = {
         valid: "valid",
-        startAddress: 0,
+        startAddress: settings.bytesSkip,
         bytesConcat: "",
     }
     let notSkippedBytesCount = settings.bytesSkip;
-    let currentAddress = -1;
+    let currentOffset = 0;
+    let addressLabelWasRead = false;
 
     try {
         const resultBuilder: string[] = [];
@@ -80,24 +81,17 @@ export function inputParser(input: string, settings: InputSettings): Input {
                         message: "Invalid address format: " + curChunk.trim(),
                     }
                 }
-                if (result.startAddress === 0) {
-                    result.startAddress = address + settings.bytesSkip;
-                    if (currentAddress === -1) {
-                        currentAddress = result.startAddress
-                    } else {
+                if (addressLabelWasRead) {
+                    if (result.startAddress - settings.bytesSkip + currentOffset !== address) {
                         return {
                             valid: "invalid",
-                            message: "0x0 address already defined",
+                            message: `Label: 0x${address.toString(16)}, but expected 0x${result.startAddress - settings.bytesSkip + currentOffset.toString(16)}`,
                         }
                     }
                 } else {
-                    if (currentAddress !== address) {
-                        return {
-                            valid: "invalid",
-                            message: `Position label does not correspond to the amount of data processed. Label: 0x${address.toString(16)}, 0x${currentAddress.toString(16)}`,
-                        }
-                    }
+                    result.startAddress = address + settings.bytesSkip - currentOffset;
                 }
+                addressLabelWasRead = true;
             } else {
                 for (let hex of curChunk.split(/\s/g)) {
                     if (!isHexString(hex)){
@@ -123,7 +117,7 @@ export function inputParser(input: string, settings: InputSettings): Input {
                                 resultBuilder.push(Array.from(hex2bin(b, 4)).reverse().join(""))
                                 resultBuilder.push(Array.from(hex2bin(a, 4)).reverse().join(""))
                             }
-                            currentAddress += hex.length / 2;
+                            currentOffset += hex.length / 2;
                             break;
                         }
                         case InputOrder.BYTE_ORDER_LE: {
@@ -136,7 +130,7 @@ export function inputParser(input: string, settings: InputSettings): Input {
                                 resultBuilder.push(Array.from(hex2bin(b, 4)).reverse().join(""));
                                 resultBuilder.push(Array.from(hex2bin(a, 4)).reverse().join(""));
                             }
-                            currentAddress += hex.length / 2;
+                            currentOffset += hex.length / 2;
                             break;
                         }
                         default: {
