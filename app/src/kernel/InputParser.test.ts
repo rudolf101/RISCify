@@ -96,6 +96,39 @@ describe("inputParser", () => {
         });
     });
 
+    test("simple example5", () => {
+        expect(inputParser("0x0: 37 03 00 40\n 0x4: 93 02 00 00\n", {
+            order: InputOrder.BYTE_ORDER_BE,
+            bytesSkip: 0
+        })).toEqual({
+            valid: "valid",
+            startAddress: 0x0,
+            bytesConcat: ["11101100", "11000000", "00000000", "00000010", "11001001", "01000000", "00000000", "00000000"].join("")
+        });
+    });
+
+    test("simple example5 with skip bytes", () => {
+        expect(inputParser("0x0: 37 03 00 40\n 0x4: 93 02 00 00\n", {
+            order: InputOrder.BYTE_ORDER_BE,
+            bytesSkip: 2
+        })).toEqual({
+            valid: "valid",
+            startAddress: 0x2,
+            bytesConcat: ["00000000", "00000010", "11001001", "01000000", "00000000", "00000000"].join("")
+        });
+    });
+
+    test("simple example6", () => {
+        expect(inputParser("37 03 00 40\n 0x8: 93 02 00 00\n", {
+            order: InputOrder.BYTE_ORDER_BE,
+            bytesSkip: 2
+        })).toEqual({
+            valid: "valid",
+            startAddress: 0x6,
+            bytesConcat: ["00000000", "00000010", "11001001", "01000000", "00000000", "00000000"].join("")
+        });
+    });
+
     test("without 0x", () => {
         expect(inputParser("0010: 09abcdef", {
             order: InputOrder.BYTE_ORDER_BE,
