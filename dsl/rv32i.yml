@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=./schema.json
 Args:
   rv32i_rd:        { name: "rd"  , span: "7:11"             , display: "regx"   }
   rv32i_rs1:       { name: "rs1" , span: "15:19"            , display: "regx"   }
@@ -66,7 +67,7 @@ Fields:
 
 Sets:
 - name: "I"
-  size: "32"
+  size: 32
   depth: "32"
   instructions:
   - mnemonic: "slli"
@@ -80,7 +81,7 @@ Sets:
     args: [ rv32i_rd, rv32i_rs1, rv32i_shamt ]
 
 - name: "I"
-  size: "32"
+  size: 32
   depth: "32|64"
   instructions:
   - mnemonic: "add"

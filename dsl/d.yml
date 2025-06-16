@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=./schema.json
 Args:
   d_rd_x:  { name: "rd" , span: "7:11"      , display: "regx" }
   d_rs1_x: { name: "rs1", span: "15:19"     , display: "regx" }
@@ -54,7 +55,7 @@ Fields:
 
 Sets:
 - name: "D"
-  size: "32"
+  size: 32
   depth: "32|64"
   instructions:
   - mnemonic: "flw"
@@ -140,7 +141,7 @@ Sets:
     args: [ d_rd, d_rs1_x, d_rm ]
 
 - name: "D"
-  size: "32"
+  size: 32
   depth: "64"
   instructions:
   - mnemonic: "fcvt.l.d"
