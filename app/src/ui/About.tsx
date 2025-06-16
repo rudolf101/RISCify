@@ -14,11 +14,12 @@ export const About = () => (
     <p className="special">Authors:</p>
     <ul>
       <li>Akim Byrkov</li>
-      <li>Andrey Bogdanov</li> <li>Andrey Oleynikov</li>
-      <li>Vladislav Kasimov</li>
+      <li>Andrey Bogdanov</li>
+      <li>Andrey Oleynikov</li>
       <li>Elizaveta Konovkina</li>
       <li>Roman Deev</li>
       <li>Stepan Avdeev</li>
+      <li>Vladislav Kasimov</li>
     </ul>
   </div>
 );
