@@ -175,6 +175,7 @@ const App = () => {
         <textarea
           ref={ref}
           value={sourceCode}
+          spellCheck={false}
           onPaste={(e) => e.stopPropagation()}
           onChange={(e) => setSourceCode(e.currentTarget.value)}
         ></textarea>
