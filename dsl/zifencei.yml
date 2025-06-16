@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=./schema.json
 Args: {}
 
 Fields:
@@ -9,7 +10,7 @@ Fields:
 
 Sets:
 - name: "Zifencei"
-  size: "32"
+  size: 32
   depth: "32|64"
   instructions:
   - mnemonic: "fence.i"

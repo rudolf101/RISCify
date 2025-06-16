@@ -1,3 +1,4 @@
+# yaml-language-server: $schema=./schema.json
 Args: {}
 
 Fields:
@@ -14,7 +15,7 @@ Fields:
 
 Sets:
 - name: "Zawrs"
-  size: "32"
+  size: 32
   depth: "32|64"
   instructions:
   - mnemonic: "wrs.nto"

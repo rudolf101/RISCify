@@ -20,6 +20,16 @@ jobs:
         run: |
           npm i
 
+      - name: Checking that the JSON Schema for DSL are regenerated
+        run: |
+          npx ts-json-schema-generator --path 'app/src/generator/parser/types.ts' --type 'DSLFile' -j extended > dsl/schema.json
+          git diff --exit-code -- 'dsl/schema.json' || (echo "Run 'npx ts-json-schema-generator --path 'app/src/generator/parser/types.ts' --type 'DSLFile' -j extended > dsl/schema.json' and commit it" && exit 1)
+
+      - name: Validate DSL
+        working-directory: ./dsl
+        run: |
+          npx ajv-cli validate -s schema.json -d '*.yml'
+
       - name: Checking that the generated files are regenerated
         working-directory: ./app
         run: |
