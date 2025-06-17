@@ -155,7 +155,7 @@ const App = () => {
         {aboutOpened ? (
           <About />
         ) : sourceCode.length === 0 ? (
-          <Message header="PASTE CODE" text="CTRL + V" />
+          <Message header="PASTE HEX DUMP" text="CTRL + V" />
         ) : disassemblerResult.valid === "invalid" ? (
           <Message
             header="FAILED TO DECODE"

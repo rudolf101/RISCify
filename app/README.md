@@ -1,46 +1,54 @@
-# Getting Started with Create React App
+## 🏗️ Сборка
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+```bash
+git clone https://github.com/rudolf101/RISCify.git && cd RISCify/app
+npm i
+npm run build
+```
 
-## Available Scripts
+## 🚀 Запуск
 
-In the project directory, you can run:
+### Локально
+```bash
+npm run build
+```
 
-### `yarn start`
+### На своём сервере
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+```bash
+PUBLIC_URL=https://your.server.com/path/ npm run build
+```
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+После чего скопируйте файлы из папки `app/build` на сервер
 
-### `yarn test`
+### GitHub Pages
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Смотрите в файл [`.github/workflows/deploy.yml`](https://github.com/rudolf101/RISCify/blob/main/.github/workflows/deploy.yml). При необходимости замените `DEPLOY_TOKEN` на `GITHUB_TOKEN`
 
-### `yarn build`
+## 🧩 Добавление новых инструкций
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+[Подробная документация по DSL для инструкций](https://github.com/rudolf101/RISCify/blob/main/dsl/README.md)
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+После редактирования `.yml`-файлов запустите в корне проекта
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+```bash
+npx tsx app/src/generator/run.ts
+```
 
-### `yarn eject`
+После чего вы должны увидеть новые инструкции в файле `app/src/kernel/Description.generated.ts`
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+## 🧪 Тестирование и разработка
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Запуск тестов:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+```bash
+npm test
+```
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Запуск линтера:
 
-## Learn More
+```bash
+npm run lint
+```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+Тесты автоматически запускаются при коммитах в любую из веток. Также есть проверки `.yml`-описаний, актуальности автогенерируемого кода и собираемости проекта. Они описаны в файле [`.github/workflows/tests.yml`](https://github.com/rudolf101/RISCify/blob/main/.github/workflows/tests.yml)

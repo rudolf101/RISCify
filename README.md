@@ -1,2 +1,25 @@
 # RISCify
-Riscify - A web-based RISC-V disassembler that helps developers analyze and understand RISC-V instructions. Enter your byte stream and get the disassembled instructions in an easy-to-read format. Perfect for learning and experimenting with RISC-V assembly!
+
+RISC-V дизассемблер, работающий полностью в вашем браузере
+
+👉 [rudolf101.github.io/RISCify](https://rudolf101.github.io/RISCify/)
+
+Поддерживаются инструкции из расширений:
+- `I`
+- `M`
+- `A`
+- `F`
+- `D`
+- `Q`
+- `Zfh`
+- `Zawrs`
+- `Zicsr`
+- `Zifencei`
+- `C`
+- `B`
+
+[📘 Руководство пользователя](./doc/README.md)
+
+[🏗️ Сборка и локальный запуск](./app/README.md)
+
+[🧩 Добавление новых расширений](./dsl/README.md)
