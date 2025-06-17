@@ -9,6 +9,7 @@ import { Code, Display, Jump } from "./Code";
 import { Switch } from "./Switch";
 
 import "./App.css";
+import { About } from "./About";
 
 const byteOrderCases = [
   { text: "BE", value: InputOrder.BYTE_ORDER_BE },
@@ -38,6 +39,7 @@ const App = () => {
   const [display, setDisplay] = useState(Display.HEX);
   const [edit, setEdit] = useState(false);
   const [jump, setJump] = useState(Jump.RELATIVE);
+  const [aboutOpened, setAboutOpened] = useState(false);
   const [disassemblerResult, setDisassemblerResult] =
     useState<DisassembleOutput>({
       valid: "valid",
@@ -141,8 +143,18 @@ const App = () => {
               EDIT DUMP
             </button>
           </div>
+          <div className="tool">
+            <button
+              className={aboutOpened ? "selected" : ""}
+              onClick={() => setAboutOpened((edit) => !edit)}
+            >
+              ABOUT
+            </button>
+          </div>
         </div>
-        {sourceCode.length === 0 ? (
+        {aboutOpened ? (
+          <About />
+        ) : sourceCode.length === 0 ? (
           <Message header="PASTE CODE" text="CTRL + V" />
         ) : disassemblerResult.valid === "invalid" ? (
           <Message
@@ -163,6 +175,7 @@ const App = () => {
         <textarea
           ref={ref}
           value={sourceCode}
+          spellCheck={false}
           onPaste={(e) => e.stopPropagation()}
           onChange={(e) => setSourceCode(e.currentTarget.value)}
         ></textarea>
