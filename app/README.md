@@ -34,3 +34,19 @@ npx tsx app/src/generator/run.ts
 ```
 
 После чего вы должны увидеть новые инструкции в файле `app/src/kernel/Description.generated.ts`
+
+### Тестирование и разработка
+
+Запуск тестов:
+
+```bash
+npm test
+```
+
+Запуск линтера:
+
+```bash
+npm run lint
+```
+
+Тесты автоматически запускаются при коммитах в любую из веток. Также есть проверки `.yml`-описаний, актуальности автогенерируемого кода и собираемости проекта. Они описаны в файле [`.github/workflows/tests.yml`](https://github.com/rudolf101/RISCify/blob/main/.github/workflows/tests.yml)
