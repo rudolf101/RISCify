@@ -23,11 +23,13 @@ PUBLIC_URL=https://your.server.com/path/ npm run build
 
 ### GitHub Pages
 
-Смотрите в файл `.github/workflows/deploy.yml`. При необходимости замените `DEPLOY_TOKEN` на `GITHUB_TOKEN`
+Смотрите в файл [`.github/workflows/deploy.yml`](https://github.com/rudolf101/RISCify/blob/main/.github/workflows/deploy.yml). При необходимости замените `DEPLOY_TOKEN` на `GITHUB_TOKEN`
 
 ### 🧩 Добавление новых инструкций
 
-После редактирования `.yml`-файлов с описанием инструкций запустите в корне проекта
+[Подробная документация по DSL для инструкций](https://github.com/rudolf101/RISCify/blob/main/dsl/README.md)
+
+После редактирования `.yml`-файлов запустите в корне проекта
 
 ```bash
 npx tsx app/src/generator/run.ts
