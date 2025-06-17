@@ -34,7 +34,7 @@ export function splitter(input: ValidInput): Chunk[] {
       } else {
         let nnn = firstByte.substring(12, 15)
         let n = Number(nnn[0]) + Number(nnn[1]) * 2 + Number(nnn[2]) * 4
-        instrBytes = (80 + 16 * n)
+        instrBytes = (10 + 2 * n)
       }
       
       // Если недостаточно байт для завершения инструкции, можно завершить цикл,
