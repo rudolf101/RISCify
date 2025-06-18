@@ -245,7 +245,8 @@ Sets:
     jump: 1
   - mnemonic: "jalr"
     fields: [ rv32i_opcode_jalr, rv32i_funct3_jalr ]
-    args: [ rv32i_rd, rv32i_rs1, rv32i_j_imm ]
+    args: [ rv32i_rd, rv32i_i_imm, rv32i_rs1 ]
+    format: "_, _(_)"
     jump: out
 
   - mnemonic: "pause"
