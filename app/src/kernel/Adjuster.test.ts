@@ -61,13 +61,13 @@ describe("adjuster", () => {
 
     test("smoke with out jump", () => {
         const result = performDisassemble(`
-e7 00 05 00`,
+e7 00 45 00`,
             {order: InputOrder.BYTE_ORDER_LE, bytesSkip: 0},
             {bitDepth: BitDepth.BIT_32}
         ) as DisassembleOutputValid
         expect(result.valid).toEqual("valid")
         expect(simplifiedRepresentation(result.result))
-            .toEqual([["jalr", "ra, a0, 327680", {"label": "out"}]]);
+            .toEqual([["jalr", "ra, 4(a0)", {"label": "out"}]]);
     })
 
     test("smoke with back jump", () => {
