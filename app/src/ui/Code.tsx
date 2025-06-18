@@ -52,7 +52,7 @@ const convertBits = (
     const hex = num.toString(16);
     const paddedHex = hex.padStart(text.length / 4, "0");
     spaced = Array.from(paddedHex.matchAll(/.{2}/g)).map((res, j) =>
-      Array.from(res[0]).map((e, i) => <span key={i * 8 + j}>{e}</span>)
+      Array.from(res[0]).map((e, i) => <span key={j * 2 + i}>{e}</span>)
     );
   }
   if (order === InputOrder.BYTE_ORDER_BE) {
