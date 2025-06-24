@@ -6,12 +6,44 @@
   --color-fg: #bfbdb6;
   --color-instruction: #ffb454;
   --color-special: #e6b673;
-  --color-comment: rgba(172, 182, 191, 0.549);
+  --color-comment: #acb6bf8c;
   --color-constant: #d2a6ff;
   --color-dots: #f07178;
   --color-hex: #95e6cb;
 
   --color-focus: #d2a6ff;
+}
+
+:root[theme="light"] {
+  --color-panel: #fa8d3e;
+  --color-jump: #6cbf43;
+  --color-entity: #399ee6;
+  --color-bg: #fcfcfc;
+  --color-fg: #5c6166;
+  --color-instruction: #f2ae49;
+  --color-special: #e6ba7e;
+  --color-comment: #787b8099;
+  --color-constant: #a37acc;
+  --color-dots: #f07171;
+  --color-hex: #4cbf99;
+
+  --color-focus: #a37acc;
+}
+
+:root[theme="mirage"] {
+  --color-panel: #ffad66;
+  --color-jump: #87d96c;
+  --color-entity: #73d0ff;
+  --color-bg: #242936;
+  --color-fg: #cccac2;
+  --color-instruction: #ffd173;
+  --color-special: #ffdfb3;
+  --color-comment: #b8cfe680;
+  --color-constant: #dfbfff;
+  --color-dots: #f28779;
+  --color-hex: #95e6cb;
+
+  --color-focus: #dfbfff;
 }
 
 body {
@@ -35,9 +67,9 @@ pre {
 
 input[type="number"]::-webkit-outer-spin-button,
 input[type="number"]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+  -webkit-appearance: none;
+  margin: 0;
 }
 input[type="number"] {
-    -moz-appearance: textfield;
+  -moz-appearance: textfield;
 }
