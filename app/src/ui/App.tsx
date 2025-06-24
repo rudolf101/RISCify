@@ -79,6 +79,11 @@ const App = () => {
   }, []);
 
   useEffect(() => {
+    let theme = localStorage.getItem("theme") ?? "dark";
+    document.documentElement.setAttribute("theme", theme);
+  }, []);
+
+  useEffect(() => {
     if (edit) {
       ref.current?.setSelectionRange(0, 0);
       ref.current?.focus();
@@ -86,6 +91,26 @@ const App = () => {
       // double setSelectionRange need for the same behavior of focus in Firefox and Chrome
     }
   }, [edit]);
+
+  const changeTheme = () => {
+    const currentTheme =
+      document.documentElement.getAttribute("theme") ?? "dark";
+    let nextTheme;
+    switch (currentTheme) {
+      case "dark":
+        nextTheme = "mirage";
+        break;
+      case "mirage":
+        nextTheme = "light";
+        break;
+      case "light":
+        nextTheme = "dark";
+        break;
+      default:
+        nextTheme = "dark";
+    }
+    document.documentElement.setAttribute("theme", nextTheme);
+  };
 
   return (
     <div className="app">
@@ -142,6 +167,9 @@ const App = () => {
             >
               EDIT DUMP
             </button>
+          </div>
+          <div className="tool">
+            <button onClick={changeTheme}>THEME</button>
           </div>
           <div className="tool">
             <button
