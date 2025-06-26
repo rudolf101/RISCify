@@ -110,6 +110,7 @@ const App = () => {
         nextTheme = "dark";
     }
     document.documentElement.setAttribute("theme", nextTheme);
+    localStorage.setItem("theme", nextTheme);
   };
 
   return (
